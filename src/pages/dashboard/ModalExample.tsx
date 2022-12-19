@@ -14,7 +14,7 @@ const ModalExample: React.FC<Props> = () => {
 	const [crudModal, showCrudModal] = useState(false)
 	const [testModal, showTestModal] = useState(false)
 
-	const hanldeReceiveDataForm = (data: UserForm) => {
+	const handleReceiveDataForm = (data: UserForm) => {
 		console.log(data)
 		showCrudModal(false)
 	}
@@ -42,7 +42,7 @@ const ModalExample: React.FC<Props> = () => {
 			{defaultModal && <DefaultModal onClose={() => showDefaultModal(false)} />}
 			{popUpModal && <ConfirmModal message='Are you sure you want to delete this product?' onClose={() => showPopUpModal(false)} />}
 			{formModal && <FormModal onClose={() => showFormModal(false)} />}
-			{crudModal && <CRUDModal onClose={() => showCrudModal(false)} onSubmit={hanldeReceiveDataForm} />}
+			{crudModal && <CRUDModal onClose={() => showCrudModal(false)} onSubmit={handleReceiveDataForm} />}
 			{testModal && <TestModal title="Blabalbal" onClose={()=>showTestModal(false)} />}
 		</>
 	)

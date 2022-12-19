@@ -1,4 +1,6 @@
 /* eslint-disable */
+import { format } from "date-fns";
+
 class Utils {
   static setLocalStorage(key: string, value: unknown): void {
     localStorage.setItem(key, JSON.stringify(value));
@@ -21,16 +23,12 @@ class Utils {
     }
   }
 
-  static formatDate(date: string): string {
-    return new Date(date).toDateString();
-  }
-
-  static newDate(date: Date): Date {
-    return new Date(date);
-  }
-
   static getMassage(): string {
-    return 'Failed to get response from server. To protect the API from unnecessary load it is rate limited, please try again in 30 seconds!!!';
+    return "Failed to get response from server. To protect the API from unnecessary load it is rate limited, please try again in 30 seconds!!!";
+  }
+
+  static formatTime(date: string, typeFormat: string) {
+    return format(new Date(date), typeFormat);
   }
 
   static getAge(date: string) {

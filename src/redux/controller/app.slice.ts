@@ -4,6 +4,7 @@ import { LanguageType, NavbarType } from "../../@types/define";
 interface AppState {
   type: string;
   message: string;
+  theme: string;
   language: LanguageType;
   navbar: NavbarType;
 }
@@ -11,6 +12,7 @@ interface AppState {
 const initAppState: AppState = {
   language: "en",
   navbar: "home",
+  theme: "light",
   type: "",
   message: "",
 };
@@ -28,11 +30,15 @@ const appSlice = createSlice({
         state.navbar = action.payload;
       }
     },
+    setTheme(state, action: PayloadAction<string>) {
+      state.theme = action.payload;
+    },
     setMessage(state, action: PayloadAction<string>) {
       state.message = action.payload;
     },
   },
 });
 
-export const { changeLanguage, setNavbar, setMessage } = appSlice.actions;
+export const { changeLanguage, setNavbar, setMessage, setTheme } =
+  appSlice.actions;
 export const appReducer = appSlice.reducer;

@@ -17,83 +17,83 @@ export const AdminRoutes = [
         url_var: 'modal-example',
         icon_var: 'ri-home-line'
     },
-    {
-        name_var: 'Project Management',
-        url_var: 'project-management',
-        icon_var: 'ri-home-line',
-        children: [
-            {
-                name_var: 'Project',
-                url_var : "project-management-project",
-                icon_var: 'ri-home-line',
-            },
-            {
-                name_var: 'Lahan',
-                url_var : "project-management-lahan",
-                icon_var: 'ri-home-line',
-            }
-        ]
-    },
-    {
-        name_var: 'Report',
-        url_var: 'report',
-        icon_var: 'ri-home-line',
-        children: [
-            {
-                name_var: 'Harian',
-                url_var : "report-daily",
-                icon_var: 'ri-home-line',
-            },
-            {
-                name_var: 'Mingguan',
-                url_var : "report-weekly",
-                icon_var: 'ri-home-line',
-            },
-            {
-                name_var: 'Bulanan',
-                url_var : "report-monthly",
-                icon_var: 'ri-home-line',
-            }
-        ]
-    },
-    {
-        name_var: 'User Management',
-        url_var: 'user-management',
-        icon_var: 'ri-home-line',
-        children: [
-            {
-                name_var: 'User',
-                url_var : "user-management-user",
-                icon_var: 'ri-home-line',
-            },
-            {
-                name_var: 'User Group',
-                url_var : "user-management-user-group",
-                icon_var: 'ri-home-line',
-            },
-            {
-                name_var: 'Menu',
-                url_var : "user-management-menu",
-                icon_var: 'ri-home-line',
-            },
-            {
-                name_var: 'Menu Action',
-                url_var : "user-management-menu-action",
-                icon_var: 'ri-home-line',
-            },
-            {
-                name_var: 'Privileges',
-                url_var : "user-management-privileges",
-                icon_var: 'ri-home-line',
-            }
-        ]
-    },
-    {
-        name_var: 'Profile',
-        url_var: 'profile',
-        icon_var: 'ri-home-line',
-        component: <User />
-    }
+    // {
+    //     name_var: 'Project Management',
+    //     url_var: 'project-management',
+    //     icon_var: 'ri-home-line',
+    //     children: [
+    //         {
+    //             name_var: 'Project',
+    //             url_var : "project-management-project",
+    //             icon_var: 'ri-home-line',
+    //         },
+    //         {
+    //             name_var: 'Lahan',
+    //             url_var : "project-management-lahan",
+    //             icon_var: 'ri-home-line',
+    //         }
+    //     ]
+    // },
+    // {
+    //     name_var: 'Report',
+    //     url_var: 'report',
+    //     icon_var: 'ri-home-line',
+    //     children: [
+    //         {
+    //             name_var: 'Harian',
+    //             url_var : "report-daily",
+    //             icon_var: 'ri-home-line',
+    //         },
+    //         {
+    //             name_var: 'Mingguan',
+    //             url_var : "report-weekly",
+    //             icon_var: 'ri-home-line',
+    //         },
+    //         {
+    //             name_var: 'Bulanan',
+    //             url_var : "report-monthly",
+    //             icon_var: 'ri-home-line',
+    //         }
+    //     ]
+    // },
+    // {
+    //     name_var: 'User Management',
+    //     url_var: 'user-management',
+    //     icon_var: 'ri-home-line',
+    //     children: [
+    //         {
+    //             name_var: 'User',
+    //             url_var : "user-management-user",
+    //             icon_var: 'ri-home-line',
+    //         },
+    //         {
+    //             name_var: 'User Group',
+    //             url_var : "user-management-user-group",
+    //             icon_var: 'ri-home-line',
+    //         },
+    //         {
+    //             name_var: 'Menu',
+    //             url_var : "user-management-menu",
+    //             icon_var: 'ri-home-line',
+    //         },
+    //         {
+    //             name_var: 'Menu Action',
+    //             url_var : "user-management-menu-action",
+    //             icon_var: 'ri-home-line',
+    //         },
+    //         {
+    //             name_var: 'Privileges',
+    //             url_var : "user-management-privileges",
+    //             icon_var: 'ri-home-line',
+    //         }
+    //     ]
+    // },
+    // {
+    //     name_var: 'Profile',
+    //     url_var: 'profile',
+    //     icon_var: 'ri-home-line',
+    //     component: <User />
+    // }
 ]
 
 
@@ -133,7 +133,7 @@ export const dashboardRoutes = [
         component: <ModalExample />
     },
     {
-        path: ':code',
+        path: ':competitionCode',
         component: <Matches />
     },
     {
