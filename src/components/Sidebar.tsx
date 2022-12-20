@@ -187,13 +187,7 @@ const Sidebar: React.FC<Props> = () => {
                             : "text-black dark:text-white"
                         } block transition duration-150`}
                       >
-                        <div
-                          onClick={() => {
-                            console.log("url_var", url_var);
-                            console.log("menuActive", menuActive);
-                          }}
-                          className="flex"
-                        >
+                        <div className="flex">
                           {img_var ? (
                             <span className="mr-2 flex items-center justify-center ">
                               <LazyLoadImage

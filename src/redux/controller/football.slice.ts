@@ -1,6 +1,12 @@
 // /* eslint-disable no-use-before-define */
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSlice,
+  PayloadAction,
+  PayloadActionCreator,
+} from "@reduxjs/toolkit";
 import { IRootCompetition } from "../../@types/competition";
+import { ICompetitionScorers } from "../../@types/competition_scorers";
 import { ICompetitionStandings } from "../../@types/competition_standings";
 import { API_FOOTBALL } from "../../api/constant";
 import Http from "../../api/http.api";
@@ -13,6 +19,7 @@ interface FootballState {
   loadingModalFootball: boolean;
   rootCompetitions: IRootCompetition;
   rootCompetitionsStanding: ICompetitionStandings;
+  rootScorers: ICompetitionScorers;
 }
 
 const initAppState: FootballState = {
@@ -20,6 +27,7 @@ const initAppState: FootballState = {
   loadingModalFootball: false,
   rootCompetitions: DataFake.CompetitionsAreas(),
   rootCompetitionsStanding: DataFake.CompetitionsStandings(),
+  rootScorers: DataFake.CompetitionScorers(),
 };
 
 const footballSlice = createSlice({
@@ -54,9 +62,51 @@ const footballSlice = createSlice({
       .addCase(
         fetchCompetitionStandings.fulfilled,
         (state: any, action: PayloadAction<any>) => {
+          const payload: ICompetitionStandings = action.payload;
+          if (!action.payload.message) {
+            state.rootCompetitionsStanding = payload;
+            state.loadingFootball = false;
+          }
+        }
+      );
+    builder
+      .addCase(fetchCompetitionsMatches.pending, (state: any) => {
+        state.loadingFootball = true;
+      })
+      .addCase(
+        fetchCompetitionsMatches.fulfilled,
+        (state: any, action: PayloadAction<any>) => {
+          if (!action.payload.message) {
+            // state.rootCompetitionsStanding = action.payload;
+            state.loadingFootball = false;
+          }
+        }
+      );
+    builder
+      .addCase(fetchTopScorersCompetitions.pending, (state: any) => {
+        state.loadingFootball = true;
+      })
+      .addCase(
+        fetchTopScorersCompetitions.fulfilled,
+        (state: any, action: PayloadAction<any>) => {
+          const payload: ICompetitionScorers = action.payload;
+          if (!action.payload.message) {
+            state.rootScorers = action.payload;
+            state.loadingFootball = false;
+          }
+        }
+      )
+    builder
+      .addCase(fetchTeamMatches.pending, (state: any) => {
+        state.loadingFootball = true;
+      })
+      .addCase(
+        fetchTeamMatches.fulfilled,
+        (state: any, action: PayloadAction<any>) => {
+          // const payload: ICompetitionScorers = action.payload;
           console.log(action.payload);
           if (!action.payload.message) {
-            state.rootCompetitionsStanding = action.payload;
+            // state.rootScorers = action.payload;
             state.loadingFootball = false;
           }
         }
@@ -110,6 +160,88 @@ export const fetchCompetitionStandings = createAsyncThunk(
   }
 );
 
+/**
+ * @function fetchCompetitionsMatches
+ *
+ * @argument competitionCode
+ */
+export const fetchCompetitionsMatches = createAsyncThunk(
+  "football/CompetitionsMatches",
+  async (competitionCode: string, { dispatch }) => {
+    try {
+      const res: any = await Http.get(
+        API_FOOTBALL.competitionsMatches(competitionCode)
+      );
+      if (res.data) {
+        const data = res.data as unknown;
+        return data;
+      }
+    } catch (error) {
+      dispatch(setMessage(Utils.getMassage()));
+      dispatch(setLoadingFootball(false));
+      return error;
+    }
+  }
+);
+
+/**
+ * @function fetchTopScorersCompetitions
+ *
+ * Call API list (Top) Scorers with 2 agu
+ * @argument competition
+ *
+ * @argument limit
+ */
+export type ITopScorers = {
+  competition: string;
+  limit: number;
+};
+export const fetchTopScorersCompetitions = createAsyncThunk(
+  "football/fetchTopScorersCompetitions",
+  async ({ competition, limit }: ITopScorers, { dispatch }) => {
+    try {
+      const res: any = await Http.get(
+        API_FOOTBALL.topScorersCompetitions(competition, limit)
+      );
+      if (res.data) {
+        const data = res.data as unknown;
+        return data;
+      }
+    } catch (error) {
+      dispatch(setMessage(Utils.getMassage()));
+      dispatch(setLoadingFootball(false));
+      return error;
+    }
+  }
+);
+
+/**
+ * @function fetchTeamMatches
+ *
+ * Call API list (Top) Scorers with 2 agu
+ * @argument idTeam
+ *
+ */
+// export type ITopScorers = {
+//   competition: string;
+//   limit: number;
+// };
+export const fetchTeamMatches = createAsyncThunk(
+  "football/fetchTeamMatches",
+  async (idTeam: number, { dispatch }) => {
+    try {
+      const res: any = await Http.get(API_FOOTBALL.teamMatches(idTeam));
+      if (res.data) {
+        const data = res.data as unknown;
+        return data;
+      }
+    } catch (error) {
+      dispatch(setMessage(Utils.getMassage()));
+      dispatch(setLoadingFootball(false));
+      return error;
+    }
+  }
+);
 export const { setLoadingFootball, setLoadingModalFootball } =
   footballSlice.actions;
 export const footballReducer = footballSlice.reducer;

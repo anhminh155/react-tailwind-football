@@ -5,10 +5,24 @@ export const API_URL = "https://api.football-data.org/v4/";
 const TIER = "TIER_ONE";
 
 export const API_FOOTBALL = {
-  competitions : `competitions?plan=TIER_ONE`,
+  competitions: `competitions?plan=TIER_ONE`,
 
   competitionsStandings: (competitionCode: string) =>
     `competitions/${competitionCode}/standings`,
+
+  //(Top) Scorers
+  topScorersCompetitions: (competition: string, limit: number) =>
+    `competitions/${competition}/scorers?limit=${limit}`,
+
+  //Matches competitions
+  competitionsMatches: (competition: string) =>
+    `competitions/${competition}/matches`,
+
+  teamInfo: (idTeam: number) =>
+    `teams/${idTeam}`,
+
+  teamMatches: (idTeam: number) =>
+    `teams/${idTeam}/matches`,
 
 
 
