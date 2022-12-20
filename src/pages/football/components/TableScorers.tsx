@@ -18,15 +18,15 @@ const TableScorers: React.FC<ITableScorers> = ({
   loading = false,
 }) => {
   return (
-    <div className="pb-10">
+    <div className="">
       <div className="flex flex-col select-none">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 pb-3">
           <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
             <CLoading loading={loading}>
               <div className={`overflow-hidden sm:rounded-lg `}>
                 <table className="min-w-full text-sm text-gray-700 dark:text-white">
-                  <thead className="dark:bg-gray-800 bg-gray-100 text-xs uppercase font-medium">
-                    <tr className="text-black dark:text-white" >
+                  <thead className="dark:bg-gray-800 bg-gray-600 text-xs uppercase font-medium">
+                    <tr className="text-white" >
                       <th
                         scope="col"
                         className="px-6 py-3 text-left tracking-wider"

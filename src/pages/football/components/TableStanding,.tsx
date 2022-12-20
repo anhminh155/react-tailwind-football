@@ -41,11 +41,11 @@ const TableStanding: React.FC<ITableStanding> = ({
   }, [standings]);
 
   return (
-    <div className="pb-10">
+    <div className="text-sm">
       {type === EnumTypes.CompetitionType.LEAGUE ? (
-        <ul className="grid grid-flow-col text-center text-gray-500 bg-gray-100 dark:bg-gray-800 rounded-t-lg p-1 dark:border-b dark:border-gray-500">
+        <ul className="border-b min-h-max grid grid-flow-col text-center text-white bg-gray-600 dark:bg-gray-800 rounded-t-lg p-1 dark:border-b dark:border-gray-500">
           <li
-            className="cursor-pointer"
+            className="cursor-pointer hover:shadow-md"
             onClick={() => {
               setSelect("TOTAL");
               setDataWithType(
@@ -56,17 +56,16 @@ const TableStanding: React.FC<ITableStanding> = ({
             }}
           >
             <span
-              className={`${
-                select === "TOTAL"
-                  ? "bg-white dark:bg-dark rounded-t-lg shadow text-violet dark:text-yellow"
-                  : ""
-              } flex justify-center py-4`}
+              className={`${select === "TOTAL"
+                ? "bg-white dark:bg-dark rounded-t-lg shadow text-violet dark:text-yellow"
+                : ""
+                } flex justify-center py-2`}
             >
               TOTAL
             </span>
           </li>
           <li
-            className="cursor-pointer"
+            className="cursor-pointer hover:shadow-md"
             onClick={() => {
               setSelect("HOME");
               setDataWithType(
@@ -75,17 +74,16 @@ const TableStanding: React.FC<ITableStanding> = ({
             }}
           >
             <span
-              className={`${
-                select === "HOME"
-                  ? "bg-white dark:bg-dark rounded-t-lg shadow text-violet dark:text-yellow"
-                  : ""
-              } flex justify-center py-4`}
+              className={`${select === "HOME"
+                ? "bg-white dark:bg-dark rounded-t-lg shadow text-violet dark:text-yellow"
+                : ""
+                } flex justify-center py-2`}
             >
               HOME
             </span>
           </li>
           <li
-            className="cursor-pointer"
+            className="cursor-pointer hover:shadow-md"
             onClick={() => {
               setSelect("AWAY");
 
@@ -95,11 +93,10 @@ const TableStanding: React.FC<ITableStanding> = ({
             }}
           >
             <span
-              className={`${
-                select === "AWAY"
-                  ? "bg-white dark:bg-dark rounded-t-lg shadow text-violet dark:text-yellow"
-                  : ""
-              } flex justify-center py-4`}
+              className={`${select === "AWAY"
+                ? "bg-white dark:bg-dark rounded-t-lg shadow text-violet dark:text-yellow"
+                : ""
+                } flex justify-center py-2`}
             >
               AWAY
             </span>
@@ -119,23 +116,21 @@ const TableStanding: React.FC<ITableStanding> = ({
               <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <CLoading loading={loading}>
                   <div
-                    className={`overflow-hidden ${
-                      type === EnumTypes.CompetitionType.CUP
-                        ? "sm:rounded-lg"
-                        : "sm:rounded-b-lg"
-                    }`}
+                    className={`overflow-hidden ${type === EnumTypes.CompetitionType.CUP
+                      ? "sm:rounded-lg"
+                      : "sm:rounded-b-lg"
+                      }`}
                   >
                     <table className="min-w-full text-sm text-gray-700 dark:text-white">
-                      <thead className="dark:bg-gray-800 bg-gray-100 text-xs uppercase font-medium">
-                        <tr className="text-black dark:text-white">
+                      <thead className="dark:bg-gray-800 bg-gray-600 text-xs uppercase font-medium">
+                        <tr className="text-white" >
                           <th />
                           <th
                             scope="col"
-                            className={`${
-                              type === EnumTypes.CompetitionType.CUP
-                                ? "w-56"
-                                : ""
-                            } px-6 py-3 text-left tracking-wider`}
+                            className={`${type === EnumTypes.CompetitionType.CUP
+                              ? "w-56"
+                              : ""
+                              } px-6 py-3 text-left tracking-wider`}
                           >
                             {type === EnumTypes.CompetitionType.CUP ? (
                               <span className="capitalize">

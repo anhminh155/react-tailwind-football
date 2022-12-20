@@ -8,6 +8,7 @@ import {
 import { IRootCompetition } from "../../@types/competition";
 import { ICompetitionScorers } from "../../@types/competition_scorers";
 import { ICompetitionStandings } from "../../@types/competition_standings";
+import { ICompetitionTeam } from "../../@types/competition_teams";
 import { API_FOOTBALL } from "../../api/constant";
 import Http from "../../api/http.api";
 import { DataFake } from "../../common/dataFake";
@@ -20,6 +21,7 @@ interface FootballState {
   rootCompetitions: IRootCompetition;
   rootCompetitionsStanding: ICompetitionStandings;
   rootScorers: ICompetitionScorers;
+  rootCompetitionsTeams: ICompetitionTeam;
 }
 
 const initAppState: FootballState = {
@@ -28,6 +30,7 @@ const initAppState: FootballState = {
   rootCompetitions: DataFake.CompetitionsAreas(),
   rootCompetitionsStanding: DataFake.CompetitionsStandings(),
   rootScorers: DataFake.CompetitionScorers(),
+  rootCompetitionsTeams: DataFake.CompetitionsTeams(),
 };
 
 const footballSlice = createSlice({
@@ -70,6 +73,20 @@ const footballSlice = createSlice({
         }
       );
     builder
+      .addCase(fetchCompetitionsTeams.pending, (state: any) => {
+        state.loadingFootball = true;
+      })
+      .addCase(
+        fetchCompetitionsTeams.fulfilled,
+        (state: any, action: PayloadAction<any>) => {
+          const payload: ICompetitionTeam = action.payload;
+          if (!action.payload.message) {
+            state.rootCompetitionsTeams = payload;
+            state.loadingFootball = false;
+          }
+        }
+      );
+    builder
       .addCase(fetchCompetitionsMatches.pending, (state: any) => {
         state.loadingFootball = true;
       })
@@ -95,7 +112,7 @@ const footballSlice = createSlice({
             state.loadingFootball = false;
           }
         }
-      )
+      );
     builder
       .addCase(fetchTeamMatches.pending, (state: any) => {
         state.loadingFootball = true;
@@ -242,6 +259,33 @@ export const fetchTeamMatches = createAsyncThunk(
     }
   }
 );
+
+/**
+ * @function fetchCompetitionsTeams
+ *
+ * Call API list (Top) Scorers with 2 agu
+ * @argument competition
+ *
+ */
+export const fetchCompetitionsTeams = createAsyncThunk(
+  "football/fetchCompetitionsTeams",
+  async (competition: string, { dispatch }) => {
+    try {
+      const res: any = await Http.get(
+        API_FOOTBALL.competitionsTeams(competition)
+      );
+      if (res.data) {
+        const data = res.data as unknown;
+        return data;
+      }
+    } catch (error) {
+      dispatch(setMessage(Utils.getMassage()));
+      dispatch(setLoadingFootball(false));
+      return error;
+    }
+  }
+);
+
 export const { setLoadingFootball, setLoadingModalFootball } =
   footballSlice.actions;
 export const footballReducer = footballSlice.reducer;

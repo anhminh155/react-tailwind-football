@@ -7,6 +7,7 @@ const TIER = "TIER_ONE";
 export const API_FOOTBALL = {
   competitions: `competitions?plan=TIER_ONE`,
 
+  //Standings
   competitionsStandings: (competitionCode: string) =>
     `competitions/${competitionCode}/standings`,
 
@@ -14,10 +15,15 @@ export const API_FOOTBALL = {
   topScorersCompetitions: (competition: string, limit: number) =>
     `competitions/${competition}/scorers?limit=${limit}`,
 
+  //Teams competitions
+  competitionsTeams: (competition: string) =>
+    `competitions/${competition}/teams`,
+
   //Matches competitions
   competitionsMatches: (competition: string) =>
     `competitions/${competition}/matches`,
 
+  //Team
   teamInfo: (idTeam: number) =>
     `teams/${idTeam}`,
 
