@@ -1,34 +1,47 @@
 // import { IFiltersAPI } from "../types/football-type";
 
+import { IFiltersAPI } from "../@types/lookup_tables";
+
 export const API_URL = "https://api.football-data.org/v4/";
 
 const TIER = "TIER_ONE";
 
+const handleEndParam = (param: IFiltersAPI): string => {
+  let result: string = "";
+  Object.keys(param).forEach((key, i: number) => {
+    if (key !== "competitions") {
+      result += `${key}=${param[key as keyof IFiltersAPI]}&`;
+    }
+  });
+  return result;
+};
+
 export const API_FOOTBALL = {
-  competitions: `competitions?plan=TIER_ONE`,
+  //competitions
+  competitions: (param: IFiltersAPI) =>
+  `competitions?plan=TIER_ONE&${handleEndParam(param)}`,
 
   //Standings
   competitionsStandings: (competitionCode: string) =>
     `competitions/${competitionCode}/standings`,
 
   //(Top) Scorers
-  topScorersCompetitions: (competition: string, limit: number) =>
-    `competitions/${competition}/scorers?limit=${limit}`,
+  topScorersCompetitions: (param: IFiltersAPI) =>
+    `competitions/${param.competitions}/scorers?${handleEndParam(param)}`,
 
   //Teams competitions
   competitionsTeams: (competition: string) =>
     `competitions/${competition}/teams`,
 
   //Matches competitions
-  competitionsMatches: (competition: string) =>
-    `competitions/${competition}/matches`,
+  competitionsMatches: (param: IFiltersAPI) =>
+    `competitions/${param.competitions}/matches?${handleEndParam(param)}`,
 
   //Team
-  teamInfo: (idTeam: number) =>
-    `teams/${idTeam}`,
+  teamInfo: (idTeam: number) => `teams/${idTeam}`,
 
-  teamMatches: (idTeam: number) =>
-    `teams/${idTeam}/matches`,
+  teamMatches: (idTeam: number) => `teams/${idTeam}/matches`,
+
 
 
 
@@ -62,14 +75,10 @@ export const API_FOOTBALL = {
   // `players/${idPerson}/matches?limit=10&competitions=PL`,
   // `players/${idPerson}/matches?limit=5`,
 
-  footballMatches: (param: any) => {
-    let result: string = "";
-    Object.keys(param).forEach((key, i: number) => {
-      if (key !== "competitions") {
-        result += `${key}=${param[key as keyof any]}&`;
-      }
-    });
-    return `competitions/${param.competitions}/matches?${result}`;
+  footballMatches: (param: IFiltersAPI) => {
+    return `competitions/${param.competitions}/matches?${handleEndParam(
+      param
+    )}`;
     // return `matches?dateFrom=2022-12-15&dateTo=2022-12-25&status=FINISHED`;
   },
 

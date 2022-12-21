@@ -5,10 +5,12 @@ import {
   PayloadAction,
   PayloadActionCreator,
 } from "@reduxjs/toolkit";
+import { ICompetitionMatches } from "../../@types/competiiton_matches";
 import { IRootCompetition } from "../../@types/competition";
 import { ICompetitionScorers } from "../../@types/competition_scorers";
 import { ICompetitionStandings } from "../../@types/competition_standings";
 import { ICompetitionTeam } from "../../@types/competition_teams";
+import { IFiltersAPI } from "../../@types/lookup_tables";
 import { API_FOOTBALL } from "../../api/constant";
 import Http from "../../api/http.api";
 import { DataFake } from "../../common/dataFake";
@@ -22,6 +24,7 @@ interface FootballState {
   rootCompetitionsStanding: ICompetitionStandings;
   rootScorers: ICompetitionScorers;
   rootCompetitionsTeams: ICompetitionTeam;
+  rootCompetitionsMatches:ICompetitionMatches
 }
 
 const initAppState: FootballState = {
@@ -31,6 +34,7 @@ const initAppState: FootballState = {
   rootCompetitionsStanding: DataFake.CompetitionsStandings(),
   rootScorers: DataFake.CompetitionScorers(),
   rootCompetitionsTeams: DataFake.CompetitionsTeams(),
+  rootCompetitionsMatches: DataFake.CompetitionsMatches()
 };
 
 const footballSlice = createSlice({
@@ -93,8 +97,9 @@ const footballSlice = createSlice({
       .addCase(
         fetchCompetitionsMatches.fulfilled,
         (state: any, action: PayloadAction<any>) => {
+          const payload: ICompetitionMatches = action.payload;
           if (!action.payload.message) {
-            // state.rootCompetitionsStanding = action.payload;
+            state.rootCompetitionsMatches = payload;
             state.loadingFootball = false;
           }
         }
@@ -138,9 +143,9 @@ const footballSlice = createSlice({
  */
 export const fetchCompetitions = createAsyncThunk(
   "football/fetchCompetitions",
-  async (_data, { dispatch }) => {
+  async (param:IFiltersAPI, { dispatch }) => {
     try {
-      const res: any = await Http.get(API_FOOTBALL.competitions);
+      const res: any = await Http.get(API_FOOTBALL.competitions(param));
       if (res.data) {
         const data = res.data as unknown;
         return data;
@@ -180,14 +185,15 @@ export const fetchCompetitionStandings = createAsyncThunk(
 /**
  * @function fetchCompetitionsMatches
  *
- * @argument competitionCode
+ * @type IFiltersAPI
+ * 
  */
 export const fetchCompetitionsMatches = createAsyncThunk(
   "football/CompetitionsMatches",
-  async (competitionCode: string, { dispatch }) => {
+  async (param:IFiltersAPI, { dispatch }) => {
     try {
       const res: any = await Http.get(
-        API_FOOTBALL.competitionsMatches(competitionCode)
+        API_FOOTBALL.competitionsMatches(param)
       );
       if (res.data) {
         const data = res.data as unknown;
@@ -209,16 +215,13 @@ export const fetchCompetitionsMatches = createAsyncThunk(
  *
  * @argument limit
  */
-export type ITopScorers = {
-  competition: string;
-  limit: number;
-};
+
 export const fetchTopScorersCompetitions = createAsyncThunk(
   "football/fetchTopScorersCompetitions",
-  async ({ competition, limit }: ITopScorers, { dispatch }) => {
+  async (param: IFiltersAPI, { dispatch }) => {
     try {
       const res: any = await Http.get(
-        API_FOOTBALL.topScorersCompetitions(competition, limit)
+        API_FOOTBALL.topScorersCompetitions(param)
       );
       if (res.data) {
         const data = res.data as unknown;

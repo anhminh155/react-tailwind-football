@@ -52,9 +52,7 @@ const footballTeamSlice = createSlice({
 });
 
 /**
- * @function fetchCompetitionsArea
- *
- * Call API list Competitions Tier 1
+ * @function fetchTeam
  */
 export const fetchTeam = createAsyncThunk(
   "footballTeam/fetchTeam",

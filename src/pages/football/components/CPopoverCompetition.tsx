@@ -112,10 +112,15 @@ export default function CPopoverCompetition() {
                     )}
                   </div>
                   <div className="bg-gray-50 p-4">
-                    <span className="flow-root rounded-md px-2 py-2 transition duration-150 ease-in-out hover:bg-gray-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                    <span
+                      onClick={() => {
+                        //handle
+                      }}
+                      className="cursor-pointer flow-root rounded-md px-2 py-2 transition duration-150 ease-in-out hover:bg-gray-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+                    >
                       <span className="flex items-center">
                         <span className="text-sm font-medium text-gray-900">
-                          All
+                          Change Season
                         </span>
                       </span>
                       <span className="block text-sm text-gray-500">

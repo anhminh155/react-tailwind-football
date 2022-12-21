@@ -206,9 +206,9 @@ const TableStanding: React.FC<ITableStanding> = ({
                               key={i}
                               onClick={() => {
                                 console.log(table);
-                                navigate(`/dashboard/team/${table.team.id}`)
+                                navigate(`team/${table.team.id}`)
                               }}
-                              className="dark:bg-dark hover:dark:bg-gray-700 hover:bg-gray-600 hover:text-white cursor-pointer"
+                              className="dark:bg-dark hover:dark:bg-gray-700 hover:bg-gray-400 hover:text-white cursor-pointer"
                             >
                               <td className="pl-4">{table.position}</td>
                               <td className="flex px-6 py-4 whitespace-nowrap">

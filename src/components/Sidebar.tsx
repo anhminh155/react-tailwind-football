@@ -93,7 +93,7 @@ const Sidebar: React.FC<Props> = () => {
         ...customRouter[0].children,
         {
           name_var: `${competition.name}`,
-          url_var: `league_${competition.code}`,
+          url_var: `league-${competition.code}`,
           icon_var: "",
           img_var: `${competition.emblem}`,
         },
@@ -104,7 +104,7 @@ const Sidebar: React.FC<Props> = () => {
         ...customRouter[1].children,
         {
           name_var: `${competition.name}`,
-          url_var: `cup_${competition.code}`,
+          url_var: `cup-${competition.code}`,
           icon_var: "",
           img_var: `${competition.emblem}`,
         },

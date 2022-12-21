@@ -146,7 +146,7 @@ export const dashboardRoutes = [
     component: <MatchesPage />,
   },
   {
-    path: "team/:idTeam",
+    path: ":competitionCode/team/:idTeam",
     component: <TeamPage />,
   },
   {

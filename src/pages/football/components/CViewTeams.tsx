@@ -21,7 +21,7 @@ const CViewTeams: React.FC<Props> = () => {
   useEffect(() => {
     // dispatch(fetchTeamMatches(Number(idTeam)));
   }, []);
-  console.log(dataTeam);
+  // console.log(dataTeam);
 
   return (
     <CLoading loading={loadingFootball}>

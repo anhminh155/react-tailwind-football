@@ -1,25 +1,29 @@
 // disable-eslint
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatchRoot, useSelectorRoot } from "../../redux/hooks";
 import { RootState } from "../../redux/rootReducer";
 import {
+  fetchCompetitionsMatches,
   fetchCompetitionStandings,
   fetchCompetitionsTeams,
   fetchTopScorersCompetitions,
-  ITopScorers,
 } from "../../redux/controller/football.slice";
 import { Props } from "../../@types/define";
 import CBox from "../../components/CBox";
 import TableStanding from "./components/TableStanding,";
 import TableScorers from "./components/TableScorers";
 import CPopoverCompetition from "./components/CPopoverCompetition";
-import { Disclosure, Tab } from "@headlessui/react";
+import { Tab } from "@headlessui/react";
 import CViewTeams from "./components/CViewTeams";
-
+import { IFiltersAPI } from "../../@types/lookup_tables";
+import CResults from "./components/CResults";
+import { format, addDays, parseISO } from "date-fns";
+import Utils from "../../common/utils";
+import "react-datepicker/dist/react-datepicker.css";
 
 function classNames(...classes: any) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 const CompetitionPage: React.FC<Props> = () => {
@@ -27,33 +31,59 @@ const CompetitionPage: React.FC<Props> = () => {
   const dispatch = useDispatchRoot();
   const { loadingFootball, rootCompetitionsStanding, rootScorers } =
     useSelectorRoot((state: RootState) => state.football);
-  const listTab: string[] = ['STANDINGS', 'RESULTS', 'FIXTURES', 'TEAMS', 'TOP SCORERS']
-  const [selectTab, setSelectTab] = useState<number>(0)
+  const listTab: string[] = [
+    "STANDINGS",
+    "RESULTS",
+    "FIXTURES",
+    "TEAMS",
+    "TOP SCORERS",
+  ];
+  const [selectTab, setSelectTab] = useState<number>(0);
+  const [paramApi, setParamAPi] = useState<IFiltersAPI>({
+    competitions: competitionCode?.split("-")[1]!,
+  });
+  const [limitPlayer, setLimitPlayer] = useState<number>(10);
+  const tabRef = useRef<HTMLInputElement>(null);
+
+  const scrollToTab = () => {
+    tabRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
+    scrollToTab();
+  }, [selectTab]);
+
+  useEffect(() => {
+    let param: IFiltersAPI = {
+      ...paramApi,
+      competitions: competitionCode?.split("-")[1]!,
+    };
+    setParamAPi(param);
     switch (selectTab) {
       case 0:
         // STANDINGS
-        dispatch(fetchCompetitionStandings(competitionCode?.split("_")[1]!));
+        dispatch(fetchCompetitionStandings(param.competitions!));
         break;
       case 1:
-        // FIXTURES
+        // RESULTS
+
+        //Done components
         break;
       case 2:
-        // RESULTS       
-
+        // FIXTURES
         break;
       case 3:
         // TEAMS
-        dispatch(fetchCompetitionsTeams(competitionCode?.split("_")[1]!))
+        dispatch(fetchCompetitionsTeams(param.competitions!));
         break;
       case 4:
         // TOP SCORERS
-        const reqTopScorersCompetitions: ITopScorers = {
-          competition: competitionCode?.split("_")[1]!,
-          limit: 10,
-        };
-        dispatch(fetchTopScorersCompetitions(reqTopScorersCompetitions));
+        dispatch(
+          fetchTopScorersCompetitions({
+            ...param,
+            limit: 10,
+          })
+        );
         break;
       default:
       // code block
@@ -67,20 +97,26 @@ const CompetitionPage: React.FC<Props> = () => {
         <div className="inline-block hover:shadow-md hover:bg-gray-200 rounded-2xl -py-10 px-2 -m-2 mb-3">
           <CPopoverCompetition />
         </div>
-        <div className="w-full px-2 py-16 sm:px-0 select-none">
-          <Tab.Group defaultIndex={selectTab} onChange={(index: number) => {
-            setSelectTab(index)
-          }}>
+
+        <div ref={tabRef} />
+
+        <div className="w-full px-2 mt-5 pt-16 sm:px-0 select-none">
+          <Tab.Group
+            defaultIndex={selectTab}
+            onChange={(index: number) => {
+              setSelectTab(index);
+            }}
+          >
             <Tab.List className="flex space-x-1 rounded-t-xl bg-soft dark:bg-gray-700 p-1">
               {listTab.map((title: string, index: number) => (
                 <Tab
                   key={index}
                   className={({ selected }) =>
                     classNames(
-                      'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-violet dark:text-yellow',
+                      "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-violet dark:text-yellow",
                       selected
-                        ? 'bg-white dark:bg-gray-800 shadow'
-                        : 'text-black hover:bg-white/[0.12] hover:text-violet hover:bg-white hover:shadow hover:dark:bg-gray-800'
+                        ? "bg-white dark:bg-gray-800 shadow"
+                        : "text-black hover:bg-white/[0.12] hover:text-violet hover:bg-white hover:shadow hover:dark:bg-gray-800"
                     )
                   }
                 >
@@ -91,7 +127,7 @@ const CompetitionPage: React.FC<Props> = () => {
             <Tab.Panels className="">
               <Tab.Panel
                 className={classNames(
-                  'rounded-b-xl p-3 pt-5 bg-soft dark:bg-gray-700',
+                  "rounded-b-xl p-3 pt-5 bg-soft dark:bg-gray-700"
                 )}
               >
                 <TableStanding
@@ -102,91 +138,50 @@ const CompetitionPage: React.FC<Props> = () => {
               </Tab.Panel>
               <Tab.Panel
                 className={classNames(
-                  'rounded-b-xl p-3 pt-5 bg-soft dark:bg-gray-700',
+                  "rounded-b-xl p-3 pt-5 bg-soft dark:bg-gray-700"
                 )}
               >
-                RESULTS
+                <CResults />
               </Tab.Panel>
               <Tab.Panel
                 className={classNames(
-                  'rounded-b-xl p-3 pt-5 bg-soft dark:bg-gray-700',
+                  "rounded-b-xl p-3 pt-5 bg-soft dark:bg-gray-700"
                 )}
               >
                 FIXTURES
+                <div className="h-screen"></div>
               </Tab.Panel>
 
               <Tab.Panel
                 className={classNames(
-                  'rounded-b-xl p-3 pt-5 bg-soft dark:bg-gray-700',
+                  "rounded-b-xl p-3 pt-5 bg-soft dark:bg-gray-700"
                 )}
               >
                 <CViewTeams />
               </Tab.Panel>
               <Tab.Panel
                 className={classNames(
-                  'rounded-b-xl p-3 pt-5 bg-soft dark:bg-gray-700',
+                  "rounded-b-xl p-3 pt-5 bg-soft dark:bg-gray-700"
                 )}
               >
                 <TableScorers
                   scorers={rootScorers?.scorers!}
                   loading={loadingFootball}
+                  onMore={() => {
+                    const lmt = limitPlayer + 10;
+                    setLimitPlayer(lmt);
+                    dispatch(
+                      fetchTopScorersCompetitions({
+                        ...paramApi,
+                        limit: lmt,
+                      })
+                    );
+                  }}
                 />
               </Tab.Panel>
             </Tab.Panels>
           </Tab.Group>
         </div>
-
-
-
-        {/* <Disclosure>
-          {(change) => {
-            return (
-              <div className="mb-2">
-                <Disclosure.Button
-                  className={`flex w-full justify-between ${change.open ? 'rounded-t-lg' : 'rounded-lg'}
-                    bg-gray-100 px-4 py-2 text-left 
-                    text-sm font-medium text-black dark:text-yellow
-                    hover:text-white hover:bg-gray-400 focus:outline-none 
-                    focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75`}
-                >
-                  <div className="text-xl py-2">Top Scorers</div>
-                </Disclosure.Button>
-                <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500 bg-soft rounded-b-lg">
-                  <TableScorers
-                    scorers={rootScorers?.scorers!}
-                    loading={loadingFootball}
-                  />
-                </Disclosure.Panel>
-              </div>
-            );
-          }}
-        </Disclosure>
-        <Disclosure defaultOpen >
-          {(change) => {
-            return (
-              <div className="">
-                <Disclosure.Button
-                  className={`flex w-full justify-between ${change.open ? 'rounded-t-lg' : 'rounded-lg'}
-                    bg-gray-100 px-4 py-2 text-left 
-                    text-sm font-medium text-black dark:text-yellow
-                    hover:text-white hover:bg-gray-400 focus:outline-none 
-                    focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75`}
-                >
-                  <div className="text-xl py-2">Standings</div>
-                </Disclosure.Button>
-                <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500 bg-soft rounded-b-lg">
-                  <div className="">
-                    <TableStanding
-                      standings={rootCompetitionsStanding?.standings}
-                      type={rootCompetitionsStanding.competition.type}
-                      loading={loadingFootball}
-                    />
-                  </div>
-                </Disclosure.Panel>
-              </div>
-            );
-          }}
-        </Disclosure> */}
       </CBox>
     </div>
   );

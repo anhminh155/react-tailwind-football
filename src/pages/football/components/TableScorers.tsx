@@ -1,22 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Scorer } from "../../../@types/competition_scorers";
-import { Standing, Table } from "../../../@types/competition_standings";
 import { Props } from "../../../@types/define";
-import { EnumTypes } from "../../../@types/lookup_tables";
-import { DataFake } from "../../../common/dataFake";
 import Utils from "../../../common/utils";
 import CLoading from "../../../components/CLoading";
 
 interface ITableScorers extends Props {
   scorers: Scorer[] | any;
   loading?: boolean;
+  onMore: any;
 }
 
 const TableScorers: React.FC<ITableScorers> = ({
   scorers,
   loading = false,
+  onMore,
 }) => {
+  const moreEndRef = useRef<HTMLInputElement | any>(null);
+
+  const scrollToBottom = () => {
+    moreEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    if (scorers.length > 10) {
+      scrollToBottom();
+    }
+  }, [scorers]);
+
   return (
     <div className="">
       <div className="flex flex-col select-none">
@@ -26,7 +37,7 @@ const TableScorers: React.FC<ITableScorers> = ({
               <div className={`overflow-hidden sm:rounded-lg `}>
                 <table className="min-w-full text-sm text-gray-700 dark:text-white">
                   <thead className="dark:bg-gray-800 bg-gray-600 text-xs uppercase font-medium">
-                    <tr className="text-white" >
+                    <tr className="text-white">
                       <th
                         scope="col"
                         className="px-6 py-3 text-left tracking-wider"
@@ -82,10 +93,11 @@ const TableScorers: React.FC<ITableScorers> = ({
                       return (
                         <tr
                           key={i}
+                          ref={scorers.length - 10 === i ? moreEndRef : null}
                           onClick={() => {
                             console.log(scorer);
                           }}
-                          className="dark:bg-dark hover:dark:bg-gray-700 hover:bg-gray-600 hover:text-white cursor-pointer"
+                          className="dark:bg-dark hover:dark:bg-gray-700 hover:bg-gray-400 hover:text-white cursor-pointer"
                         >
                           <td className="px-6 py-4 whitespace-nowrap">
                             {i + 1}
@@ -125,6 +137,18 @@ const TableScorers: React.FC<ITableScorers> = ({
                         </tr>
                       );
                     })}
+                    <tr className="bg-gray-200 dark:bg-dark hover:dark:bg-gray-700 hover:bg-gray-600 text-violet dark:text-white hover:text-white cursor-pointer hover:text-xl text-lg transition ease-out duration-600">
+                      <td
+                        onClick={onMore}
+                        colSpan={8}
+                        className="text-center py-3 "
+                      >
+                        <span className="animate-pulse">
+
+                        Add 10 player...
+                        </span>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>

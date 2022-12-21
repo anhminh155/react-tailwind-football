@@ -1,5 +1,6 @@
 /* eslint-disable */
-import { format } from "date-fns";
+import { parseISO } from "date-fns";
+import { format, utcToZonedTime } from "date-fns-tz";
 
 class Utils {
   static setLocalStorage(key: string, value: unknown): void {
@@ -29,6 +30,23 @@ class Utils {
 
   static formatTime(date: string, typeFormat: string) {
     return format(new Date(date), typeFormat);
+  }
+
+  static getCurrentTimeUTC(date?: Date): string {
+    const currentDay: string = date
+      ? date.toISOString()
+      : new Date().toISOString();
+    const parsedTime = parseISO(currentDay);
+    const formatInTimeZone = (date: Date, fmt: string, tz: string) => {
+      return format(utcToZonedTime(date, tz), fmt, { timeZone: tz });
+    };
+    const formattedTime = formatInTimeZone(
+      parsedTime,
+      // "yyyy-MM-dd kk:mm:ss xxx",
+      "yyyy-MM-dd",
+      "UTC"
+    );
+    return formattedTime;
   }
 
   static getAge(date: string) {
