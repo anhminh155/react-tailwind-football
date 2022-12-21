@@ -60,7 +60,7 @@ const Sidebar: React.FC<Props> = () => {
   }, [location.pathname]);
 
   useEffect(() => {
-    // dispatch(fetchCompetitions());
+    dispatch(fetchCompetitions({}));
   }, []);
 
   useEffect(() => {
@@ -93,7 +93,7 @@ const Sidebar: React.FC<Props> = () => {
         ...customRouter[0].children,
         {
           name_var: `${competition.name}`,
-          url_var: `league-${competition.code}`,
+          url_var: `league-${competition.code}-2022`,
           icon_var: "",
           img_var: `${competition.emblem}`,
         },

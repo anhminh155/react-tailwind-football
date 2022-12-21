@@ -9,49 +9,28 @@ import { useDispatchRoot, useSelectorRoot } from "../../../redux/hooks";
 import { RootState } from "../../../redux/rootReducer";
 import { IPathNameChild } from "../../../routes";
 import DatePicker from "react-datepicker";
-import { format, addDays, parseISO, subDays } from "date-fns";
+import { format, addDays, parseISO, subDays, nextDay } from "date-fns";
 import { Match } from "../../../@types/competiiton_matches";
 import { Switch } from "@headlessui/react";
 import { fetchCompetitionsMatches } from "../../../redux/controller/football.slice";
 import Utils from "../../../common/utils";
 import { EnumTypes } from "../../../@types/lookup_tables";
 
-const CResults: React.FC<Props> = () => {
-  const dispatch = useDispatchRoot();
+interface ICResults extends Props {
+  getParam: any;
+}
+
+const CResults: React.FC<ICResults> = ({ getParam }) => {
   const { loadingFootball, rootCompetitionsMatches } = useSelectorRoot(
     (state: RootState) => state.football
   );
   const { competitionCode, idTeam } = useParams<IPathNameChild>();
-  const [dateRange, setDateRange] = useState([
-    subDays(new Date(), 7),
-    new Date(),
+  const [dateRange, setDateRange] = useState<[any, any]>([
+    subDays(new Date(), 14),
+    nextDay(new Date(), 2),
   ]);
   const [startDate, endDate] = dateRange;
   const [enabled, setEnabled] = useState(false);
-
-  useEffect(() => {
-    // dispatch(fetchTeamMatches(Number(idTeam)));
-    if (dateRange[0] !== null && dateRange[1] !== null) {
-      if (enabled) {
-        dispatch(
-          fetchCompetitionsMatches({
-            competitions: competitionCode?.split("-")[1]!,
-            dateFrom: Utils.getCurrentTimeUTC(dateRange[0]),
-            dateTo: Utils.getCurrentTimeUTC(dateRange[1]),
-          })
-        );
-      } else {
-        dispatch(
-          fetchCompetitionsMatches({
-            status: "FINISHED",
-            competitions: competitionCode?.split("-")[1]!,
-            dateFrom: Utils.getCurrentTimeUTC(dateRange[0]),
-            dateTo: Utils.getCurrentTimeUTC(dateRange[1]),
-          })
-        );
-      }
-    }
-  }, [dateRange, enabled]);
 
   return (
     <CLoading loading={loadingFootball}>
@@ -64,8 +43,24 @@ const CResults: React.FC<Props> = () => {
             selectsRange={true}
             startDate={startDate}
             endDate={endDate}
-            onChange={(update: any[]) => {
+            onChange={(update: [any, any]) => {              
               setDateRange(update);
+              if (update[0] !== null && update[1] !== null) {                
+                if (enabled) {
+                  getParam({
+                    competitions: competitionCode?.split("-")[1]!,
+                    dateFrom: Utils.getCurrentTimeUTC(update[0]),
+                    dateTo: Utils.getCurrentTimeUTC(update[1]),
+                  });
+                } else {
+                  getParam({
+                    status: "FINISHED",
+                    competitions: competitionCode?.split("-")[1]!,
+                    dateFrom: Utils.getCurrentTimeUTC(update[0]),
+                    dateTo: Utils.getCurrentTimeUTC(update[1]),
+                  });
+                }
+              }
             }}
             withPortal
           />
@@ -75,6 +70,22 @@ const CResults: React.FC<Props> = () => {
           <Switch
             checked={enabled}
             onChange={(e: boolean) => {
+              console.log('Switch');
+              
+              if (e) {
+                getParam({
+                  competitions: competitionCode?.split("-")[1]!,
+                  dateFrom: Utils.getCurrentTimeUTC(dateRange[0]),
+                  dateTo: Utils.getCurrentTimeUTC(dateRange[1]),
+                });
+              } else {
+                getParam({
+                  status: "FINISHED",
+                  competitions: competitionCode?.split("-")[1]!,
+                  dateFrom: Utils.getCurrentTimeUTC(dateRange[0]),
+                  dateTo: Utils.getCurrentTimeUTC(dateRange[1]),
+                });
+              }
               setEnabled(e);
             }}
             className={`${enabled ? "bg-teal-900" : "bg-gray-200"}
@@ -124,21 +135,19 @@ const CResults: React.FC<Props> = () => {
                   key={i}
                   className="dark:bg-dark hover:dark:bg-gray-700 hover:bg-gray-400 hover:text-white"
                 >
-                  <td className="px-6 py-4 whitespace-nowrap min-w-fit">
+                  <td className="px-6 py-4 min-w-fit">
                     {format(new Date(match.utcDate), "dd/MM HH:mm")}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right">
+                  <td className="px-6 py-4 text-right">
                     {match.homeTeam.shortName}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-center">
+                  <td className="px-6 py-4 text-center">
                     {match.score.winner === null
                       ? "vs"
                       : `${match.score.fullTime.home} - ${match.score.fullTime.away}`}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {match.awayTeam.shortName}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap flex justify-end">
+                  <td className="px-6 py-4">{match.awayTeam.shortName}</td>
+                  <td className="px-6 py-4 flex justify-end">
                     <button
                       type="button"
                       className="inline-flex rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"

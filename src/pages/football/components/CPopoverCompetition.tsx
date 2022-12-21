@@ -2,12 +2,13 @@ import { Popover, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Fragment } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Competition } from "../../../@types/competition";
 import { EnumTypes } from "../../../@types/lookup_tables";
 import Utils from "../../../common/utils";
 import { useSelectorRoot } from "../../../redux/hooks";
 import { RootState } from "../../../redux/rootReducer";
+import { IPathNameChild } from "../../../routes";
 
 const solutions = [
   {
@@ -34,36 +35,42 @@ export default function CPopoverCompetition() {
   const { rootCompetitionsStanding, rootCompetitions } = useSelectorRoot(
     (state: RootState) => state.football
   );
+  const { competitionCode } = useParams<IPathNameChild>();
+  const currentCompetition: Competition = rootCompetitions.competitions.find(
+    (competition: Competition) =>
+      competition.code === competitionCode?.split("-")[1]!
+  )!;
+
   return (
     <div className="w-full max-w-sm select-none">
       <Popover className="relative">
         {(change) => (
           <>
             <Popover.Button>
-              <div className="py-10 flex items-center">
+              <div className="p-2 flex items-center">
                 <LazyLoadImage
                   effect="blur"
                   className="h-10 mr-1 bg-transparent"
-                  src={rootCompetitionsStanding.area.flag}
+                  src={currentCompetition.area.flag!}
                   alt=""
                 />
                 <LazyLoadImage
                   effect="blur"
                   className="h-10 mr-2 bg-transparent"
-                  src={rootCompetitionsStanding.competition.emblem}
+                  src={currentCompetition.emblem}
                   alt=""
                 />
                 <div className="flex flex-col items-start">
                   <div className="text-lg text-violet dark:text-yellow font-semibold text-left w-40">
-                    {rootCompetitionsStanding.competition.name}
+                    {currentCompetition.name}
                   </div>
-                  <div className="text-xs opacity-70">{`Season ${Utils.formatTime(
-                    rootCompetitionsStanding.season.startDate,
-                    "yyyy"
-                  )}-${Utils.formatTime(
-                    rootCompetitionsStanding.season.endDate,
-                    "yyyy"
-                  )}`}</div>
+                  {competitionCode?.split("-")[2] ? (
+                    <div className="text-xs opacity-70">{`Season: ${
+                      competitionCode?.split("-")[2]
+                    }`}</div>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               </div>
             </Popover.Button>

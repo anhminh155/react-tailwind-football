@@ -5,7 +5,6 @@ import User from "./pages/dashboard/User";
 import Register from "./pages/auth/Register";
 import CompetitionPage from "./pages/football/CompetitionPage";
 import MatchesPage from "./pages/football/MatchesPage";
-import { type } from "@testing-library/user-event/dist/type";
 import TeamPage from "./pages/football/TeamPage";
 
 export const AdminRoutes = [
@@ -14,11 +13,11 @@ export const AdminRoutes = [
     url_var: "",
     icon_var: "ri-home-line",
   },
-  {
-    name_var: "Modal Example",
-    url_var: "modal-example",
-    icon_var: "ri-home-line",
-  },
+  // {
+  //   name_var: "Modal Example",
+  //   url_var: "modal-example",
+  //   icon_var: "ri-home-line",
+  // },
   // {
   //     name_var: 'Project Management',
   //     url_var: 'project-management',

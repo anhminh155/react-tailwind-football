@@ -29,7 +29,7 @@ const TableStanding: React.FC<ITableStanding> = ({
     standings.filter((e: Standing) => e.type === StandingType.TOTAL)!
   );
   const [select, setSelect] = useState<"TOTAL" | "HOME" | "AWAY">("TOTAL");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (type === EnumTypes.CompetitionType.CUP) {
@@ -56,10 +56,11 @@ const TableStanding: React.FC<ITableStanding> = ({
             }}
           >
             <span
-              className={`${select === "TOTAL"
-                ? "bg-white dark:bg-dark rounded-t-lg shadow text-violet dark:text-yellow"
-                : ""
-                } flex justify-center py-2`}
+              className={`${
+                select === "TOTAL"
+                  ? "bg-white dark:bg-dark rounded-t-lg shadow text-violet dark:text-yellow"
+                  : ""
+              } flex justify-center py-2`}
             >
               TOTAL
             </span>
@@ -74,10 +75,11 @@ const TableStanding: React.FC<ITableStanding> = ({
             }}
           >
             <span
-              className={`${select === "HOME"
-                ? "bg-white dark:bg-dark rounded-t-lg shadow text-violet dark:text-yellow"
-                : ""
-                } flex justify-center py-2`}
+              className={`${
+                select === "HOME"
+                  ? "bg-white dark:bg-dark rounded-t-lg shadow text-violet dark:text-yellow"
+                  : ""
+              } flex justify-center py-2`}
             >
               HOME
             </span>
@@ -93,10 +95,11 @@ const TableStanding: React.FC<ITableStanding> = ({
             }}
           >
             <span
-              className={`${select === "AWAY"
-                ? "bg-white dark:bg-dark rounded-t-lg shadow text-violet dark:text-yellow"
-                : ""
-                } flex justify-center py-2`}
+              className={`${
+                select === "AWAY"
+                  ? "bg-white dark:bg-dark rounded-t-lg shadow text-violet dark:text-yellow"
+                  : ""
+              } flex justify-center py-2`}
             >
               AWAY
             </span>
@@ -116,21 +119,23 @@ const TableStanding: React.FC<ITableStanding> = ({
               <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <CLoading loading={loading}>
                   <div
-                    className={`overflow-hidden ${type === EnumTypes.CompetitionType.CUP
-                      ? "sm:rounded-lg"
-                      : "sm:rounded-b-lg"
-                      }`}
+                    className={`overflow-hidden ${
+                      type === EnumTypes.CompetitionType.CUP
+                        ? "sm:rounded-lg"
+                        : "sm:rounded-b-lg"
+                    }`}
                   >
                     <table className="min-w-full text-sm text-gray-700 dark:text-white">
                       <thead className="dark:bg-gray-800 bg-gray-600 text-xs uppercase font-medium">
-                        <tr className="text-white" >
+                        <tr className="text-white">
                           <th />
                           <th
                             scope="col"
-                            className={`${type === EnumTypes.CompetitionType.CUP
-                              ? "w-56"
-                              : ""
-                              } px-6 py-3 text-left tracking-wider`}
+                            className={`${
+                              type === EnumTypes.CompetitionType.CUP
+                                ? "w-56"
+                                : ""
+                            } px-6 py-3 text-left tracking-wider`}
                           >
                             {type === EnumTypes.CompetitionType.CUP ? (
                               <span className="capitalize">
@@ -144,58 +149,60 @@ const TableStanding: React.FC<ITableStanding> = ({
                           </th>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-left tracking-wider"
+                            className="px-6 py-3 text-center tracking-wider"
                           >
                             MP
                           </th>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-left tracking-wider"
+                            className="px-6 py-3 text-center tracking-wider"
                           >
                             W
                           </th>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-left tracking-wider"
+                            className="px-6 py-3 text-center tracking-wider"
                           >
                             D
                           </th>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-left tracking-wider"
+                            className="px-6 py-3 text-center tracking-wider"
                           >
                             L
                           </th>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-left tracking-wider"
+                            className="px-6 py-3 text-center tracking-wider"
                           >
                             GF
                           </th>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-left tracking-wider"
+                            className="px-6 py-3 text-center tracking-wider"
                           >
                             GA
                           </th>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-left tracking-wider"
+                            className="px-6 py-3 text-center tracking-wider"
                           >
                             GD
                           </th>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-left tracking-wider"
+                            className="px-6 py-3 text-center tracking-wider"
                           >
                             Pts
                           </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left tracking-wider"
-                          >
-                            Last 5
-                          </th>
+                          {standing.table[0].form && (
+                            <th
+                              scope="col"
+                              className="px-6 py-3 text-center tracking-wider"
+                            >
+                              Last 5
+                            </th>
+                          )}
                         </tr>
                       </thead>
                       <tbody className="dark:bg-gray-800 bg-white ">
@@ -206,7 +213,7 @@ const TableStanding: React.FC<ITableStanding> = ({
                               key={i}
                               onClick={() => {
                                 console.log(table);
-                                navigate(`team/${table.team.id}`)
+                                navigate(`team/${table.team.id}`);
                               }}
                               className="dark:bg-dark hover:dark:bg-gray-700 hover:bg-gray-400 hover:text-white cursor-pointer"
                             >
@@ -222,96 +229,33 @@ const TableStanding: React.FC<ITableStanding> = ({
                                   {table.team.name}
                                 </span>
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
+                              <td className="px-6 py-4 text-center whitespace-nowrap">
                                 {table.playedGames}
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
+                              <td className="px-6 py-4 text-center whitespace-nowrap">
                                 {table.won}
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
+                              <td className="px-6 py-4 text-center whitespace-nowrap">
                                 {table.draw}
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
+                              <td className="px-6 py-4 text-center whitespace-nowrap">
                                 {table.lost}
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
+                              <td className="px-6 py-4 text-center whitespace-nowrap">
                                 {table.goalsFor}
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
+                              <td className="px-6 py-4 text-center whitespace-nowrap">
                                 {table.goalsAgainst}
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
+                              <td className="px-6 py-4 text-center whitespace-nowrap">
                                 {table.goalDifference}
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
+                              <td className="px-6 py-4 text-center whitespace-nowrap">
                                 {table.points}
                               </td>
-                              <td className="flex px-6 py-4 whitespace-nowrap">
-                                {!table.form ? (
-                                  <div className="flex">
-                                    <svg
-                                      className="w-4 fill-current text-orange-300"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      viewBox="0 0 20 20"
-                                      fill="currentColor"
-                                    >
-                                      <path
-                                        fillRule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z"
-                                        clipRule="evenodd"
-                                      />
-                                    </svg>
-                                    <svg
-                                      className="w-4 fill-current text-orange-300"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      viewBox="0 0 20 20"
-                                      fill="currentColor"
-                                    >
-                                      <path
-                                        fillRule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z"
-                                        clipRule="evenodd"
-                                      />
-                                    </svg>
-                                    <svg
-                                      className="w-4 fill-current text-orange-300"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      viewBox="0 0 20 20"
-                                      fill="currentColor"
-                                    >
-                                      <path
-                                        fillRule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z"
-                                        clipRule="evenodd"
-                                      />
-                                    </svg>
-                                    <svg
-                                      className="w-4 fill-current text-orange-300"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      viewBox="0 0 20 20"
-                                      fill="currentColor"
-                                    >
-                                      <path
-                                        fillRule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z"
-                                        clipRule="evenodd"
-                                      />
-                                    </svg>
-                                    <svg
-                                      className="w-4 fill-current text-orange-300"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      viewBox="0 0 20 20"
-                                      fill="currentColor"
-                                    >
-                                      <path
-                                        fillRule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z"
-                                        clipRule="evenodd"
-                                      />
-                                    </svg>
-                                  </div>
-                                ) : (
-                                  table?.form
+                              {table.form && (
+                                <td className="flex px-6 py-4 whitespace-nowrap">
+                                  {table?.form
                                     .split(",")
                                     .map((e: string, index: number) => {
                                       if (e === "W") {
@@ -363,9 +307,9 @@ const TableStanding: React.FC<ITableStanding> = ({
                                           </svg>
                                         );
                                       }
-                                    })
-                                )}
-                              </td>
+                                    })}
+                                </td>
+                              )}
                             </tr>
                           );
                         })}

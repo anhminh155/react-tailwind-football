@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useDispatchRoot, useSelectorRoot } from "../../redux/hooks";
 import { RootState } from "../../redux/rootReducer";
 import {
+  fetchCompetitions,
   fetchCompetitionsMatches,
   fetchCompetitionStandings,
   fetchCompetitionsTeams,
@@ -18,9 +19,9 @@ import { Tab } from "@headlessui/react";
 import CViewTeams from "./components/CViewTeams";
 import { IFiltersAPI } from "../../@types/lookup_tables";
 import CResults from "./components/CResults";
-import { format, addDays, parseISO } from "date-fns";
-import Utils from "../../common/utils";
+import { subDays, nextDay } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
+import Utils from "../../common/utils";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -43,17 +44,10 @@ const CompetitionPage: React.FC<Props> = () => {
     competitions: competitionCode?.split("-")[1]!,
   });
   const [limitPlayer, setLimitPlayer] = useState<number>(10);
-  const tabRef = useRef<HTMLInputElement>(null);
-
-  const scrollToTab = () => {
-    tabRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  const [paramCResults, setParamCResults] = useState<IFiltersAPI>({});
 
   useEffect(() => {
-    scrollToTab();
-  }, [selectTab]);
-
-  useEffect(() => {
+    // console.table([selectTab, paramCResults, competitionCode]);
     let param: IFiltersAPI = {
       ...paramApi,
       competitions: competitionCode?.split("-")[1]!,
@@ -67,6 +61,18 @@ const CompetitionPage: React.FC<Props> = () => {
       case 1:
         // RESULTS
 
+        if (!paramCResults.dateFrom) {
+          dispatch(
+            fetchCompetitionsMatches({
+              status: "FINISHED",
+              competitions: competitionCode?.split("-")[1]!,
+              dateFrom: Utils.getCurrentTimeUTC(subDays(new Date(), 14)),
+              dateTo: Utils.getCurrentTimeUTC(nextDay(new Date(), 2)),
+            })
+          );
+        } else {
+          dispatch(fetchCompetitionsMatches(paramCResults));
+        }
         //Done components
         break;
       case 2:
@@ -88,22 +94,22 @@ const CompetitionPage: React.FC<Props> = () => {
       default:
       // code block
     }
-  }, [selectTab, competitionCode]);
+  }, [selectTab, paramCResults, competitionCode]);
 
   return (
     <div className="">
       <CBox>
         {/* popover league */}
-        <div className="inline-block hover:shadow-md hover:bg-gray-200 rounded-2xl -py-10 px-2 -m-2 mb-3">
+        <div className="inline-block hover:shadow-md hover:bg-gray-200 rounded-2xl -py-10 px-2 -m-2 mb-3 ring-0">
           <CPopoverCompetition />
         </div>
 
-        <div ref={tabRef} />
-
-        <div className="w-full px-2 mt-5 pt-16 sm:px-0 select-none">
+        <div className="w-full px-2 mt-5 sm:px-0 select-none">
           <Tab.Group
             defaultIndex={selectTab}
             onChange={(index: number) => {
+              console.log(index);
+
               setSelectTab(index);
             }}
           >
@@ -141,7 +147,12 @@ const CompetitionPage: React.FC<Props> = () => {
                   "rounded-b-xl p-3 pt-5 bg-soft dark:bg-gray-700"
                 )}
               >
-                <CResults />
+                <CResults
+                  getParam={(param: IFiltersAPI) => {
+                    console.log(param);
+                    setParamCResults(param);
+                  }}
+                />
               </Tab.Panel>
               <Tab.Panel
                 className={classNames(
@@ -187,4 +198,4 @@ const CompetitionPage: React.FC<Props> = () => {
   );
 };
 
-export default CompetitionPage;
+export default React.memo(CompetitionPage);

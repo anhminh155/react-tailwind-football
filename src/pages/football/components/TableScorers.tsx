@@ -137,16 +137,13 @@ const TableScorers: React.FC<ITableScorers> = ({
                         </tr>
                       );
                     })}
-                    <tr className="bg-gray-200 dark:bg-dark hover:dark:bg-gray-700 hover:bg-gray-600 text-violet dark:text-white hover:text-white cursor-pointer hover:text-xl text-lg transition ease-out duration-600">
+                    <tr className="bg-gray-200 dark:bg-gray-800 hover:dark:bg-gray-900 hover:bg-gray-600 text-violet dark:text-white hover:text-white cursor-pointer text-md transition ease-out duration-600">
                       <td
                         onClick={onMore}
                         colSpan={8}
                         className="text-center py-3 "
                       >
-                        <span className="animate-pulse">
-
-                        Add 10 player...
-                        </span>
+                        <span className="animate-pulse">More 10 player...</span>
                       </td>
                     </tr>
                   </tbody>
