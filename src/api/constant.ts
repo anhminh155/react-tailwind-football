@@ -22,16 +22,16 @@ export const API_FOOTBALL = {
   `competitions?plan=TIER_ONE&${handleEndParam(param)}`,
 
   //Standings
-  competitionsStandings: (competitionCode: string) =>
-    `competitions/${competitionCode}/standings`,
+  competitionsStandings: (param: IFiltersAPI) =>
+    `competitions/${param.competitions}/standings?${handleEndParam(param)}`,
 
   //(Top) Scorers
   topScorersCompetitions: (param: IFiltersAPI) =>
     `competitions/${param.competitions}/scorers?${handleEndParam(param)}`,
 
   //Teams competitions
-  competitionsTeams: (competition: string) =>
-    `competitions/${competition}/teams`,
+  competitionsTeams: (param: IFiltersAPI) =>
+    `competitions/${param.competitions}/teams?${handleEndParam(param)}`,
 
   //Matches competitions
   competitionsMatches: (param: IFiltersAPI) =>

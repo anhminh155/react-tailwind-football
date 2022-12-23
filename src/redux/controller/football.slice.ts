@@ -34,7 +34,7 @@ const initAppState: FootballState = {
   rootCompetitionsStanding: DataFake.CompetitionsStandings(),
   rootScorers: DataFake.CompetitionScorers(),
   rootCompetitionsTeams: DataFake.CompetitionsTeams(),
-  rootCompetitionsMatches: DataFake.CompetitionsMatches()
+  rootCompetitionsMatches: DataFake.CompetitionsMatches(),
 };
 
 const footballSlice = createSlice({
@@ -165,16 +165,21 @@ export const fetchCompetitions = createAsyncThunk(
  */
 export const fetchCompetitionStandings = createAsyncThunk(
   "football/CompetitionStandings",
-  async (competitionCode: string, { dispatch }) => {
+  async (param: IFiltersAPI, { dispatch }) => {
     try {
       const res: any = await Http.get(
-        API_FOOTBALL.competitionsStandings(competitionCode)
+        API_FOOTBALL.competitionsStandings(param)
       );
       if (res.data) {
         const data = res.data as unknown;
         return data;
+      }else{
+        console.log(res);
+        
       }
     } catch (error) {
+      console.log(error);
+      
       dispatch(setMessage(Utils.getMassage()));
       dispatch(setLoadingFootball(false));
       return error;
@@ -272,10 +277,10 @@ export const fetchTeamMatches = createAsyncThunk(
  */
 export const fetchCompetitionsTeams = createAsyncThunk(
   "football/fetchCompetitionsTeams",
-  async (competition: string, { dispatch }) => {
+  async (param: IFiltersAPI, { dispatch }) => {
     try {
       const res: any = await Http.get(
-        API_FOOTBALL.competitionsTeams(competition)
+        API_FOOTBALL.competitionsTeams(param)
       );
       if (res.data) {
         const data = res.data as unknown;

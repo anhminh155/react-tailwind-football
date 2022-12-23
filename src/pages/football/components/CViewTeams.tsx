@@ -103,7 +103,7 @@ const CViewTeams: React.FC<Props> = () => {
                     </svg>
 
                     <h1
-                      className="px-2 text-sm cursor-pointer underline text-blue-600"
+                      className="px-2 text-sm cursor-alias underline text-blue-600"
                       onClick={() => {
                         const url: any = encodeURIComponent(dataTeam?.address!);
                         window.open(
@@ -132,7 +132,7 @@ const CViewTeams: React.FC<Props> = () => {
                     </svg>
 
                     <h1
-                      className="px-2 text-sm cursor-pointer underline text-blue-600"
+                      className="px-2 text-sm cursor-alias underline text-blue-600"
                       onClick={() => {
                         window.open(`${dataTeam?.website}`, "_system");
                       }}

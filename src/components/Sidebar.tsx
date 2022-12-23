@@ -1,7 +1,7 @@
 /** disable-eslint */
 import React, { useEffect, useRef, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { AdminRoutes } from "../routes";
 import ProfileMenu from "./ProfileMenu";
 import appLogo from "../assets/img/applogo.png";
@@ -10,6 +10,7 @@ import { fetchCompetitions } from "../redux/controller/football.slice";
 import { Competition } from "../@types/competition";
 import { EnumTypes } from "../@types/lookup_tables";
 import { RootState } from "../redux/rootReducer";
+import { getYear } from "date-fns";
 
 type Props = {};
 
@@ -93,18 +94,23 @@ const Sidebar: React.FC<Props> = () => {
         ...customRouter[0].children,
         {
           name_var: `${competition.name}`,
-          url_var: `league-${competition.code}-2022`,
+          url_var: `league-${competition.code}-${getYear(
+            new Date(competition.currentSeason.startDate)
+          )}`,
           icon_var: "",
           img_var: `${competition.emblem}`,
         },
       ];
     });
     dataCup.forEach((competition: Competition) => {
+      // console.log(competition);
       customRouter[1].children = [
         ...customRouter[1].children,
         {
           name_var: `${competition.name}`,
-          url_var: `cup-${competition.code}`,
+          url_var: `cup-${competition.code}-${getYear(
+            new Date(competition.currentSeason.startDate)
+          )}`,
           icon_var: "",
           img_var: `${competition.emblem}`,
         },

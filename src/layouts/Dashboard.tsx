@@ -1,6 +1,7 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import CBreadcrumb from "../components/CBreadcrumb";
 import ProfileMenu from "../components/ProfileMenu";
 import Sidebar from "../components/Sidebar";
 import NotFound from "../pages/dashboard/NotFound";

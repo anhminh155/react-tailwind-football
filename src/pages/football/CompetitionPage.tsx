@@ -18,10 +18,11 @@ import CPopoverCompetition from "./components/CPopoverCompetition";
 import { Tab } from "@headlessui/react";
 import CViewTeams from "./components/CViewTeams";
 import { IFiltersAPI } from "../../@types/lookup_tables";
-import CResults from "./components/CResults";
-import { subDays, nextDay } from "date-fns";
+import { subDays, nextDay, subMonths, addMonths } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 import Utils from "../../common/utils";
+import CMatches from "./components/CMatches";
+import CBreadcrumb from "../../components/CBreadcrumb";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -32,57 +33,57 @@ const CompetitionPage: React.FC<Props> = () => {
   const dispatch = useDispatchRoot();
   const { loadingFootball, rootCompetitionsStanding, rootScorers } =
     useSelectorRoot((state: RootState) => state.football);
-  const listTab: string[] = [
-    "STANDINGS",
-    "RESULTS",
-    "FIXTURES",
-    "TEAMS",
-    "TOP SCORERS",
-  ];
+  const listTab: string[] = ["STANDINGS", "MATCHES", "TEAMS", "TOP SCORERS"];
   const [selectTab, setSelectTab] = useState<number>(0);
   const [paramApi, setParamAPi] = useState<IFiltersAPI>({
     competitions: competitionCode?.split("-")[1]!,
   });
   const [limitPlayer, setLimitPlayer] = useState<number>(10);
-  const [paramCResults, setParamCResults] = useState<IFiltersAPI>({});
+  const [paramCMatches, setParamCMatches] = useState<IFiltersAPI>({});
 
   useEffect(() => {
-    // console.table([selectTab, paramCResults, competitionCode]);
+    // console.table([selectTab, paramCMatches, competitionCode]);
     let param: IFiltersAPI = {
       ...paramApi,
+      season: competitionCode?.split("-")[2]!,
       competitions: competitionCode?.split("-")[1]!,
     };
     setParamAPi(param);
     switch (selectTab) {
       case 0:
         // STANDINGS
-        dispatch(fetchCompetitionStandings(param.competitions!));
-        break;
-      case 1:
-        // RESULTS
-
-        if (!paramCResults.dateFrom) {
+        if (competitionCode?.split("-")[0] === "cup") {
           dispatch(
-            fetchCompetitionsMatches({
-              status: "FINISHED",
+            fetchCompetitionStandings({
               competitions: competitionCode?.split("-")[1]!,
-              dateFrom: Utils.getCurrentTimeUTC(subDays(new Date(), 14)),
-              dateTo: Utils.getCurrentTimeUTC(nextDay(new Date(), 2)),
             })
           );
         } else {
-          dispatch(fetchCompetitionsMatches(paramCResults));
+          dispatch(fetchCompetitionStandings(param));
+        }
+        break;
+      case 1:
+        // MATCHES
+        if (!paramCMatches.dateFrom) {
+          dispatch(
+            fetchCompetitionsMatches({
+              ...param,
+              // competitions: competitionCode?.split("-")[1]!,
+              status: "FINISHED",
+              dateFrom: Utils.getCurrentTimeUTC(subMonths(new Date(), 1)),
+              dateTo: Utils.getCurrentTimeUTC(addMonths(new Date(), 1)),
+            })
+          );
+        } else {
+          dispatch(fetchCompetitionsMatches(paramCMatches));
         }
         //Done components
         break;
       case 2:
-        // FIXTURES
+        // TEAMS
+        dispatch(fetchCompetitionsTeams(param));
         break;
       case 3:
-        // TEAMS
-        dispatch(fetchCompetitionsTeams(param.competitions!));
-        break;
-      case 4:
         // TOP SCORERS
         dispatch(
           fetchTopScorersCompetitions({
@@ -94,10 +95,12 @@ const CompetitionPage: React.FC<Props> = () => {
       default:
       // code block
     }
-  }, [selectTab, paramCResults, competitionCode]);
+  }, [selectTab, paramCMatches, competitionCode]);
+
 
   return (
     <div className="">
+      <CBreadcrumb />
       <CBox>
         {/* popover league */}
         <div className="inline-block hover:shadow-md hover:bg-gray-200 rounded-2xl -py-10 px-2 -m-2 mb-3 ring-0">
@@ -147,20 +150,12 @@ const CompetitionPage: React.FC<Props> = () => {
                   "rounded-b-xl p-3 pt-5 bg-soft dark:bg-gray-700"
                 )}
               >
-                <CResults
+                <CMatches
                   getParam={(param: IFiltersAPI) => {
                     console.log(param);
-                    setParamCResults(param);
+                    setParamCMatches(param);
                   }}
                 />
-              </Tab.Panel>
-              <Tab.Panel
-                className={classNames(
-                  "rounded-b-xl p-3 pt-5 bg-soft dark:bg-gray-700"
-                )}
-              >
-                FIXTURES
-                <div className="h-screen"></div>
               </Tab.Panel>
 
               <Tab.Panel
