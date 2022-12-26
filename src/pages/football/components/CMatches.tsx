@@ -76,14 +76,12 @@ const CMatches: React.FC<ICResults> = ({ getParam }) => {
               if (update[0] !== null && update[1] !== null) {
                 if (enabled) {
                   getParam({
-                    competitions: competitionCode?.split("-")[1]!,
                     dateFrom: Utils.getCurrentTimeUTC(update[0]),
                     dateTo: Utils.getCurrentTimeUTC(update[1]),
                   });
                 } else {
                   getParam({
                     status: "FINISHED",
-                    competitions: competitionCode?.split("-")[1]!,
                     dateFrom: Utils.getCurrentTimeUTC(update[0]),
                     dateTo: Utils.getCurrentTimeUTC(update[1]),
                   });

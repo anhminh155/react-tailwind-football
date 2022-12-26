@@ -64,7 +64,9 @@ const CompetitionPage: React.FC<Props> = () => {
         break;
       case 1:
         // MATCHES
-        if (!paramCMatches.dateFrom) {
+        console.log(paramCMatches);
+        
+        if (paramCMatches) {          
           dispatch(
             fetchCompetitionsMatches({
               ...param,

@@ -4,6 +4,11 @@ import { toast, ToastContainer } from "react-toastify";
 
 const headers = {
   "X-Auth-Token": "0c7100d23de447f9be17b2ec5d06c289",
+  //options
+  // "X-Unfold-Lineups": false,
+  // "X-Unfold-Bookings": false,
+  // "X-Unfold-Subs": false,
+  // "X-Unfold-Goals": false,
 };
 
 export default class Http {

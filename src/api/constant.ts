@@ -19,7 +19,7 @@ const handleEndParam = (param: IFiltersAPI): string => {
 export const API_FOOTBALL = {
   //competitions
   competitions: (param: IFiltersAPI) =>
-  `competitions?plan=TIER_ONE&${handleEndParam(param)}`,
+  `competitions?${handleEndParam(param)}`,
 
   //Standings
   competitionsStandings: (param: IFiltersAPI) =>
