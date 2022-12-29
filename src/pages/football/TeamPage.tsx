@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useParams } from "react-router-dom";
 import { Props } from "types/define";
-import { fetchTeam } from "redux/controller/football-team";
 import { useDispatchRoot, useSelectorRoot } from "redux/hooks";
 import { RootState } from "redux/rootReducer";
 import { IPathNameChild } from "routes";
 import CBreadcrumb from "components/CBreadcrumb";
 import { Tab } from "@headlessui/react";
 import { IFiltersAPI } from "types/lookup_tables";
+import { fetchTeam } from "redux/controller/football-team";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -25,7 +25,7 @@ const TeamPage: React.FC<Props> = () => {
 
   useEffect(() => {
     dispatch(fetchTeam(Number(idTeam)));
-  }, []);
+  }, [idTeam]);
 
   useEffect(() => {
     let param: IFiltersAPI = {
@@ -39,15 +39,10 @@ const TeamPage: React.FC<Props> = () => {
       case 0:
         //handle RESULTS
         break;
-        // case 1:
-        //   //handle FIXTURES
-        break;
       case 1:
         //handle TRANSFERS
         break;
-        // case 3:
-        //   //handle ODDS
-        break;
+
       case 2:
         //handle STANDINGS
         break;
@@ -55,7 +50,6 @@ const TeamPage: React.FC<Props> = () => {
       case 3:
         //handle SQUAD
         break;
-
       default:
         break;
     }
@@ -64,19 +58,19 @@ const TeamPage: React.FC<Props> = () => {
   return (
     <div>
       <CBreadcrumb />
-      <div className="header flex gap-5 shadow-lg rounded-md p-3">
-        <div className="h-44 w-1/4 flex justify-center">
-          <div className="">
+      <div className="header shadow-lg rounded-md p-3 grid md:grid-cols-4 gap-2">
+        <div className="col-span-1">
+          <div className="w-full flex flex-col md:items-center">
             <LazyLoadImage
               effect="blur"
               src={rootTeam?.crest}
-              className=""
+              className="h-44 w-44"
               alt=""
             />
-            <div className="text-center">{rootTeam?.name}</div>
+            <div className="py-2 font-bold text-center">{rootTeam?.name}</div>
           </div>
         </div>
-        <div className="px-2">
+        <div className="col-span-3">
           <div className="pb-2 flex">
             <div className="font-semibold pr-2">Short Name:</div>
             <span>{rootTeam?.shortName}</span>

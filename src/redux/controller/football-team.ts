@@ -35,12 +35,12 @@ const footballTeamSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchTeam.pending, (state: any) => {
+      .addCase(fetchTeam.pending, (state) => {
         state.loadingTeam = true;
       })
       .addCase(
         fetchTeam.fulfilled,
-        (state: any, action: PayloadAction<any>) => {
+        (state, action: PayloadAction<any>) => {
           console.log(action.payload);
           if (!action.payload.message) {
             state.rootTeam = action.payload;

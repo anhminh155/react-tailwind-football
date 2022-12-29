@@ -109,9 +109,9 @@ const CStatistics: React.FC<ICStatistics> = ({ match, loading, ...props }) => {
   // };
   return (
     <CLoading loading={loading}>
-      {Object.keys(match.homeTeam.statistics).map((key: any, i: number) => {
-        // return <span key={i}>{RenderProgress(key)}</span>;
-      })}
+      {/* {Object.keys(match.homeTeam.statistics).map((key: any, i: number) => {
+        return <span key={i}>{RenderProgress(key)}</span>;
+      })} */}
     </CLoading>
   );
 };
