@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { Competition } from "../@types/competition";
-import { Props } from "../@types/define";
+import { Competition } from "types/competition";
+import { Props } from "types/define";
 import { useDispatchRoot, useSelectorRoot } from "../redux/hooks";
 import { RootState } from "../redux/rootReducer";
 import { IPathNameChild } from "../routes";
@@ -12,10 +12,13 @@ const CBreadcrumb: React.FC<Props> = () => {
   const { rootCompetitions } = useSelectorRoot(
     (state: RootState) => state.football
   );
-  const { competitionCode, idTeam } = useParams<IPathNameChild>();
+  const { competitionCode, idMatch } = useParams<IPathNameChild>();
   const location = useLocation();
   const [paramUrl, setParamUrl] = useState<string[]>(["Dashboard"]);
   const navigate = useNavigate();
+// console.log(idMatch);
+// console.log(rootCompetitions);
+
 
   useEffect(() => {
     const foo: string[] = ["Dashboard"];
@@ -23,13 +26,22 @@ const CBreadcrumb: React.FC<Props> = () => {
       (competition: Competition) =>
         competition.code === competitionCode?.split("-")[1]
     );
+    // console.log(rootCompetitions.competitions.find(
+    //   (competition: Competition) =>
+    //   idTeam === competition
+    // ));
+    // console.log(competition);
+    
     if (competition) {
       foo.push(competition.name);
+    }else if(idMatch){
+      console.log(idMatch);
+      
     }
-    console.log(foo);
+    // console.log(foo);
 
     setParamUrl(foo);
-  }, [rootCompetitions]);
+  }, [rootCompetitions, idMatch]);
 
   return (
     <div>

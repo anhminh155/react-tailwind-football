@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { Scorer } from "../../../@types/competition_scorers";
-import { Props } from "../../../@types/define";
-import Utils from "../../../common/utils";
-import CLoading from "../../../components/CLoading";
+import { Scorer } from "types/competition_scorers";
+import { Props } from "types/define";
+import Utils from "common/utils";
+import CLoading from "components/CLoading";
 
 interface ITableScorers extends Props {
   scorers: Scorer[] | any;

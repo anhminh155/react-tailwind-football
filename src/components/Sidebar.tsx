@@ -7,8 +7,8 @@ import ProfileMenu from "./ProfileMenu";
 import appLogo from "../assets/img/applogo.png";
 import { useDispatchRoot, useSelectorRoot } from "../redux/hooks";
 import { fetchCompetitions } from "../redux/controller/football.slice";
-import { Competition } from "../@types/competition";
-import { EnumTypes } from "../@types/lookup_tables";
+import { Competition } from "types/competition";
+import { EnumTypes } from "types/lookup_tables";
 import { RootState } from "../redux/rootReducer";
 import { getYear } from "date-fns";
 

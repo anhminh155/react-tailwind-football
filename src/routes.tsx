@@ -1,11 +1,11 @@
-import MainDashboard from "./pages/dashboard/MainDashboard";
-import Login from "./pages/auth/Login";
-import ModalExample from "./pages/dashboard/ModalExample";
-import User from "./pages/dashboard/User";
-import Register from "./pages/auth/Register";
-import CompetitionPage from "./pages/football/CompetitionPage";
-import MatchesPage from "./pages/football/MatchesPage";
-import TeamPage from "./pages/football/TeamPage";
+import MainDashboard from "pages/dashboard/MainDashboard";
+import Login from "pages/auth/Login";
+import ModalExample from "pages/dashboard/ModalExample";
+import User from "pages/dashboard/User";
+import Register from "pages/auth/Register";
+import CompetitionPage from "pages/football/CompetitionPage";
+import TeamPage from "pages/football/TeamPage";
+import InfoMatch from "pages/football/InfoMatch";
 
 export const AdminRoutes = [
   {
@@ -125,6 +125,7 @@ export const UserRoutes = [
 export type IPathNameChild = {
   competitionCode?: string;
   idTeam?: string;
+  idMatch?: string
 };
 
 export const dashboardRoutes = [
@@ -141,8 +142,8 @@ export const dashboardRoutes = [
     component: <CompetitionPage />,
   },
   {
-    path: ":competitionCode/matches/:idTeam",
-    component: <MatchesPage />,
+    path: ":competitionCode/:idMatch",
+    component: <InfoMatch />,
   },
   {
     path: ":competitionCode/team/:idTeam",

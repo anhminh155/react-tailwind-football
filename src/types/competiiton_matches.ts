@@ -99,8 +99,9 @@ export interface ICompetitionMatches {
   }
   
   export interface Odds {
-    homeWin: number
-    draw: number
-    awayWin: number
+    msg?: string;
+    homeWin?: number
+    awayWin?: number
+    draw?: number
   }
   

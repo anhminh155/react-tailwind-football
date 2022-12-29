@@ -1,6 +1,6 @@
 // import { IFiltersAPI } from "../types/football-type";
 
-import { IFiltersAPI } from "../@types/lookup_tables";
+import { IFiltersAPI } from "types/lookup_tables";
 
 export const API_URL = "https://api.football-data.org/v4/";
 
@@ -18,8 +18,7 @@ const handleEndParam = (param: IFiltersAPI): string => {
 
 export const API_FOOTBALL = {
   //competitions
-  competitions: (param: IFiltersAPI) =>
-  `competitions?${handleEndParam(param)}`,
+  competitions: (param: IFiltersAPI) => `competitions?${handleEndParam(param)}`,
 
   //Standings
   competitionsStandings: (param: IFiltersAPI) =>
@@ -37,15 +36,18 @@ export const API_FOOTBALL = {
   competitionsMatches: (param: IFiltersAPI) =>
     `competitions/${param.competitions}/matches?${handleEndParam(param)}`,
 
+  //Info match
+  infoMatch: (param: IFiltersAPI) =>
+    `matches/${param.ids}?${handleEndParam(param)}`,
+    
+  //h2h
+  infoMatchHead2head: (param: IFiltersAPI) =>
+    `matches/${param.ids}/head2head?${handleEndParam(param)}`,
+
   //Team
   teamInfo: (idTeam: number) => `teams/${idTeam}`,
 
   teamMatches: (idTeam: number) => `teams/${idTeam}/matches`,
-
-
-
-
-
 
 
 

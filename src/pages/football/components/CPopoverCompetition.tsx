@@ -4,12 +4,11 @@ import { getYear } from "date-fns";
 import { Fragment } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Competition } from "../../../@types/competition";
-import { EnumTypes } from "../../../@types/lookup_tables";
-import Utils from "../../../common/utils";
-import { useSelectorRoot } from "../../../redux/hooks";
-import { RootState } from "../../../redux/rootReducer";
-import { IPathNameChild } from "../../../routes";
+import { Competition } from "types/competition";
+import { EnumTypes } from "types/lookup_tables";
+import { useSelectorRoot } from "redux/hooks";
+import { RootState } from "redux/rootReducer";
+import { IPathNameChild } from "routes";
 
 const solutions = [
   {
@@ -85,7 +84,7 @@ export default function CPopoverCompetition() {
               leaveFrom="opacity-100 translate-y-0"
               leaveTo="opacity-0 translate-y-1"
             >
-              <Popover.Panel className="absolute left-1/2 z-10 mt-3 w-screen max-w-sm -translate-x-16 -translate-y-10 transform px-4 sm:px-0 lg:max-w-3xl">
+              <Popover.Panel className="absolute left-1/2 z-50 mt-3 w-screen max-w-sm -translate-x-16 -translate-y-10 transform px-4 sm:px-0 lg:max-w-3xl">
                 <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                   <div className="relative grid gap-8 bg-white dark:bg-dark dark:text-white p-7 lg:grid-cols-1 overflow-auto h-[300px]">
                     {rootCompetitions.competitions.map(

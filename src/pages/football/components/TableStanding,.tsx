@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate } from "react-router-dom";
-import { Standing, Table } from "../../../@types/competition_standings";
-import { Props } from "../../../@types/define";
-import { EnumTypes } from "../../../@types/lookup_tables";
+import { Standing, Table } from "types/competition_standings";
+import { Props } from "types/define";
+import { EnumTypes } from "types/lookup_tables";
 import { DataFake } from "../../../common/dataFake";
 import Utils from "../../../common/utils";
 import CLoading from "../../../components/CLoading";
@@ -12,6 +12,7 @@ interface ITableStanding extends Props {
   standings: Standing[];
   type?: string;
   loading?: boolean;
+  focusTeam?: number[]
 }
 
 enum StandingType {
@@ -24,6 +25,7 @@ const TableStanding: React.FC<ITableStanding> = ({
   standings,
   type = EnumTypes.CompetitionType.LEAGUE,
   loading = false,
+  focusTeam = []
 }) => {
   const [dataWithType, setDataWithType] = useState<Standing[]>(
     standings.filter((e: Standing) => e.type === StandingType.TOTAL)!
@@ -195,19 +197,18 @@ const TableStanding: React.FC<ITableStanding> = ({
                           >
                             Pts
                           </th>
-                          {standing.table[0].form && (
+                          {standing.table[0].form ? (
                             <th
                               scope="col"
                               className="px-6 py-3 text-center tracking-wider"
                             >
                               Last 5
                             </th>
-                          )}
+                          ) : null}
                         </tr>
                       </thead>
                       <tbody className="dark:bg-gray-800 bg-white ">
                         {standing.table.map((table: Table, i: number) => {
-                          // {dataWithType?.table.map((table: Table, i: number) => {
                           return (
                             <tr
                               key={i}
@@ -215,7 +216,7 @@ const TableStanding: React.FC<ITableStanding> = ({
                                 console.log(table);
                                 navigate(`team/${table.team.id}`);
                               }}
-                              className="dark:bg-dark hover:dark:bg-gray-700 hover:bg-gray-400 hover:text-white cursor-pointer"
+                              className={`dark:bg-dark hover:dark:bg-gray-700 hover:bg-gray-400 hover:text-white cursor-pointer ${focusTeam.find((id:number)=> id ===table.team.id) ? 'bg-gray-300 dark:bg-gray-500':''}`}
                             >
                               <td className="pl-4">{table.position}</td>
                               <td className="flex px-6 py-4 whitespace-nowrap">
@@ -253,7 +254,7 @@ const TableStanding: React.FC<ITableStanding> = ({
                               <td className="px-6 py-4 text-center whitespace-nowrap">
                                 {table.points}
                               </td>
-                              {table.form && (
+                              {table.form ? (
                                 <td className="flex px-6 py-4 whitespace-nowrap">
                                   {table?.form
                                     .split(",")
@@ -309,6 +310,8 @@ const TableStanding: React.FC<ITableStanding> = ({
                                       }
                                     })}
                                 </td>
+                              ) : (
+                                <></>
                               )}
                             </tr>
                           );

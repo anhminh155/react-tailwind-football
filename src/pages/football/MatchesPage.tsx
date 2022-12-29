@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Props } from "../../@types/define";
-import { fetchTeamMatches } from "../../redux/controller/football.slice";
-import { useDispatchRoot, useSelectorRoot } from "../../redux/hooks";
-import { RootState } from "../../redux/rootReducer";
-import { IPathNameChild } from "../../routes";
+import { Props } from "types/define";
+import { useDispatchRoot, useSelectorRoot } from "redux/hooks";
+import { RootState } from "redux/rootReducer";
+import { IPathNameChild } from "routes";
 
 const MatchesPage: React.FC<Props> = () => {
   const dispatch = useDispatchRoot();
@@ -12,7 +11,7 @@ const MatchesPage: React.FC<Props> = () => {
   const { competitionCode, idTeam } = useParams<IPathNameChild>();
 
   useEffect(() => {
-    dispatch(fetchTeamMatches(Number(idTeam)));
+    // dispatch(fetchTeamMatches(Number(idTeam)));
   }, []);
 
   return <div>Matches</div>;

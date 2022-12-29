@@ -5,10 +5,10 @@ import {
   PayloadAction,
   PayloadActionCreator,
 } from "@reduxjs/toolkit";
-import { IRootCompetition } from "../../@types/competition";
-import { ICompetitionScorers } from "../../@types/competition_scorers";
-import { ICompetitionStandings } from "../../@types/competition_standings";
-import { ITeam } from "../../@types/team";
+import { IRootCompetition } from "types/competition";
+import { ICompetitionScorers } from "types/competition_scorers";
+import { ICompetitionStandings } from "types/competition_standings";
+import { ITeam } from "types/team";
 import { API_FOOTBALL } from "../../api/constant";
 import Http from "../../api/http.api";
 import { DataFake } from "../../common/dataFake";

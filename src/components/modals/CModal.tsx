@@ -1,6 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment, useState } from "react";
-import { Props } from "../../@types/define";
+import { Props } from "types/define";
 
 interface IMyModal extends Props {
   title?: JSX.Element | string;

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { LanguageType, NavbarType } from "../../@types/define";
+import { LanguageType, NavbarType } from "types/define";
 
 interface AppState {
   type: string;

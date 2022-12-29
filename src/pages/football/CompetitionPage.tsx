@@ -1,28 +1,26 @@
 // disable-eslint
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useDispatchRoot, useSelectorRoot } from "../../redux/hooks";
-import { RootState } from "../../redux/rootReducer";
+import { useDispatchRoot, useSelectorRoot } from "redux/hooks";
+import { RootState } from "redux/rootReducer";
 import {
-  fetchCompetitions,
   fetchCompetitionsMatches,
   fetchCompetitionStandings,
   fetchCompetitionsTeams,
   fetchTopScorersCompetitions,
-} from "../../redux/controller/football.slice";
-import { Props } from "../../@types/define";
-import CBox from "../../components/CBox";
+} from "redux/controller/football.slice";
+import { Props } from "types/define";
+import CBox from "components/CBox";
 import TableStanding from "./components/TableStanding,";
 import TableScorers from "./components/TableScorers";
 import CPopoverCompetition from "./components/CPopoverCompetition";
 import { Tab } from "@headlessui/react";
 import CViewTeams from "./components/CViewTeams";
-import { IFiltersAPI } from "../../@types/lookup_tables";
-import { subDays, nextDay, subMonths, addMonths } from "date-fns";
+import { IFiltersAPI } from "types/lookup_tables";
 import "react-datepicker/dist/react-datepicker.css";
-import Utils from "../../common/utils";
+import Utils from "common/utils";
 import CMatches from "./components/CMatches";
-import CBreadcrumb from "../../components/CBreadcrumb";
+import CBreadcrumb from "components/CBreadcrumb";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -39,10 +37,9 @@ const CompetitionPage: React.FC<Props> = () => {
     competitions: competitionCode?.split("-")[1]!,
   });
   const [limitPlayer, setLimitPlayer] = useState<number>(10);
-  const [paramCMatches, setParamCMatches] = useState<IFiltersAPI>({});
+  const [paramCMatches, setParamCMatches] = useState<IFiltersAPI | null>(null);
 
   useEffect(() => {
-    // console.table([selectTab, paramCMatches, competitionCode]);
     let param: IFiltersAPI = {
       ...paramApi,
       season: competitionCode?.split("-")[2]!,
@@ -64,20 +61,24 @@ const CompetitionPage: React.FC<Props> = () => {
         break;
       case 1:
         // MATCHES
-        console.log(paramCMatches);
-        
-        if (paramCMatches) {          
+        dispatch(fetchCompetitionsTeams(param));
+        if (!paramCMatches) {
           dispatch(
             fetchCompetitionsMatches({
               ...param,
-              // competitions: competitionCode?.split("-")[1]!,
-              status: "FINISHED",
-              dateFrom: Utils.getCurrentTimeUTC(subMonths(new Date(), 1)),
-              dateTo: Utils.getCurrentTimeUTC(addMonths(new Date(), 1)),
+              // status: "SCHEDULED",
+              dateFrom: Utils.getCurrentTimeUTC(
+                new Date(rootCompetitionsStanding.season.startDate)
+              ),
+              dateTo: Utils.getCurrentTimeUTC(
+                new Date(rootCompetitionsStanding.season.endDate)
+              ),
+              // dateFrom: Utils.getCurrentTimeUTC(subMonths(new Date(), 1)),
+              // dateTo: Utils.getCurrentTimeUTC(addMonths(new Date(), 1)),
             })
           );
         } else {
-          dispatch(fetchCompetitionsMatches(paramCMatches));
+          dispatch(fetchCompetitionsMatches({ ...param, ...paramCMatches }));
         }
         //Done components
         break;
@@ -99,7 +100,6 @@ const CompetitionPage: React.FC<Props> = () => {
     }
   }, [selectTab, paramCMatches, competitionCode]);
 
-
   return (
     <div className="">
       <CBreadcrumb />
@@ -113,8 +113,7 @@ const CompetitionPage: React.FC<Props> = () => {
           <Tab.Group
             defaultIndex={selectTab}
             onChange={(index: number) => {
-              console.log(index);
-
+              // console.log(index);
               setSelectTab(index);
             }}
           >

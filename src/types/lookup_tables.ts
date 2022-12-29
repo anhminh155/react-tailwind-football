@@ -6,6 +6,7 @@ export interface IFiltersAPI {
   ids?: number;
   matchday?: number;
   season?: string;
+  // status?: any;
   status?:
     | "SCHEDULED"
     | "LIVE"

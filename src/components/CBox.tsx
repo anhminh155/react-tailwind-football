@@ -1,5 +1,5 @@
 import React from "react";
-import { Props } from "../@types/define";
+import { Props } from "types/define";
 
 const CBox: React.FC<Props> = ({ children }) => {
   return (
