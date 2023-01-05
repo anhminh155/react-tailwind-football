@@ -32,7 +32,7 @@ class Utils {
     return format(new Date(date), typeFormat);
   }
 
-  static getCurrentTimeUTC(date?: Date): string {
+  static getCurrentTimeUTC(date?: any): string {
     const currentDay: string = date
       ? date.toISOString()
       : new Date().toISOString();

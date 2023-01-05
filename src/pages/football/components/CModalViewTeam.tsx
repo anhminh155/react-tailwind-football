@@ -33,7 +33,7 @@ const CModalViewTeam: React.FC<ICModalViewTeam> = ({
             />
           </div>
           <div className="flex items-center px-6 py-3 bg-gray-700 justify-center">
-            <h1 className="mx-3 text-white faont-semibold text-lg">
+            <h1 className="mx-3 text-white font-semibold text-lg">
               {dataTeam?.name}
             </h1>
           </div>

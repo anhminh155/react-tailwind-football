@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { IPathNameChild } from "routes";
 import { Standing, Table } from "types/competition_standings";
 import { Props } from "types/define";
 import { EnumTypes } from "types/lookup_tables";
@@ -12,7 +13,7 @@ interface ITableStanding extends Props {
   standings: Standing[];
   type?: string;
   loading?: boolean;
-  focusTeam?: number[]
+  focusTeam?: number[];
 }
 
 enum StandingType {
@@ -25,13 +26,15 @@ const TableStanding: React.FC<ITableStanding> = ({
   standings,
   type = EnumTypes.CompetitionType.LEAGUE,
   loading = false,
-  focusTeam = []
+  focusTeam = [],
 }) => {
   const [dataWithType, setDataWithType] = useState<Standing[]>(
     standings.filter((e: Standing) => e.type === StandingType.TOTAL)!
   );
   const [select, setSelect] = useState<"TOTAL" | "HOME" | "AWAY">("TOTAL");
   const navigate = useNavigate();
+  const location = useLocation();
+  const { idMatch } = useParams<IPathNameChild>();
 
   useEffect(() => {
     if (type === EnumTypes.CompetitionType.CUP) {
@@ -43,85 +46,89 @@ const TableStanding: React.FC<ITableStanding> = ({
   }, [standings]);
 
   return (
-    <div className="text-sm">
-      {type === EnumTypes.CompetitionType.LEAGUE ? (
-        <ul className="border-b min-h-max grid grid-flow-col text-center text-white bg-gray-600 dark:bg-gray-800 rounded-t-lg p-1 dark:border-b dark:border-gray-500">
-          <li
-            className="cursor-pointer hover:shadow-md"
-            onClick={() => {
-              setSelect("TOTAL");
-              setDataWithType(
-                standings.filter(
-                  (e: Standing) => e.type === StandingType.TOTAL
-                )!
-              );
-            }}
-          >
-            <span
-              className={`${
-                select === "TOTAL"
-                  ? "bg-white dark:bg-dark rounded-t-lg shadow text-violet dark:text-yellow"
-                  : ""
-              } flex justify-center py-2`}
+    <CLoading loading={loading}>
+      <div className="text-sm">
+        {type === EnumTypes.CompetitionType.LEAGUE ? (
+          <ul className="border-b min-h-max grid grid-flow-col text-center text-white bg-gray-600 dark:bg-gray-800 rounded-t-lg p-1 dark:border-b dark:border-gray-500">
+            <li
+              className="cursor-pointer hover:shadow-md"
+              onClick={() => {
+                setSelect("TOTAL");
+                setDataWithType(
+                  standings.filter(
+                    (e: Standing) => e.type === StandingType.TOTAL
+                  )!
+                );
+              }}
             >
-              TOTAL
-            </span>
-          </li>
-          <li
-            className="cursor-pointer hover:shadow-md"
-            onClick={() => {
-              setSelect("HOME");
-              setDataWithType(
-                standings.filter((e: Standing) => e.type === StandingType.HOME)!
-              );
-            }}
-          >
-            <span
-              className={`${
-                select === "HOME"
-                  ? "bg-white dark:bg-dark rounded-t-lg shadow text-violet dark:text-yellow"
-                  : ""
-              } flex justify-center py-2`}
+              <span
+                className={`${
+                  select === "TOTAL"
+                    ? "bg-white dark:bg-dark rounded-t-lg shadow text-violet dark:text-yellow"
+                    : ""
+                } flex justify-center py-2`}
+              >
+                TOTAL
+              </span>
+            </li>
+            <li
+              className="cursor-pointer hover:shadow-md"
+              onClick={() => {
+                setSelect("HOME");
+                setDataWithType(
+                  standings.filter(
+                    (e: Standing) => e.type === StandingType.HOME
+                  )!
+                );
+              }}
             >
-              HOME
-            </span>
-          </li>
-          <li
-            className="cursor-pointer hover:shadow-md"
-            onClick={() => {
-              setSelect("AWAY");
+              <span
+                className={`${
+                  select === "HOME"
+                    ? "bg-white dark:bg-dark rounded-t-lg shadow text-violet dark:text-yellow"
+                    : ""
+                } flex justify-center py-2`}
+              >
+                HOME
+              </span>
+            </li>
+            <li
+              className="cursor-pointer hover:shadow-md"
+              onClick={() => {
+                setSelect("AWAY");
 
-              setDataWithType(
-                standings.filter((e: Standing) => e.type === StandingType.AWAY)!
-              );
-            }}
-          >
-            <span
-              className={`${
-                select === "AWAY"
-                  ? "bg-white dark:bg-dark rounded-t-lg shadow text-violet dark:text-yellow"
-                  : ""
-              } flex justify-center py-2`}
+                setDataWithType(
+                  standings.filter(
+                    (e: Standing) => e.type === StandingType.AWAY
+                  )!
+                );
+              }}
             >
-              AWAY
-            </span>
-          </li>
-        </ul>
-      ) : (
-        <></>
-      )}
+              <span
+                className={`${
+                  select === "AWAY"
+                    ? "bg-white dark:bg-dark rounded-t-lg shadow text-violet dark:text-yellow"
+                    : ""
+                } flex justify-center py-2`}
+              >
+                AWAY
+              </span>
+            </li>
+          </ul>
+        ) : (
+          <></>
+        )}
 
-      <div className="flex flex-col select-none">
-        {dataWithType.map((standing: Standing, key: number) => {
-          return (
-            <div
-              key={key}
-              className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 pb-3"
-            >
-              <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                <CLoading loading={loading}>
+        <div className="flex flex-col select-none">
+          {dataWithType.map((standing: Standing, key: number) => {
+            return (
+              <div
+                key={key}
+                className="overflow-x-auto -my-2 sm:-mx-6 lg:-mx-8 pb-3"
+              >
+                <div className="py-2 sm:px-6 lg:px-8">
                   <div
-                    className={`overflow-hidden ${
+                    className={` ${
                       type === EnumTypes.CompetitionType.CUP
                         ? "sm:rounded-lg"
                         : "sm:rounded-b-lg"
@@ -213,10 +220,23 @@ const TableStanding: React.FC<ITableStanding> = ({
                             <tr
                               key={i}
                               onClick={() => {
-                                console.log(table);
-                                navigate(`team/${table.team.id}`);
+                                if (focusTeam) {
+                                  navigate(
+                                    `${
+                                      location.pathname.split(`${idMatch}`)[0]
+                                    }/team/${table.team.id}`
+                                  );
+                                } else {
+                                  navigate(`team/${table.team.id}`);
+                                }
                               }}
-                              className={`dark:bg-dark hover:dark:bg-gray-700 hover:bg-gray-400 hover:text-white cursor-pointer ${focusTeam.find((id:number)=> id ===table.team.id) ? 'bg-gray-300 dark:bg-gray-500':''}`}
+                              className={`dark:bg-dark hover:dark:bg-gray-700 hover:bg-gray-400 hover:text-white cursor-pointer ${
+                                focusTeam.find(
+                                  (id: number) => id === table.team.id
+                                )
+                                  ? "bg-gray-300 dark:bg-gray-500"
+                                  : ""
+                              }`}
                             >
                               <td className="pl-4">{table.position}</td>
                               <td className="flex px-6 py-4 whitespace-nowrap">
@@ -319,14 +339,14 @@ const TableStanding: React.FC<ITableStanding> = ({
                       </tbody>
                     </table>
                   </div>
-                </CLoading>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+        {/* Component End  */}
       </div>
-      {/* Component End  */}
-    </div>
+    </CLoading>
   );
 };
 

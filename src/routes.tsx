@@ -6,6 +6,7 @@ import Register from "pages/auth/Register";
 import CompetitionPage from "pages/football/CompetitionPage";
 import TeamPage from "pages/football/TeamPage";
 import InfoMatch from "pages/football/InfoMatch";
+import PlayerPage from "pages/football/PlayerPage";
 
 export const AdminRoutes = [
   {
@@ -124,8 +125,9 @@ export const UserRoutes = [
 
 export type IPathNameChild = {
   competitionCode?: string;
+  idMatch?: string;
   idTeam?: string;
-  idMatch?: string
+  IdPlayer?: string;
 };
 
 export const dashboardRoutes = [
@@ -148,6 +150,10 @@ export const dashboardRoutes = [
   {
     path: ":competitionCode/team/:idTeam",
     component: <TeamPage />,
+  },
+  {
+    path: ":competitionCode/team/:idTeam/player/:IdPlayer",
+    component: <PlayerPage />,
   },
   {
     path: "profile",

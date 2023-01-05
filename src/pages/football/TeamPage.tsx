@@ -8,7 +8,13 @@ import { IPathNameChild } from "routes";
 import CBreadcrumb from "components/CBreadcrumb";
 import { Tab } from "@headlessui/react";
 import { IFiltersAPI } from "types/lookup_tables";
-import { fetchTeam } from "redux/controller/football-team";
+import {
+  fetchTeam,
+  fetchTeamMatches,
+} from "redux/controller/football.team.slice";
+import CSquad from "./components/CSquad";
+import CRunningCompetition from "./components/CRunningCompetition";
+import CMatchNoFilter from "./components/CMatchNoFilter";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -16,12 +22,16 @@ function classNames(...classes: any) {
 
 const TeamPage: React.FC<Props> = () => {
   const dispatch = useDispatchRoot();
-  const { rootTeam } = useSelectorRoot(
-    (state: RootState) => state.footballTeam
-  );
+  const { rootTeam, loadingTeam, loadingTeamMatch, rootTeamsMatches } =
+    useSelectorRoot((state: RootState) => state.footballTeam);
   const { competitionCode, idTeam } = useParams<IPathNameChild>();
   const [selectTab, setSelectTab] = useState<number>(0);
-  const listTab: string[] = ["RESULTS", "FIXTURES", "TRANSFERS", "SQUAD"];
+  const listTab: string[] = [
+    "RESULTS",
+    "FIXTURES",
+    "RUNNING COMPETITIONS",
+    "SQUAD",
+  ];
 
   useEffect(() => {
     dispatch(fetchTeam(Number(idTeam)));
@@ -38,13 +48,29 @@ const TeamPage: React.FC<Props> = () => {
     switch (selectTab) {
       case 0:
         //handle RESULTS
+        dispatch(
+          fetchTeamMatches({ ...param, id: Number(idTeam), status: "FINISHED" })
+        );
         break;
       case 1:
-        //handle TRANSFERS
+        //handle FIXTURES
+        dispatch(
+          fetchTeamMatches({
+            ...param,
+            id: Number(idTeam),
+            status: "SCHEDULED",
+          })
+        );
         break;
 
       case 2:
-        //handle STANDINGS
+        //handle RUNNING COMPETITIONS
+        dispatch(
+          fetchTeamMatches({
+            ...param,
+            id: Number(idTeam),
+          })
+        );
         break;
 
       case 3:
@@ -53,14 +79,14 @@ const TeamPage: React.FC<Props> = () => {
       default:
         break;
     }
-  }, [selectTab]);
+  }, [selectTab, idTeam]);
 
   return (
     <div>
       <CBreadcrumb />
-      <div className="header shadow-lg rounded-md p-3 grid md:grid-cols-4 gap-2">
+      <div className="header shadow-lg rounded-md p-3 flex">
         <div className="col-span-1">
-          <div className="w-full flex flex-col md:items-center">
+          <div className="w-full flex flex-col md:items-center md:px-3 lg:pr-11">
             <LazyLoadImage
               effect="blur"
               src={rootTeam?.crest}
@@ -180,13 +206,26 @@ const TeamPage: React.FC<Props> = () => {
           </Tab.List>
           <Tab.Panels className="">
             <Tab.Panel className={classNames("rounded-b-xl p-3 pt-2 ")}>
-              1
+              <CMatchNoFilter
+                loading={loadingTeamMatch}
+                dataMatch={rootTeamsMatches.matches}
+              />
             </Tab.Panel>
-            {/* <Tab.Panel className={classNames("rounded-b-xl p-3 pt-5 ")}>
-              <CStatistics match={rootInfoMatch} loading={loadingFootball} />
-            </Tab.Panel> */}
             <Tab.Panel className={classNames("rounded-b-xl p-3 pt-5 ")}>
-              2
+              <CMatchNoFilter
+                loading={loadingTeamMatch}
+                dataMatch={rootTeamsMatches.matches}
+              />
+            </Tab.Panel>
+            <Tab.Panel className={classNames("rounded-b-xl p-3 pt-5 ")}>
+              <CRunningCompetition
+                dataTeam={rootTeam}
+                dataResult={rootTeamsMatches.resultSet}
+                loading={loadingTeam ?? loadingTeamMatch}
+              />
+            </Tab.Panel>
+            <Tab.Panel className={classNames("rounded-b-xl p-3 pt-5 ")}>
+              <CSquad dataTeam={rootTeam} loading={loadingTeam} />
             </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>

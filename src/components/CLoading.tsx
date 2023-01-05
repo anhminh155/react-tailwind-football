@@ -15,7 +15,7 @@ function CLoading({
       <div>{children}</div>
       {loading ? (
         <div
-          className={`flex items-center justify-center h-full w-full absolute top-0 bg-[#28374b87]`}
+          className={`flex items-start justify-center h-full rounded-md w-full absolute top-0 bg-[#242c3787]`}
         >
           <div className="box-football">
             <div className="shadow" />

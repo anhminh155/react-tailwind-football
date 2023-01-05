@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Props } from "types/define";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -7,8 +7,21 @@ import {
   faBullhorn,
   faStop,
 } from "@fortawesome/free-solid-svg-icons";
-import { Booking, Goal, IInfoMatch, Substitution } from "types/infoMatch";
+import {
+  Booking,
+  Goal,
+  IInfoMatch,
+  Lineup,
+  Lineup2,
+  Substitution,
+} from "types/infoMatch";
 import CLoading from "components/CLoading";
+import CModalViewPlayerMatch from "./CModalViewPlayerMatch";
+import { useDispatchRoot, useSelectorRoot } from "redux/hooks";
+import { fetchPlayerMatches } from "redux/controller/football.player.slice";
+import { addDays, format, nextDay, previousDay, subDays } from "date-fns";
+import { RootState } from "redux/rootReducer";
+import { IPlayerMatches } from "types/player_matches";
 
 interface ICSummary extends Props {
   loading?: boolean;
@@ -20,6 +33,19 @@ const CSummary: React.FC<ICSummary> = ({
   match,
   ...props
 }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { loadingPlayerMatches, rootPlayerMatches } = useSelectorRoot(
+    (state: RootState) => state.footballPlayer
+  );
+  const dispatch = useDispatchRoot();
+  const [selectTeam, setSelectTeam] = useState<number>();
+  const param = {
+    dateFrom: match.utcDate.split("T")[0],
+    dateTo: format(
+      addDays(new Date(match.utcDate.split("T")[0]), 1),
+      "yyyy-MM-dd"
+    ),
+  };
   return (
     <CLoading loading={loading}>
       <div className="">
@@ -37,21 +63,87 @@ const CSummary: React.FC<ICSummary> = ({
                     icon={faFutbolBall}
                     className="text-base pr-2 text-green-500"
                   />
-                  <span className="pr-1">{goal.scorer.name}</span>
-                  <span className="capitalize">
-                    {goal.assist !== null
-                      ? `(assist: ${goal.assist?.name})`
-                      : `(${goal.type})`}
+                  <span
+                    onClick={() => {
+                      //handle
+                      dispatch(
+                        fetchPlayerMatches({
+                          ...param,
+                          id: goal.scorer?.id,
+                        })
+                      );
+                      setSelectTeam(goal.team.id);
+                      setIsOpen(true);
+                    }}
+                    className="pr-1 hover:font-bold cursor-pointer"
+                  >
+                    {goal.scorer.name}
+                  </span>
+                  <span className="capitalize ">
+                    {goal.assist !== null ? (
+                      <span
+                        className="hover:font-bold cursor-pointer"
+                        onClick={() => {
+                          //handle
+                          dispatch(
+                            fetchPlayerMatches({
+                              ...param,
+                              id: goal.assist?.id,
+                            })
+                          );
+                          setSelectTeam(goal.team.id);
+                          setIsOpen(true);
+                        }}
+                      >
+                        (assist: {goal.assist?.name})
+                      </span>
+                    ) : (
+                      <span>{`(${goal.type})`}</span>
+                    )}
                   </span>
                 </div>
               ) : (
                 <div className="flex justify-end items-center">
                   <span className="capitalize pr-1">
-                    {goal.assist !== null
-                      ? `(assist: ${goal.assist?.name})`
-                      : `(${goal.type.toString().toLowerCase()})`}
+                    {goal.assist !== null ? (
+                      <span
+                        className="hover:font-bold cursor-pointer"
+                        onClick={() => {
+                          //handle
+                          dispatch(
+                            fetchPlayerMatches({
+                              ...param,
+                              id: goal.assist?.id,
+                            })
+                          );
+
+                          setSelectTeam(goal.team.id);
+                          setIsOpen(true);
+                        }}
+                      >
+                        (assist: {goal.assist?.name})
+                      </span>
+                    ) : (
+                      `(${goal.type.toString().toLowerCase()})`
+                    )}
                   </span>
-                  <span className="pr-2">{goal.scorer.name}</span>
+                  <span
+                    onClick={() => {
+                      //handle
+                      dispatch(
+                        fetchPlayerMatches({
+                          ...param,
+                          id: goal.scorer?.id,
+                        })
+                      );
+
+                      setSelectTeam(goal.team.id);
+                      setIsOpen(true);
+                    }}
+                    className="pr-2 hover:font-bold cursor-pointer"
+                  >
+                    {goal.scorer.name}
+                  </span>
                   <FontAwesomeIcon
                     icon={faFutbolBall}
                     className="text-base pr-2 text-green-500"
@@ -75,14 +167,40 @@ const CSummary: React.FC<ICSummary> = ({
                 {substitution.team.id === match.homeTeam.id ? (
                   <div className="flex justify-start gap-2">
                     <span className="pr-3">{substitution.minute}'</span>
-                    <span>
+                    <span
+                      className="hover:font-bold cursor-pointer"
+                      onClick={() => {
+                        //handle
+                        dispatch(
+                          fetchPlayerMatches({
+                            ...param,
+                            id: substitution.playerIn?.id,
+                          })
+                        );
+                        setSelectTeam(substitution.team.id);
+                        setIsOpen(true);
+                      }}
+                    >
                       <FontAwesomeIcon
                         icon={faShirt}
                         className="text-base pr-2 text-green-500"
                       />
                       <span>{substitution.playerIn.name}</span>
                     </span>
-                    <span>
+                    <span
+                      className="hover:font-bold cursor-pointer"
+                      onClick={() => {
+                        //handle
+                        dispatch(
+                          fetchPlayerMatches({
+                            ...param,
+                            id: substitution.playerOut?.id,
+                          })
+                        );
+                        setSelectTeam(substitution.team.id);
+                        setIsOpen(true);
+                      }}
+                    >
                       <FontAwesomeIcon
                         icon={faShirt}
                         className="text-base pr-2 text-red-500"
@@ -92,23 +210,49 @@ const CSummary: React.FC<ICSummary> = ({
                   </div>
                 ) : (
                   <div className="flex justify-end gap-2">
-                    <span>
+                    <span
+                      className="hover:font-bold cursor-pointer"
+                      onClick={() => {
+                        //handle
+                        dispatch(
+                          fetchPlayerMatches({
+                            ...param,
+                            id: substitution.playerIn?.id,
+                          })
+                        );
+                        setSelectTeam(substitution.team.id);
+                        setIsOpen(true);
+                      }}
+                    >
                       <span className="pr-2">{substitution.playerIn.name}</span>
                       <FontAwesomeIcon
                         icon={faShirt}
                         className="text-base text-green-500"
                       />
                     </span>
-                    <span>
+                    <span
+                      className="hover:font-bold cursor-pointer"
+                      onClick={() => {
+                        //handle
+                        dispatch(
+                          fetchPlayerMatches({
+                            ...param,
+                            id: substitution.playerOut?.id,
+                          })
+                        );
+                        setSelectTeam(substitution.team.id);
+                        setIsOpen(true);
+                      }}
+                    >
                       <span className="pr-2">
                         {substitution.playerOut.name}
                       </span>
                       <FontAwesomeIcon
                         icon={faShirt}
-                        className="text-base pr-2 text-red-500"
+                        className="text-base text-red-500"
                       />
-                      <span className="pl-3">{substitution.minute}'</span>
                     </span>
+                    <span className="pl-3">{substitution.minute}'</span>
                   </div>
                 )}
               </div>
@@ -128,8 +272,20 @@ const CSummary: React.FC<ICSummary> = ({
                 {booking.team.id === match.homeTeam.id ? (
                   <div className="flex justify-start gap-2 items-center">
                     <span className="pr-3">{booking.minute}'</span>
-
-                    <span>
+                    <div
+                      className="hover:font-bold cursor-pointer"
+                      onClick={() => {
+                        //handle
+                        dispatch(
+                          fetchPlayerMatches({
+                            ...param,
+                            id: booking.player?.id,
+                          })
+                        );
+                        setSelectTeam(booking.team.id);
+                        setIsOpen(true);
+                      }}
+                    >
                       <FontAwesomeIcon
                         icon={faStop}
                         className={`text-base pr-2 ${
@@ -139,22 +295,35 @@ const CSummary: React.FC<ICSummary> = ({
                         }`}
                       />
                       <span>{booking.player.name}</span>
-                    </span>
+                    </div>
                   </div>
                 ) : (
                   <div className="flex justify-end gap-2 items-center">
-                    <span>
+                    <div
+                      className="hover:font-bold cursor-pointer"
+                      onClick={() => {
+                        //handle
+                        dispatch(
+                          fetchPlayerMatches({
+                            ...param,
+                            id: booking.player?.id,
+                          })
+                        );
+                        setSelectTeam(booking.team.id);
+                        setIsOpen(true);
+                      }}
+                    >
                       <span className="pr-2">{booking.player.name}</span>
                       <FontAwesomeIcon
                         icon={faStop}
-                        className={`text-base pr-2 ${
+                        className={`text-base ${
                           booking.card === "YELLOW"
                             ? "text-yellow"
                             : "text-red-600"
                         }`}
                       />
-                      <span className="pl-3">{booking.minute}'</span>
-                    </span>
+                    </div>
+                    <span className="pl-3">{booking.minute}'</span>
                   </div>
                 )}
               </div>
@@ -162,6 +331,13 @@ const CSummary: React.FC<ICSummary> = ({
           })}
         </span>
       </div>
+      <CModalViewPlayerMatch
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        playerMatches={rootPlayerMatches}
+        loading={loadingPlayerMatches}
+        idTeam={selectTeam}
+      />
     </CLoading>
   );
 };

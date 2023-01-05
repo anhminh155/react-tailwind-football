@@ -4,6 +4,7 @@ import { Scorer } from "types/competition_scorers";
 import { Props } from "types/define";
 import Utils from "common/utils";
 import CLoading from "components/CLoading";
+import { useNavigate } from "react-router-dom";
 
 interface ITableScorers extends Props {
   scorers: Scorer[] | any;
@@ -17,6 +18,7 @@ const TableScorers: React.FC<ITableScorers> = ({
   onMore,
 }) => {
   const moreEndRef = useRef<HTMLInputElement | any>(null);
+  const navigate = useNavigate()
 
   const scrollToBottom = () => {
     moreEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -95,7 +97,9 @@ const TableScorers: React.FC<ITableScorers> = ({
                           key={i}
                           ref={scorers.length - 10 === i ? moreEndRef : null}
                           onClick={() => {
-                            console.log(scorer);
+                            navigate(
+                              `team/${scorer.team.id}/player/${scorer.player.id}`
+                            )
                           }}
                           className="dark:bg-dark hover:dark:bg-gray-700 hover:bg-gray-400 hover:text-white cursor-pointer"
                         >

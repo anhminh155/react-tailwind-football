@@ -1,10 +1,5 @@
 // /* eslint-disable no-use-before-define */
-import {
-  createAsyncThunk,
-  createSlice,
-  PayloadAction,
-  PayloadActionCreator,
-} from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ICompetitionMatches } from "types/competiiton_matches";
 import { IRootCompetition } from "types/competition";
 import { ICompetitionScorers } from "types/competition_scorers";
@@ -13,6 +8,7 @@ import { ICompetitionTeam } from "types/competition_teams";
 import { IHead2Head } from "types/head2Head";
 import { IInfoMatch } from "types/infoMatch";
 import { IFiltersAPI } from "types/lookup_tables";
+import { IMatches } from "types/matches";
 import { API_FOOTBALL } from "../../api/constant";
 import Http from "../../api/http.api";
 import { DataFake } from "../../common/dataFake";
@@ -23,7 +19,8 @@ interface FootballState {
   loadingFootball: boolean;
   loadingCompetitionsMatches: boolean;
   loadingModalFootball: boolean;
-  loadingH2H: boolean
+  loadingH2H: boolean;
+  loadingMatch: boolean;
   rootCompetitions: IRootCompetition;
   rootCompetitionsStanding: ICompetitionStandings;
   rootScorers: ICompetitionScorers;
@@ -31,6 +28,7 @@ interface FootballState {
   rootCompetitionsMatches: ICompetitionMatches;
   rootInfoMatch: IInfoMatch;
   rootHead2Head: IHead2Head;
+  rootMatches: IMatches;
 }
 
 const initAppState: FootballState = {
@@ -38,6 +36,7 @@ const initAppState: FootballState = {
   loadingModalFootball: false,
   loadingCompetitionsMatches: false,
   loadingH2H: false,
+  loadingMatch: false,
   rootCompetitions: DataFake.CompetitionsAreas(),
   rootCompetitionsStanding: DataFake.CompetitionsStandings(),
   rootScorers: DataFake.CompetitionScorers(),
@@ -45,6 +44,7 @@ const initAppState: FootballState = {
   rootCompetitionsMatches: DataFake.CompetitionsMatches(),
   rootInfoMatch: DataFake.InfoMatch(),
   rootHead2Head: DataFake.Head2Head(),
+  rootMatches: DataFake.Matches(),
 };
 
 const footballSlice = createSlice({
@@ -69,6 +69,19 @@ const footballSlice = createSlice({
           if (!action.payload.message) {
             state.rootCompetitions = action.payload;
             state.loadingFootball = false;
+          }
+        }
+      );
+    builder
+      .addCase(fetchMatches.pending, (state: any) => {
+        state.loadingMatch = true;
+      })
+      .addCase(
+        fetchMatches.fulfilled,
+        (state: any, action: PayloadAction<IRootCompetition | any>) => {
+          if (!action.payload.message) {
+            state.rootMatches = action.payload;
+            state.loadingMatch = false;
           }
         }
       );
@@ -157,24 +170,26 @@ const footballSlice = createSlice({
           }
         }
       );
-    builder
-      .addCase(fetchTeamMatches.pending, (state: any) => {
-        state.loadingFootball = true;
-      })
-      .addCase(
-        fetchTeamMatches.fulfilled,
-        (state: any, action: PayloadAction<any>) => {
-          // const payload: ICompetitionScorers = action.payload;
-          console.log(action.payload);
-          if (!action.payload.message) {
-            // state.rootScorers = action.payload;
-            state.loadingFootball = false;
-          }
-        }
-      );
   },
 });
 
+/**
+ * @function fetchMatches
+ */
+export const fetchMatches = createAsyncThunk(
+  "football/fetchMatches",
+  async (param: IFiltersAPI, { dispatch }) => {
+    try {
+      const res: any = await Http.get(API_FOOTBALL.matches(param));
+      if (res.data) {
+        const data = res.data as unknown;
+        return data;
+      }
+    } catch (error) {
+      return error;
+    }
+  }
+);
 /**
  * @function fetchCompetitionsArea
  *
@@ -190,8 +205,6 @@ export const fetchCompetitions = createAsyncThunk(
         return data;
       }
     } catch (error) {
-      dispatch(setMessage(Utils.getMassage()));
-      dispatch(setLoadingFootball(false));
       return error;
     }
   }
@@ -218,8 +231,6 @@ export const fetchCompetitionStandings = createAsyncThunk(
     } catch (error) {
       console.log(error);
 
-      dispatch(setMessage(Utils.getMassage()));
-      dispatch(setLoadingFootball(false));
       return error;
     }
   }
@@ -241,8 +252,6 @@ export const fetchCompetitionsMatches = createAsyncThunk(
         return data;
       }
     } catch (error) {
-      dispatch(setMessage(Utils.getMassage()));
-      dispatch(setLoadingFootball(false));
       return error;
     }
   }
@@ -269,36 +278,6 @@ export const fetchTopScorersCompetitions = createAsyncThunk(
         return data;
       }
     } catch (error) {
-      dispatch(setMessage(Utils.getMassage()));
-      dispatch(setLoadingFootball(false));
-      return error;
-    }
-  }
-);
-
-/**
- * @function fetchTeamMatches
- *
- * Call API list (Top) Scorers with 2 agu
- * @argument idTeam
- *
- */
-// export type ITopScorers = {
-//   competition: string;
-//   limit: number;
-// };
-export const fetchTeamMatches = createAsyncThunk(
-  "football/fetchTeamMatches",
-  async (idTeam: number, { dispatch }) => {
-    try {
-      const res: any = await Http.get(API_FOOTBALL.teamMatches(idTeam));
-      if (res.data) {
-        const data = res.data as unknown;
-        return data;
-      }
-    } catch (error) {
-      dispatch(setMessage(Utils.getMassage()));
-      dispatch(setLoadingFootball(false));
       return error;
     }
   }
@@ -321,8 +300,6 @@ export const fetchCompetitionsTeams = createAsyncThunk(
         return data;
       }
     } catch (error) {
-      dispatch(setMessage(Utils.getMassage()));
-      dispatch(setLoadingFootball(false));
       return error;
     }
   }
@@ -345,8 +322,6 @@ export const fetchInfoMatch = createAsyncThunk(
         return data;
       }
     } catch (error) {
-      dispatch(setMessage(Utils.getMassage()));
-      dispatch(setLoadingFootball(false));
       return error;
     }
   }
