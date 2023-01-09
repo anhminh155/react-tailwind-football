@@ -44,8 +44,7 @@ export const API_FOOTBALL = {
     `competitions/${param.competitions}/matches?${handleEndParam(param)}`,
 
   //Match
-  matches: (param: IFiltersAPI) =>
-  `matches?${handleEndParam(param)}`,
+  matches: (param: IFiltersAPI) => `matches?${handleEndParam(param)}`,
 
   //Info match
   infoMatch: (param: IFiltersAPI) =>
@@ -72,46 +71,7 @@ export const API_FOOTBALL = {
     `persons/${param.id}/matches?${handleEndParamPlayer(param)}`,
 
   //[---------------------------------------]
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  footballTeamMatchesCompetitions: (idTeam: number, competition: string) =>
-    `teams/${idTeam}/matches?competitions=${competition}`,
-
-  footballAreas: (idArea?: number) => `areas/${idArea}`,
-
-  footballTierCompetitions: (idArea: string) =>
-    `competitions?plan=TIER_ONE&areas=${idArea}`,
-  // 2267
-
-  footballTeamCompetitions: (competition: string) =>
-    `competitions/${competition}/teams`,
-
-  //Best Player
-  footballBestScorersCompetitions: (competition: string, limit: number) =>
-    `competitions/${competition}/scorers?limit=${limit}`,
-
-  footballInfoPersonsMatches: (idPerson: number) => `teams/90`,
-  // `players/${idPerson}/matches?limit=10&competitions=PL`,
-  // `players/${idPerson}/matches?limit=5`,
-
-  footballMatches: (param: IFiltersAPI) => {
-    return `competitions/${param.competitions}/matches?${handleEndParam(
-      param
-    )}`;
-    // return `matches?dateFrom=2022-12-15&dateTo=2022-12-25&status=FINISHED`;
-  },
-
-  footballHead2Head: (idMatch: number) => `matches/${idMatch}/head2head`,
 };
+export const NEWS_FOOTBALL = {
+  
+}

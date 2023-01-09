@@ -21,11 +21,11 @@ const PlayerAggregations: React.FC<IPlayerAggregations> = ({
         <div className="bg-gray-200 dark:bg-gray-700 py-2 mb-1">
           <div className="uppercase flex items-center justify-center ">
             <div className="font-semibold">
-              AGGREGATIONS:{" "}
-              {`${format(new Date(resultSet.first), "dd/MM/yyyy")} - ${format(
+              AGGREGATIONS:
+              {resultSet.first ? `${format(new Date(resultSet.first), "dd/MM/yyyy")} - ${format(
                 new Date(resultSet.last),
                 "dd/MM/yyyy"
-              )}`}
+              )}` : ''}
             </div>
           </div>
         </div>

@@ -47,22 +47,22 @@ const PlayerPage: React.FC<Props> = () => {
   ]);
   const [selected, setSelected] = useState<any>(runningCompetition[0]);
 
-  useEffect(() => {    
+  useEffect(() => {
     let newRunningCompetition: any = [{ name: "ALL" }];
-    competitionPlayer.split(",").forEach((code: string) => {
-      const a = rootCompetitions.competitions.find(
-        (competition: Competition) => competition.code === code
-      );
-      if (a) {
-        newRunningCompetition.push({
-          name: a?.name,
-          code: a?.code,
-          img: a.emblem,
-        });
-      }
-    });
-    console.log(competitionPlayer);
-    
+    if (competitionPlayer) {
+      competitionPlayer.split(",").forEach((code: string) => {
+        const a = rootCompetitions.competitions.find(
+          (competition: Competition) => competition.code === code
+        );
+        if (a) {
+          newRunningCompetition.push({
+            name: a?.name,
+            code: a?.code,
+            img: a.emblem,
+          });
+        }
+      });
+    }
     setRunningCompetition(newRunningCompetition);
   }, [competitionPlayer]);
 
