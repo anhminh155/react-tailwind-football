@@ -1,36 +1,26 @@
 import { Transition } from "@tailwindui/react";
 import { useState, useRef, useEffect } from "react";
-import ConfirmModal from "./modals/ConfirmModal";
 import { Link, useNavigate } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import Utils from "../common/utils";
 import { useDispatchRoot, useSelectorRoot } from "../redux/hooks";
 import { setTheme } from "../redux/controller/app.slice";
 import { RootState } from "../redux/rootReducer";
-
-const BG_AVATAR = [
-  "152e4d",
-  "0891b2",
-  "2E8B57",
-  "8B4513",
-  "4B0082",
-  "999",
-  "000",
-];
+import { signOut } from "@firebase/auth";
+import { auth, db } from "firebase-config";
+import CModal from "./modals/CModal";
+import { ref } from "firebase/database";
+import { useObject } from "react-firebase-hooks/database";
 
 function ProfileMenu() {
   const [modalOut, showModalOut] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [bgAvatar, setBgAvatar] = useState(BG_AVATAR[0]);
-  const { theme } = useSelectorRoot((state: RootState) => state.app);
+  const { theme, user } = useSelectorRoot((state: RootState) => state.app);
+  const [profile] = useObject(ref(db, `users/${user?.uid}`));
   const dispatch = useDispatchRoot();
-
   const navigate = useNavigate();
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
-
-  const userLocal = localStorage.getItem("user");
-  const user = userLocal ? JSON.parse(userLocal || "") : null;
 
   // close on click outside
   useEffect(() => {
@@ -57,13 +47,17 @@ function ProfileMenu() {
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
-  useEffect(() => {
-    setBgAvatar(BG_AVATAR[Math.floor(Math.random() * BG_AVATAR.length)]);
-  }, []);
-
   const handleLogout = async () => {
-    localStorage.clear();
-    navigate("/auth", { replace: true });
+    sessionStorage.clear();
+    signOut(auth)
+      .then(() => {
+        showModalOut(false);
+        // Sign-out successful.
+        // navigate("/auth", { replace: true });
+      })
+      .catch((error) => {
+        // An error happened.
+      });
   };
 
   return (
@@ -82,37 +76,53 @@ function ProfileMenu() {
           className="pr-3 cursor-pointer select-none dark:text-white"
         >
           {theme === "dark" ? (
-            <i className="ri-lightbulb-fill text-xl"/>
+            <i className="ri-lightbulb-fill text-xl" />
           ) : (
-            <i className="ri-lightbulb-fill text-xl"/>
+            <i className="ri-lightbulb-fill text-xl" />
           )}
         </div>
-        <button
-          ref={trigger}
-          className="inline-flex justify-center items-center group"
-          aria-haspopup="true"
-          aria-expanded={dropdownOpen}
-          onClick={() => setDropdownOpen(!dropdownOpen)}
-        >
-          {/* <div className='text-right mr-3'>
+        {user ? (
+          <button
+            ref={trigger}
+            className="inline-flex justify-center items-center group"
+            aria-haspopup="true"
+            aria-expanded={dropdownOpen}
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+          >
+            {/* <div className='text-right mr-3'>
                         <h4 className='font-bold'>John Doe</h4>
                         <p>Administrator</p>
                     </div> */}
-          <div className="w-10 h-10 mr-1 rounded-full bg-gray-400">
-            <LazyLoadImage
-              src={`https://ui-avatars.com/api/?name=${user?.name}&background=${bgAvatar}&color=fff`}
-              className="rounded-full"
-              alt=""
-              effect="blur"
-            />
-          </div>
-          <div className="flex items-center truncate">
-            <span className="truncate mr-1 font-medium group-hover:text-indigo-600">
-              {user?.name}
-            </span>
-            <i className="ri-arrow-down-s-line font-bold text-xl dark:text-white"></i>
-          </div>
-        </button>
+            <div className="w-10 h-10 mr-1 rounded-full bg-gray-400">
+              <LazyLoadImage
+                threshold={50}
+                src={
+                  profile?.val().photoURL
+                    ? `${profile?.val().photoURL}`
+                    : `https://ui-avatars.com/api/?name=${profile?.val().email}&background=152e4d&color=fff`
+                }
+                className="rounded-full w-10 h-10"
+                alt=""
+                effect="blur"
+              />
+            </div>
+            <div className="flex items-center truncate">
+              <span className="truncate mr-1 font-medium group-hover:text-indigo-600">
+                {user?.email}
+              </span>
+              <i className="ri-arrow-down-s-line font-bold text-xl dark:text-white"></i>
+            </div>
+          </button>
+        ) : (
+          <button
+            className="btn-submit dark:text-white cursor-pointer bg-gray-500"
+            onClick={() => {
+              navigate("/auth/sign-in");
+            }}
+          >
+            Login
+          </button>
+        )}
 
         {/* {dropdownOpen && */}
         <Transition
@@ -131,10 +141,10 @@ function ProfileMenu() {
             onBlur={() => setDropdownOpen(false)}
           >
             <div className="pt-0.5 pb-2 px-3 mb-1 border-b border-gray-200">
-              <div className="font-medium text-gray-800">{"Username"}</div>
-              <div className="text-xs text-gray-500 italic">
-                {"user?.email"}
+              <div className="font-medium text-gray-800">
+                {user?.displayName ?? "-"}
               </div>
+              <div className="text-xs text-gray-500 italic">{user?.email}</div>
             </div>
             <ul>
               <li>
@@ -161,12 +171,46 @@ function ProfileMenu() {
         {/* } */}
       </div>
       {modalOut && (
+        <CModal show={modalOut} closeModal={(e: boolean) => showModalOut(e)}>
+          <div className="relative bg-white rounded-lg overflow-hidden ">
+            <div className="flex items-center px-6 py-3 justify-center">
+              <h1 className="mx-3  font-semibold text-lg">
+                Are you sure you want to logout?
+              </h1>
+            </div>
+            <div
+              onClick={() => showModalOut(false)}
+              className="absolute top-1 right-1 p-1 rounded-md bg-gray-300 hover:bg-gray-500 cursor-pointer"
+            >
+              <i className="ri-close-line"></i>
+            </div>
+          </div>
+
+          <div className="px-6 pb-4">
+            {/* <button
+              onClick={handleLogout}
+              type="button"
+              className="w-full inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium  hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+            >
+              Cancel
+            </button> */}
+            <button
+              onClick={handleLogout}
+              type="button"
+              className="w-full inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+            >
+              Ok
+            </button>
+          </div>
+        </CModal>
+      )}
+      {/* {modalOut && (
         <ConfirmModal
           message="Are you sure to logout?"
           onClose={() => showModalOut(false)}
           onNext={handleLogout}
         />
-      )}
+      )} */}
     </>
   );
 }

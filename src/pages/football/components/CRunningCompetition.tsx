@@ -1,6 +1,6 @@
 import React from "react";
 import { Props } from "types/define";
-import { ITeams, RunningCompetition, Squad } from "types/teams";
+import { ITeams, RunningCompetition } from "types/teams";
 import CLoading from "components/CLoading";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { ResultSet } from "types/teams_matches";

@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { API_URL } from "./constant";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 const headers = {
   "X-Auth-Token": "475e4b54e1344de8ba772455f6919e95",

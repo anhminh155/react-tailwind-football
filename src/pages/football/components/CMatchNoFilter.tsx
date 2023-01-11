@@ -2,25 +2,21 @@ import React from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate } from "react-router-dom";
 import { Props } from "types/define";
-import { useSelectorRoot } from "redux/hooks";
-import { RootState } from "redux/rootReducer";
 import { format } from "date-fns";
 import { Match } from "types/teams_matches";
 import CLoading from "components/CLoading";
 
-
 interface ICMatchTeam extends Props {
   dataMatch?: Match[];
   loading?: boolean;
+  showLeague?: boolean;
 }
 
 const CMatchNoFilter: React.FC<ICMatchTeam> = ({
   dataMatch,
   loading = false,
+  showLeague = true,
 }) => {
-  const { rootTeamsMatches, loadingTeamMatch } = useSelectorRoot(
-    (state: RootState) => state.footballTeam
-  );
   const navigate = useNavigate();
 
   return (
@@ -35,9 +31,9 @@ const CMatchNoFilter: React.FC<ICMatchTeam> = ({
               >
                 Time
               </th>
-              <th scope="col" className="px-6 py-3 text-center tracking-wider">
+              {showLeague ? <th scope="col" className="px-6 py-3 text-center tracking-wider">
                 League
-              </th>
+              </th> : null}
               <th scope="col" className="px-6 py-3 text-right tracking-wider">
                 Home
               </th>
@@ -67,7 +63,7 @@ const CMatchNoFilter: React.FC<ICMatchTeam> = ({
                     <td className="px-6 py-2 min-w-fit">
                       {format(new Date(match.utcDate), "dd/MM/yyyy HH:mm")}
                     </td>
-                    <td
+                    {showLeague ? <td
                       onClick={() => {
                         navigate(
                           `/dashboard/${match.competition.type.toLowerCase()}-${
@@ -78,7 +74,7 @@ const CMatchNoFilter: React.FC<ICMatchTeam> = ({
                       className="px-6 py-2 text-center whitespace-nowrap hover:bg-gray-200 hover:text-violet hover:cursor-pointer hover:dark:text-yellow hover:dark:bg-gray-400"
                     >
                       {match.competition.name}
-                    </td>
+                    </td> : null}
                     <td
                       className="px-6 py-2 text-right whitespace-nowrap hover:bg-gray-200 hover:text-violet hover:cursor-pointer hover:dark:text-yellow hover:dark:bg-gray-400"
                       onClick={() => {

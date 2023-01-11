@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import { Team } from "types/competition_teams";
+import React from "react";
 import { Props } from "types/define";
 import CLoading from "components/CLoading";
 import CModal from "components/modals/CModal";
 import { useNavigate } from "react-router-dom";
 import { IPlayerMatches } from "types/player_matches";
+import { useSelectorRoot } from "redux/hooks";
+import { RootState } from "redux/rootReducer";
 
 interface ICModalViewPlayerMatch extends Props {
   isOpen: boolean;
@@ -23,6 +23,9 @@ const CModalViewPlayerMatch: React.FC<ICModalViewPlayerMatch> = ({
   loading,
 }) => {
   const navigate = useNavigate();
+  const { rootInfoMatch } = useSelectorRoot(
+    (state: RootState) => state.football
+  );
 
   return (
     <CModal show={isOpen} closeModal={(e: boolean) => setIsOpen(e)}>
@@ -51,26 +54,32 @@ const CModalViewPlayerMatch: React.FC<ICModalViewPlayerMatch> = ({
               <span>{playerMatches?.person.dateOfBirth}</span>
             </div>
             <div className="pt-1 mb-2 flex col-span-2 bg-slate-400" />
-            <div className="pb-2 flex">
-              <div className="font-semibold pr-2 ">Minutes Played:</div>
-              <span>{playerMatches?.aggregations.minutesPlayed}</span>
-            </div>
-            <div className="pb-2 flex">
-              <div className="font-semibold pr-2 ">Goals:</div>
-              <span>{playerMatches?.aggregations.goals}</span>
-            </div>
-            <div className="pb-2 flex">
-              <div className="font-semibold pr-2 ">Assists:</div>
-              <span>{playerMatches?.aggregations.assists}</span>
-            </div>
-            <div className="pb-2 flex">
-              <div className="font-semibold pr-2 ">Yellow Cards:</div>
-              <span>{playerMatches?.aggregations.yellowCards}</span>
-            </div>
-            <div className="pb-2 flex">
-              <div className="font-semibold pr-2 ">Red Cards:</div>
-              <span>{playerMatches?.aggregations.yellowRedCards}</span>
-            </div>
+            {playerMatches?.matches.length !== 0 ? (
+              <>
+                <div className="pb-2 flex">
+                  <div className="font-semibold pr-2 ">Minutes Played:</div>
+                  <span>{playerMatches?.aggregations.minutesPlayed}</span>
+                </div>
+                <div className="pb-2 flex">
+                  <div className="font-semibold pr-2 ">Goals:</div>
+                  <span>{playerMatches?.aggregations.goals}</span>
+                </div>
+                <div className="pb-2 flex">
+                  <div className="font-semibold pr-2 ">Assists:</div>
+                  <span>{playerMatches?.aggregations.assists}</span>
+                </div>
+                <div className="pb-2 flex">
+                  <div className="font-semibold pr-2 ">Yellow Cards:</div>
+                  <span>{playerMatches?.aggregations.yellowCards}</span>
+                </div>
+                <div className="pb-2 flex">
+                  <div className="font-semibold pr-2 ">Red Cards:</div>
+                  <span>{playerMatches?.aggregations.yellowRedCards}</span>
+                </div>
+              </>
+            ) : (
+              <div className="">-</div>
+            )}
           </div>
         </div>
 
@@ -79,10 +88,10 @@ const CModalViewPlayerMatch: React.FC<ICModalViewPlayerMatch> = ({
             onClick={() => {
               //Handle
               navigate(
-                `/dashboard/${playerMatches?.matches[0].competition.type.toLowerCase()}-${
-                  playerMatches?.matches[0].competition.code
+                `/dashboard/${rootInfoMatch.competition.type.toLowerCase()}-${
+                  rootInfoMatch.competition.code
                 }-${new Date(
-                  playerMatches?.matches[0].season.startDate!
+                  rootInfoMatch.season.startDate!
                 ).getFullYear()}/team/${idTeam}/player/${
                   playerMatches?.person.id
                 }`

@@ -9,11 +9,11 @@ type Props = {
 
 const ConfirmModal: React.FC<Props> = ({ message, onClose, onNext }: Props) => {
 	return <>
-		<div className="modal-form">
+		<div className="modal-form h-screen w-screen">
 			<div className="modal-form-outside" onClick={onClose} />
 
 			{/* <!-- Modal content --> */}
-			<div className="w-11/12 md:w-5/12 bg-white rounded-lg shadow dark:bg-gray-700 z-50">
+			<div className=" bg-white rounded-lg shadow dark:bg-gray-700 z-50">
 				{/* <!-- Modal header --> */}
 				<div className="flex justify-end p-2">
 					<button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"

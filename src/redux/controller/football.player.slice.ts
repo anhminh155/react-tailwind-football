@@ -6,7 +6,6 @@ import { DataFake } from "common/dataFake";
 import { IFiltersAPI } from "types/lookup_tables";
 import { IPlayer } from "types/player";
 import { IPlayerMatches } from "types/player_matches";
-import { ITeamsMatches } from "types/teams_matches";
 
 interface FootballState {
   loadingPlayer: boolean;
@@ -54,7 +53,7 @@ const footballPlayerSlice = createSlice({
           const payload: IPlayerMatches = action.payload;
           if (
             state.rootPlayerMatches.person.id !== payload.person.id ||
-            state.competitionPlayer.length === 0
+            state.competitionPlayer?.length === 0
           ) {
             state.competitionPlayer = payload.resultSet.competitions;
           }

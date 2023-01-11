@@ -1,17 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import { Navigate, Route, Routes } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { AuthRoutes } from "../routes";
 import NotFound from "../pages/dashboard/NotFound";
-
-const BG = [
-  require("../assets/img/bg1.jpg"),
-  require("../assets/img/bg2.jpg"),
-  require("../assets/img/bg3.jpg"),
-  require("../assets/img/bg4.jpg"),
-  require("../assets/img/bg5.jpg"),
-  require("../assets/img/bg6.jpg"),
-];
+import { onAuthStateChanged } from "@firebase/auth";
+import { auth } from "firebase-config";
 
 // MAIN ROUTE
 const getRoutes = () => {
@@ -23,17 +15,33 @@ const getRoutes = () => {
 type Props = {};
 
 const Auth: React.FC<Props> = () => {
-  const [bgImage, setBgImage] = useState(BG[0]);
+  const navigate = useNavigate();
+  const authToken = sessionStorage.getItem("Auth Token");
 
   useEffect(() => {
-    setBgImage(BG[Math.floor(Math.random() * BG.length)]);
-  }, []);
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigate("/dashboard");
+        // console.log(user);
+        
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        // const uid = user.uid;
+        // navigate('/dashboard')
+        // ...
+      } else {
+        // User is signed out
+        // ...
+      }
+    });
+    //eslint-disable-next-line
+  }, [authToken]);
 
   return (
     <>
       <div className="bg-[#eee] min-h-screen flex justify-center items-center font-poppins">
-        <div className="relative w-[1366px] h-[768px]">
-          <div className="absolute top-0 left-0 w-full md:w-1/2 h-full bg-white 2xl:rounded-tl-xl 2xl:rounded-bl-xl text-dark z-10">
+        <div className="flex justify-center w-[1366px]">
+          <div className=" w-full md:w-2/3 h-full bg-white 2xl:rounded-tl-xl 2xl:rounded-bl-xl text-dark p-5 rounded-lg">
             <Routes>
               {getRoutes()}
 
@@ -44,15 +52,6 @@ const Auth: React.FC<Props> = () => {
               />
             </Routes>
           </div>
-
-          {/* <div className="hidden md:block h-full w-full object-fill z-0"> */}
-          <LazyLoadImage
-            effect="blur"
-            src={bgImage}
-            alt=""
-            className="hidden md:block h-full w-full object-fill z-0 2xl:rounded-xl"
-          />
-          {/* </div> */}
         </div>
       </div>
     </>

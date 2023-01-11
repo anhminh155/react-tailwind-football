@@ -84,6 +84,7 @@ const InfoMatch: React.FC<Props> = () => {
       default:
         break;
     }
+    //eslint-disable-next-line
   }, [selectTab]);
 
   return (

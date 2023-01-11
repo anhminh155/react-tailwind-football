@@ -1,3 +1,4 @@
+ /* eslint-disable */
 import React, { useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useParams } from "react-router-dom";

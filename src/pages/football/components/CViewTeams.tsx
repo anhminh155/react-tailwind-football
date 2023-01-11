@@ -3,13 +3,11 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Team } from "types/competition_teams";
 import { Props } from "types/define";
 import CLoading from "components/CLoading";
-import CModal from "components/modals/CModal";
-import { useDispatchRoot, useSelectorRoot } from "redux/hooks";
+import { useSelectorRoot } from "redux/hooks";
 import { RootState } from "redux/rootReducer";
 import CModalViewTeam from "./CModalViewTeam";
 
 const CViewTeams: React.FC<Props> = () => {
-  const dispatch = useDispatchRoot();
   const { loadingFootball, rootCompetitionsTeams } = useSelectorRoot(
     (state: RootState) => state.football
   );
@@ -38,7 +36,11 @@ const CViewTeams: React.FC<Props> = () => {
               <span className="px-2">{team.shortName}</span>
             </div>
           ))}
-          <CModalViewTeam isOpen={isOpen} setIsOpen={setIsOpen} dataTeam={dataTeam!} />
+          <CModalViewTeam
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            dataTeam={dataTeam!}
+          />
         </div>
       </div>
     </CLoading>

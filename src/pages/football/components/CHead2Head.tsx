@@ -1,6 +1,5 @@
 import React from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { useNavigate } from "react-router-dom";
 import { Props } from "types/define";
 import { useSelectorRoot } from "redux/hooks";
 import { RootState } from "redux/rootReducer";
@@ -15,8 +14,6 @@ const CHead2Head: React.FC<ICHead2Head> = ({ getPath }) => {
   const { rootHead2Head } = useSelectorRoot(
     (state: RootState) => state.football
   );
-  const navigate = useNavigate();
-
   return (
     <div>
       <div>

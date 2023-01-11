@@ -1,3 +1,4 @@
+ /* eslint-disable */
 import React, { Fragment, useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -39,7 +40,7 @@ const PlayerPage: React.FC<Props> = () => {
   const { rootCompetitions } = useSelectorRoot(
     (state: RootState) => state.football
   );
-  const { competitionCode, IdPlayer } = useParams<IPathNameChild>();
+  const {  IdPlayer } = useParams<IPathNameChild>();
   const navigate = useNavigate();
   const location = useLocation();
   const [runningCompetition, setRunningCompetition] = useState([

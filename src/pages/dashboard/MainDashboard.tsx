@@ -6,13 +6,14 @@ import {
   getYear,
   isMonday,
   isSunday,
-  nextMonday,
   nextSunday,
-  nextWednesday,
   previousMonday,
 } from "date-fns";
+import { db } from "firebase-config";
+import { ref } from "firebase/database";
 import CMatchNoFilter from "pages/football/components/CMatchNoFilter";
 import React, { useEffect } from "react";
+import { useObject } from "react-firebase-hooks/database";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate } from "react-router-dom";
 import { fetchMatches } from "redux/controller/football.slice";
@@ -23,12 +24,19 @@ import CBreadcrumb from "../../components/CBreadcrumb";
 type Props = {};
 
 const MainDashboard: React.FC<Props> = () => {
+  const dispatch = useDispatchRoot();
   const { rootMatches, rootCompetitions, loadingMatch } = useSelectorRoot(
     (state: RootState) => state.football
   );
+  const {user} = useSelectorRoot((state: RootState) => state.app);
   const navigate = useNavigate();
+  const [listFollowCompetition, loading, error] = useObject(
+    ref(db, `users/${user?.uid}/football/competition`)
+  );
 
-  const dispatch = useDispatchRoot();
+  console.log(listFollowCompetition?.val());
+  
+
   useEffect(() => {
     dispatch(
       fetchMatches({
@@ -40,6 +48,7 @@ const MainDashboard: React.FC<Props> = () => {
           : format(nextSunday(new Date()), "yyyy-MM-dd"),
       })
     );
+    //eslint-disable-next-line
   }, []);
 
   return (
@@ -106,6 +115,7 @@ const MainDashboard: React.FC<Props> = () => {
                         >
                           <Disclosure.Panel className="-mt-2 p-2 dark:bg-gray-900 bg-gray-200">
                             <CMatchNoFilter
+                              showLeague={false}
                               dataMatch={rootMatches.matches.filter(
                                 (matches) => matches.competition.code === code
                               )}

@@ -7,6 +7,7 @@ interface AppState {
   theme: string;
   language: LanguageType;
   navbar: NavbarType;
+  user: any | null;
 }
 
 const initAppState: AppState = {
@@ -15,6 +16,7 @@ const initAppState: AppState = {
   theme: "light",
   type: "",
   message: "",
+  user: null,
 };
 
 const appSlice = createSlice({
@@ -36,9 +38,12 @@ const appSlice = createSlice({
     setMessage(state, action: PayloadAction<string>) {
       state.message = action.payload;
     },
+    setUser(state, action: PayloadAction<string>) {
+      state.user = JSON.parse(action.payload);
+    },
   },
 });
 
-export const { changeLanguage, setNavbar, setMessage, setTheme } =
+export const { changeLanguage, setNavbar, setMessage, setTheme, setUser } =
   appSlice.actions;
 export const appReducer = appSlice.reducer;

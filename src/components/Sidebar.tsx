@@ -1,7 +1,7 @@
 /** disable-eslint */
 import React, { useEffect, useRef, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AdminRoutes } from "../routes";
 import ProfileMenu from "./ProfileMenu";
 import appLogo from "../assets/img/applogo.png";
@@ -62,6 +62,7 @@ const Sidebar: React.FC<Props> = () => {
 
   useEffect(() => {
     dispatch(fetchCompetitions({}));
+    //eslint-disable-next-line
   }, []);
 
   useEffect(() => {

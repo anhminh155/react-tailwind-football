@@ -7,32 +7,20 @@ import {
   faBullhorn,
   faStop,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  Booking,
-  Goal,
-  IInfoMatch,
-  Lineup,
-  Lineup2,
-  Substitution,
-} from "types/infoMatch";
+import { Booking, Goal, IInfoMatch, Substitution } from "types/infoMatch";
 import CLoading from "components/CLoading";
 import CModalViewPlayerMatch from "./CModalViewPlayerMatch";
 import { useDispatchRoot, useSelectorRoot } from "redux/hooks";
 import { fetchPlayerMatches } from "redux/controller/football.player.slice";
-import { addDays, format, nextDay, previousDay, subDays } from "date-fns";
+import { addDays, format, subDays } from "date-fns";
 import { RootState } from "redux/rootReducer";
-import { IPlayerMatches } from "types/player_matches";
 
 interface ICSummary extends Props {
   loading?: boolean;
   match: IInfoMatch;
 }
 
-const CSummary: React.FC<ICSummary> = ({
-  loading = false,
-  match,
-  ...props
-}) => {
+const CSummary: React.FC<ICSummary> = ({ loading = false, match }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { loadingPlayerMatches, rootPlayerMatches } = useSelectorRoot(
     (state: RootState) => state.footballPlayer
@@ -40,7 +28,10 @@ const CSummary: React.FC<ICSummary> = ({
   const dispatch = useDispatchRoot();
   const [selectTeam, setSelectTeam] = useState<number>();
   const param = {
-    dateFrom: match.utcDate.split("T")[0],
+    dateFrom: format(
+      subDays(new Date(match.utcDate.split("T")[0]), 1),
+      "yyyy-MM-dd"
+    ),
     dateTo: format(
       addDays(new Date(match.utcDate.split("T")[0]), 1),
       "yyyy-MM-dd"

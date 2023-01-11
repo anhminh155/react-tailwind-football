@@ -1,4 +1,4 @@
-// disable-eslint
+/* eslint-disable */
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatchRoot, useSelectorRoot } from "redux/hooks";
@@ -21,6 +21,16 @@ import "react-datepicker/dist/react-datepicker.css";
 import Utils from "common/utils";
 import CMatches from "./components/CMatches";
 import CBreadcrumb from "components/CBreadcrumb";
+import CFollow from "components/CFollow";
+import UtilsFirebase from "common/utilsFirebase";
+import { child, get, ref } from "firebase/database";
+import { db, dbRef } from "firebase-config";
+import {
+  useList,
+  useObject,
+  useObjectVal,
+} from "react-firebase-hooks/database";
+import { Competition } from "types/competition";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -31,6 +41,7 @@ const CompetitionPage: React.FC<Props> = () => {
   const dispatch = useDispatchRoot();
   const { loadingFootball, rootCompetitionsStanding, rootScorers } =
     useSelectorRoot((state: RootState) => state.football);
+  const { user } = useSelectorRoot((state: RootState) => state.app);
   const listTab: string[] = ["STANDINGS", "MATCHES", "TEAMS", "TOP SCORERS"];
   const [selectTab, setSelectTab] = useState<number>(0);
   const [paramApi, setParamAPi] = useState<IFiltersAPI>({
@@ -38,6 +49,25 @@ const CompetitionPage: React.FC<Props> = () => {
   });
   const [limitPlayer, setLimitPlayer] = useState<number>(10);
   const [paramCMatches, setParamCMatches] = useState<IFiltersAPI | null>(null);
+  const [activeStar, setActiveStar] = useState<boolean>(false);
+  const [listFollowCompetition] = useObject(
+    ref(db, `users/${user?.uid}/football/competition`)
+  );
+
+  useEffect(() => {
+    if (
+      listFollowCompetition
+        ?.val()
+        ?.find(
+          (competition: Competition) =>
+            competition.id === rootCompetitionsStanding.competition.id
+        )
+    ) {
+      setActiveStar(true);
+    } else {
+      setActiveStar(false);
+    }
+  }, [listFollowCompetition, rootCompetitionsStanding]);
 
   useEffect(() => {
     let param: IFiltersAPI = {
@@ -105,8 +135,70 @@ const CompetitionPage: React.FC<Props> = () => {
       <CBreadcrumb />
       <CBox>
         {/* popover league */}
-        <div className="inline-block hover:shadow-md hover:bg-gray-200 rounded-2xl -py-10 px-2 -m-2 mb-3 ring-0">
-          <CPopoverCompetition />
+        <div className="flex gap-2">
+          <div className="inline-block hover:shadow-md hover:bg-gray-200 rounded-2xl -py-10 px-2 -m-2 mb-3 ring-0">
+            <CPopoverCompetition />
+          </div>
+          {user ? (
+            <CFollow
+              size="2xl"
+              active={activeStar}
+              onClick={() => {
+                get(child(dbRef, `users/${user?.uid}/football/competition`))
+                  .then((snapshot) => {
+                    let param: any = {
+                      userId: user.uid,
+                      competition: [],
+                    };
+                    if (snapshot.exists()) {
+                      console.log(snapshot.val());
+                      const check = snapshot
+                        .val()
+                        .find(
+                          (competition: Competition) =>
+                            competition.code ===
+                            rootCompetitionsStanding.competition.code
+                        );
+                      if (check) {
+                        param.competition = [
+                          ...snapshot
+                            .val()
+                            .filter(
+                              (competition: Competition) =>
+                                competition.code !==
+                                rootCompetitionsStanding.competition.code
+                            ),
+                        ];
+                      } else {
+                        param.competition = [
+                          ...snapshot.val(),
+                          {
+                            ...rootCompetitionsStanding.competition,
+                            ...rootCompetitionsStanding.season,
+                          },
+                        ];
+                      }
+                      UtilsFirebase.writeFootballData(param).then(() => {
+                        setActiveStar(!activeStar);
+                      });
+                    } else {
+                      param.competition.push({
+                        ...rootCompetitionsStanding.competition,
+                        ...rootCompetitionsStanding.season,
+                      });
+                      UtilsFirebase.writeFootballData(param).then(() => {
+                        setActiveStar(!activeStar);
+                      });
+                    }
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                  });
+              }}
+            />
+          ) : (
+            ""
+          )}
         </div>
 
         <div className="w-full px-2 mt-5 sm:px-0 select-none">

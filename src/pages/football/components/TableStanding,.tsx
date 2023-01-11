@@ -1,3 +1,4 @@
+ /* eslint-disable */
 import React, { useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -5,7 +6,6 @@ import { IPathNameChild } from "routes";
 import { Standing, Table } from "types/competition_standings";
 import { Props } from "types/define";
 import { EnumTypes } from "types/lookup_tables";
-import { DataFake } from "../../../common/dataFake";
 import Utils from "../../../common/utils";
 import CLoading from "../../../components/CLoading";
 
@@ -299,7 +299,7 @@ const TableStanding: React.FC<ITableStanding> = ({
                                         return (
                                           <svg
                                             key={index}
-                                            className="w-4 fill-current text-gray-400"
+                                            className="w-4 fill-current text-gray-600"
                                             xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 20 20"
                                             fill="currentColor"

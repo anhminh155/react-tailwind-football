@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Competition } from "types/competition";
 import { Props } from "types/define";
-import { useDispatchRoot, useSelectorRoot } from "../redux/hooks";
+import { useSelectorRoot } from "../redux/hooks";
 import { RootState } from "../redux/rootReducer";
 import { IPathNameChild } from "../routes";
 
 const CBreadcrumb: React.FC<Props> = () => {
-  const dispatch = useDispatchRoot();
-  const { rootCompetitions, rootCompetitionsMatches, rootCompetitionsTeams } =
-    useSelectorRoot((state: RootState) => state.football);
+  const { rootCompetitions, rootCompetitionsMatches } = useSelectorRoot(
+    (state: RootState) => state.football
+  );
   const { rootPlayer } = useSelectorRoot(
     (state: RootState) => state.footballPlayer
   );
@@ -65,6 +64,7 @@ const CBreadcrumb: React.FC<Props> = () => {
       foo.push({ name: `${rootPlayer.name}` });
     }
     setParamUrl(foo);
+    //eslint-disable-next-line
   }, [rootCompetitions, location, rootCompetitionsMatches]);
 
   return (

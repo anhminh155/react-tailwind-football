@@ -4,7 +4,7 @@ import { IFiltersAPI } from "types/lookup_tables";
 
 export const API_URL = "https://api.football-data.org/v4/";
 
-const TIER = "TIER_ONE";
+// const TIER = "TIER_ONE";
 
 const handleEndParam = (param: IFiltersAPI): string => {
   let result: string = "";

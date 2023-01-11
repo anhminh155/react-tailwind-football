@@ -31,38 +31,128 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
     lineup.forEach((lp: Lineup | Lineup2, i: number) => {
       switch (lp.position) {
         case "Goalkeeper":
-          arrLineup.squad.gk = { number: lp.shirtNumber, name: "" };
+          arrLineup.squad.gk = {
+            number: lp.shirtNumber,
+            name: (
+              <div
+                className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible `}
+              >
+                {lp.name}
+              </div>
+            ),
+          };
           arrLineup.squad.gk.onClick = () => {
-            console.log("");
+            console.log(lp.name);
           };
           break;
         case "Centre-Back":
-          arrLineup.squad.df.push({ number: lp.shirtNumber, name: "" });
+          arrLineup.squad.df.push({
+            number: lp.shirtNumber,
+            name: (
+              <div
+                className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible `}
+              >
+                {lp.name}
+              </div>
+            ),
+          });
           break;
         case "Right-Back":
-          arrLineup.squad.cm.push({ number: lp.shirtNumber, name: "" });
+          arrLineup.squad.cm.push({
+            number: lp.shirtNumber,
+            name: (
+              <div
+                className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible `}
+              >
+                {lp.name}
+              </div>
+            ),
+          });
           break;
         case "Left-Back":
-          arrLineup.squad.cm.push({ number: lp.shirtNumber, name: "" });
+          arrLineup.squad.cm.push({
+            number: lp.shirtNumber,
+            name: (
+              <div
+                className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible `}
+              >
+                {lp.name}
+              </div>
+            ),
+          });
           break;
         case "Defensive Midfield":
-          arrLineup.squad.cm.push({ number: lp.shirtNumber, name: "" });
+          arrLineup.squad.cm.push({
+            number: lp.shirtNumber,
+            name: (
+              <div
+                className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible `}
+              >
+                {lp.name}
+              </div>
+            ),
+          });
           break;
         case "Central Midfield":
-          arrLineup.squad.cm.push({ number: lp.shirtNumber, name: "" });
+          arrLineup.squad.cm.push({
+            number: lp.shirtNumber,
+            name: (
+              <div
+                className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible `}
+              >
+                {lp.name}
+              </div>
+            ),
+          });
           break;
         case "Attacking Midfield":
-          arrLineup.squad.fw.push({ number: lp.shirtNumber, name: "" });
+          arrLineup.squad.fw.push({
+            number: lp.shirtNumber,
+            name: (
+              <div
+                className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible `}
+              >
+                {lp.name}
+              </div>
+            ),
+          });
           break;
         case "Right Winger":
-          arrLineup.squad.fw.push({ number: lp.shirtNumber, name: "" });
+          arrLineup.squad.fw.push({
+            number: lp.shirtNumber,
+            name: (
+              <div
+                className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible `}
+              >
+                {lp.name}
+              </div>
+            ),
+          });
           break;
         case "Centre-Forward":
-          arrLineup.squad.fw.push({ number: lp.shirtNumber, name: "" });
+          arrLineup.squad.fw.push({
+            number: lp.shirtNumber,
+            name: (
+              <div
+                className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible `}
+              >
+                {lp.name}
+              </div>
+            ),
+          });
           break;
 
         default:
-          arrLineup.squad.fw.push({ number: lp.shirtNumber, name: "" });
+          arrLineup.squad.fw.push({
+            number: lp.shirtNumber,
+            name: (
+              <div
+                className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible `}
+              >
+                {lp.name}
+              </div>
+            ),
+          });
           break;
       }
     });
@@ -86,7 +176,7 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
         <div className="">
           <SoccerLineUp
             size={"responsive"}
-            pattern={"squares"}
+            // pattern={"squares"}
             homeTeam={{
               ...convertArr(match?.homeTeam.lineup!),
               //   color: "lightblue",

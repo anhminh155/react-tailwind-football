@@ -1,11 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Team } from "types/competition_teams";
 import { Props } from "types/define";
-import CLoading from "components/CLoading";
 import CModal from "components/modals/CModal";
-import { useDispatchRoot, useSelectorRoot } from "redux/hooks";
-import { RootState } from "redux/rootReducer";
 import { useNavigate } from "react-router-dom";
 
 interface ICModalViewTeam extends Props {

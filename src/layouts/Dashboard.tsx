@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import ProfileMenu from "components/ProfileMenu";
 import Sidebar from "components/Sidebar";
 import NotFound from "pages/dashboard/NotFound";
 import { dashboardRoutes } from "routes";
+import { onAuthStateChanged } from "@firebase/auth";
+import { auth } from "firebase-config";
+import { useDispatchRoot } from "redux/hooks";
+import { setUser } from "redux/controller/app.slice";
 
 // MAIN ROUTE
 const getRoutes = () => {
@@ -16,6 +20,28 @@ const getRoutes = () => {
 type Props = {};
 
 const Dashboard: React.FC<Props> = () => {
+  const authToken = sessionStorage.getItem("Auth Token");
+  const dispatch = useDispatchRoot();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user: any) => {
+      if (user) {
+        // console.log(user);
+        dispatch(setUser(JSON.stringify(user)));
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        // const uid = user.uid;
+        // navigate('/dashboard')
+        // ...
+      } else {
+        dispatch(setUser(null!));
+        // User is signed out
+        // ...
+      }
+    });
+    //eslint-disable-next-line
+  }, [authToken]);
+
   return (
     <>
       <div className="flex flex-col md:flex-row w-full h-screen overflow-hidden font-poppins bg-soft dark:bg-dark text-dark font-medium transform transition-all duration-500 ease-in-out dark:text-white">
