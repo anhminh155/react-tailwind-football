@@ -6,9 +6,10 @@ import Sidebar from "components/Sidebar";
 import NotFound from "pages/dashboard/NotFound";
 import { dashboardRoutes } from "routes";
 import { onAuthStateChanged } from "@firebase/auth";
-import { auth } from "firebase-config";
+import { auth, db, dbRef } from "firebase-config";
 import { useDispatchRoot } from "redux/hooks";
 import { setUser } from "redux/controller/app.slice";
+import { getDatabase, ref, child, get } from "firebase/database";
 
 // MAIN ROUTE
 const getRoutes = () => {
@@ -26,8 +27,29 @@ const Dashboard: React.FC<Props> = () => {
   useEffect(() => {
     onAuthStateChanged(auth, (user: any) => {
       if (user) {
+        if (user.photoURL) {
+          dispatch(setUser(JSON.stringify(user)));
+        } else {
+          get(child(dbRef, `users/${user.uid}`))
+            .then((snapshot) => {
+              if (snapshot.exists()) {
+                dispatch(
+                  setUser(
+                    JSON.stringify({
+                      ...user,
+                      photoURL: snapshot.val().photoURL,
+                    })
+                  )
+                );
+              } else {
+                dispatch(setUser(JSON.stringify(user)));
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
         // console.log(user);
-        dispatch(setUser(JSON.stringify(user)));
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
         // const uid = user.uid;

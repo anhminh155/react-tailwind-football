@@ -1,5 +1,15 @@
+import { format } from "date-fns";
 import { db } from "firebase-config";
-import { ref, set, update } from "firebase/database";
+import {
+  child,
+  onDisconnect,
+  onValue,
+  push,
+  ref,
+  serverTimestamp,
+  set,
+  update,
+} from "firebase/database";
 import { IUser } from "types/users";
 
 class UtilsFirebase {
@@ -18,10 +28,24 @@ class UtilsFirebase {
     });
   }
   static async writeFootballData({ userId, ...other }: any) {
-    
     return await update(ref(db, "users/" + userId + "/football"), {
       ...other,
     });
+  }
+
+  static async writeUserMessagesData({ roomId, ...other }: any) {
+    // const offsetRef = ref(db, ".info/serverTimeOffset");
+    // onValue(offsetRef, (snap) => {
+    //   const offset = snap.val();
+    //   const estimatedServerTimeMs = new Date().getTime() + offset;
+    // });
+    const estimatedServerTimeMs = new Date().getTime();
+    return await set(
+      ref(db, "messages/" + roomId + `/${estimatedServerTimeMs}`),
+      {
+        ...other,
+      }
+    );
   }
 }
 

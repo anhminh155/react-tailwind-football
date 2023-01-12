@@ -4,6 +4,7 @@ import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "@firebase/auth";
 import { getStorage } from "firebase/storage";
 import { getDatabase, ref } from "firebase/database";
+import { getFirestore } from 'firebase/firestore';
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -13,11 +14,12 @@ import { getDatabase, ref } from "firebase/database";
 const firebaseConfig = {
   apiKey: "AIzaSyD_xJm6f7CpnmX7qSZN1cTNfvoLQuruGw8",
   authDomain: "football-info-697d6.firebaseapp.com",
+  databaseURL: "https://football-info-697d6-default-rtdb.firebaseio.com",
   projectId: "football-info-697d6",
   storageBucket: "football-info-697d6.appspot.com",
   messagingSenderId: "146018806721",
   appId: "1:146018806721:web:c5ac137470a47b8450dd40",
-  measurementId: "G-CHZ8H5LEJR",
+  measurementId: "G-CHZ8H5LEJR"
 };
 
 // Initialize Firebase
@@ -27,5 +29,6 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const firebaseStorage = getStorage(app);
 export const db = getDatabase(app);
+export const fireStore = getFirestore(app);
 export const dbRef = ref(db);
 export const analytics = getAnalytics(app);

@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import Utils from "../common/utils";
 import { useDispatchRoot, useSelectorRoot } from "../redux/hooks";
-import { setTheme } from "../redux/controller/app.slice";
+import { setTheme, setUser } from "../redux/controller/app.slice";
 import { RootState } from "../redux/rootReducer";
 import { signOut } from "@firebase/auth";
 import { auth, db } from "firebase-config";
@@ -16,7 +16,6 @@ function ProfileMenu() {
   const [modalOut, showModalOut] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { theme, user } = useSelectorRoot((state: RootState) => state.app);
-  const [profile] = useObject(ref(db, `users/${user?.uid}`));
   const dispatch = useDispatchRoot();
   const navigate = useNavigate();
   const trigger = useRef<any>(null);
@@ -97,9 +96,11 @@ function ProfileMenu() {
               <LazyLoadImage
                 threshold={50}
                 src={
-                  profile?.val().photoURL
-                    ? `${profile?.val().photoURL}`
-                    : `https://ui-avatars.com/api/?name=${profile?.val().email}&background=152e4d&color=fff`
+                  user.photoURL
+                    ? `${user.photoURL}`
+                    : `https://ui-avatars.com/api/?name=${
+                        user.email
+                      }&background=152e4d&color=fff`
                 }
                 className="rounded-full w-10 h-10"
                 alt=""

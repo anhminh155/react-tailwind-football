@@ -1,5 +1,6 @@
 import { Disclosure, Transition } from "@headlessui/react";
 import { ChevronUpIcon } from "@heroicons/react/20/solid";
+import CChatBox from "components/CChatbox";
 import CLoading from "components/CLoading";
 import {
   format,
@@ -28,14 +29,13 @@ const MainDashboard: React.FC<Props> = () => {
   const { rootMatches, rootCompetitions, loadingMatch } = useSelectorRoot(
     (state: RootState) => state.football
   );
-  const {user} = useSelectorRoot((state: RootState) => state.app);
+  const { user } = useSelectorRoot((state: RootState) => state.app);
   const navigate = useNavigate();
   const [listFollowCompetition, loading, error] = useObject(
     ref(db, `users/${user?.uid}/football/competition`)
   );
 
-  console.log(listFollowCompetition?.val());
-  
+  // console.log(listFollowCompetition?.val());
 
   useEffect(() => {
     dispatch(
@@ -54,6 +54,8 @@ const MainDashboard: React.FC<Props> = () => {
   return (
     <div className="">
       <CBreadcrumb />
+      <CChatBox />
+
       <div className="w-ful">
         <CLoading
           loading={loadingMatch}

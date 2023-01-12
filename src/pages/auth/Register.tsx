@@ -6,11 +6,13 @@ import appLogo from "assets/img/applogo.png";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "firebase-config";
+import UtilsFirebase from "common/utilsFirebase";
+import { IUser } from "types/users";
 
 type Props = {};
 
 interface DataForm {
-  fullname: string;
+  displayName: string;
   email: string;
   password: string;
 }
@@ -27,6 +29,14 @@ const Register: React.FC<Props> = () => {
     createUserWithEmailAndPassword(auth, data.email, data.password).then(
       (response) => {
         console.log(response);
+
+        const param: any = {
+          userId: response.user.uid,
+          displayName: data.displayName,
+          email: data.email,
+          photoURL: `https://ui-avatars.com/api/?name=${data.displayName}&background=152e4d&color=fff`,
+        };
+        UtilsFirebase.writeUserData(param);
       }
     );
     // navigate('/auth', {replace: true})
@@ -50,17 +60,17 @@ const Register: React.FC<Props> = () => {
 
         <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-5 px-2">
           <div>
-            <label className="font-semibold" htmlFor="fullname">
-              Fullname
+            <label className="font-semibold" htmlFor="displayName">
+              Full name
             </label>
             <input
-              id="fullname"
-              type="fullname"
-              autoComplete="fullname"
+              id="displayName"
+              type="displayName"
+              autoComplete="displayName"
               className="text-input"
-              {...register("fullname", { required: "Fullname is required." })}
+              {...register("displayName", { required: "DisplayName is required." })}
             />
-            <ErrorField errors={errors} name="fullname" />
+            <ErrorField errors={errors} name="displayName" />
           </div>
           <div>
             <label className="font-semibold" htmlFor="email-address">

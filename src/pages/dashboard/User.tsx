@@ -28,6 +28,11 @@ const User: React.FC<Props> = () => {
   const [progressPercent, setProgressPercent] = useState(0);
   const navigate = useNavigate();
   const [counter, setCounter] = React.useState(0);
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<any>({ criteriaMode: "all" });
 
   // Suggested by Laurent
   React.useEffect(() => {
@@ -49,11 +54,6 @@ const User: React.FC<Props> = () => {
       });
   }, [user]);
 
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm<any>({ criteriaMode: "all" });
 
   const onSubmitForm = async (data: any) => {
     setLoading(true);
