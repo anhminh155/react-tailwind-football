@@ -56,7 +56,7 @@ const MainDashboard: React.FC<Props> = () => {
       <CBreadcrumb />
       <CChatBox />
 
-      <div className="w-ful">
+      {/* <div className="w-ful"> */}
         <CLoading
           loading={loadingMatch}
           className="mx-auto w-full rounded-2xl bg-white dark:bg-gray-500  p-2"
@@ -131,7 +131,7 @@ const MainDashboard: React.FC<Props> = () => {
               );
             })}
         </CLoading>
-      </div>
+      {/* </div> */}
     </div>
   );
 };

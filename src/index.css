@@ -33,6 +33,9 @@
     @apply absolute w-full h-full bg-gray-900 opacity-50;
   }
 }
+.show-scroll{
+  overflow: auto !important;
+}
 
 :root {
   --clr-bg-dark: #1f2937; /* gray-800 */

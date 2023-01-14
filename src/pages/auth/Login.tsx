@@ -89,8 +89,6 @@ const Login: React.FC<Props> = () => {
         // This gives you a GitHub Access Token. You can use it to access the GitHub API.
         const credential: any = GithubAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
-        console.log("🚀 ~ file: Login.tsx:62 ~ .then ~ token", token);
-
         // The signed-in user info.
         const user = result.user;
         checkDataDbAndAddDb(user);
@@ -229,17 +227,17 @@ const Login: React.FC<Props> = () => {
             <i className="ri-google-fill mr-2 text-2xl"></i>
             <p>Sign in with Google</p>
           </button>
-          <button
+          {/* <button
             onClick={() => signInGithub()}
             type="button"
             className="flex items-center btn-submit text-black bg-gray-100 hover:bg-gray-200 p-2"
           >
             <i className="ri-github-fill  mr-2 text-2xl"></i>
             <p>Sign in with Github</p>
-          </button>
+          </button> */}
         </div>
         <button
-          onClick={() => navigate("/dashboard")}
+          onClick={() => navigate(-1)}
           type="submit"
           className="btn-submit hover:bg-blue-500 bg-blue-400"
         >

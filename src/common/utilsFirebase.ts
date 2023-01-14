@@ -39,13 +39,15 @@ class UtilsFirebase {
     //   const offset = snap.val();
     //   const estimatedServerTimeMs = new Date().getTime() + offset;
     // });
-    const estimatedServerTimeMs = new Date().getTime();
-    return await set(
-      ref(db, "messages/" + roomId + `/${estimatedServerTimeMs}`),
-      {
-        ...other,
-      }
-    );
+
+    // Get a key for a new Post.
+    const newPostKey = push(child(ref(db), "messages/" + roomId)).key;
+    // Write the new post's data simultaneously in the posts list and the user's post list.
+    const updates:any = {};
+    updates[`/messages/${roomId}/` + newPostKey] = {
+      ...other,
+    };
+    return update(ref(db), updates);
   }
 }
 

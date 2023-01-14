@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Link } from "react-router-dom";
 import ErrorField from "components/ErrorField";
@@ -7,7 +7,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "firebase-config";
 import UtilsFirebase from "common/utilsFirebase";
-import { IUser } from "types/users";
+import CButton from "components/CButton";
+import { toast } from "react-toastify";
 
 type Props = {};
 
@@ -23,13 +24,13 @@ const Register: React.FC<Props> = () => {
     formState: { errors },
     handleSubmit,
   } = useForm<DataForm>({ criteriaMode: "all" });
+  const [loading, setLoading] = useState<boolean>(false)
 
   const onSubmitForm: SubmitHandler<DataForm> = (data) => {
-    console.log(data);
+    setLoading(true)
     createUserWithEmailAndPassword(auth, data.email, data.password).then(
       (response) => {
         console.log(response);
-
         const param: any = {
           userId: response.user.uid,
           displayName: data.displayName,
@@ -37,8 +38,15 @@ const Register: React.FC<Props> = () => {
           photoURL: `https://ui-avatars.com/api/?name=${data.displayName}&background=152e4d&color=fff`,
         };
         UtilsFirebase.writeUserData(param);
+        setLoading(false)
       }
-    );
+    ).catch(()=> {
+      toast.error(`EMAIL EXISTS`, {
+        position: toast.POSITION.TOP_RIGHT,
+        className: "foo-bar",
+      });
+      setLoading(false)
+    });
     // navigate('/auth', {replace: true})
   };
 
@@ -111,9 +119,9 @@ const Register: React.FC<Props> = () => {
             <ErrorField errors={errors} name="password" />
           </div>
 
-          <button type="submit" className="btn-submit">
+          <CButton loading={loading} type="submit" className="btn-submit">
             Sign Up
-          </button>
+          </CButton>
         </form>
 
         <div className="font-medium text-sm flex items-center justify-center">

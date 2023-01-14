@@ -9,6 +9,7 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import Utils from "./common/utils";
 import Auth from "./layouts/Auth";
 import Dashboard from "./layouts/Dashboard";
@@ -35,6 +36,18 @@ const App: React.FC<Props> = () => {
             {/* <Route path='*' element={<Navigate replace to='/' />} /> */}
           </Routes>
         </Router>
+        <ToastContainer
+          position="bottom-left"
+          theme="dark"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </div>
     </CLoading>
   );
