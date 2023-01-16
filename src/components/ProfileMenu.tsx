@@ -116,7 +116,7 @@ function ProfileMenu() {
           </button>
         ) : (
           <button
-            className="btn-submit dark:text-white cursor-pointer bg-gray-500"
+            className="btn-submit dark:text-white cursor-pointer bg-gray-500 hover:bg-gray-800 transition-all ease-in-out duration-200"
             onClick={() => {
               navigate("/auth/sign-in");
             }}

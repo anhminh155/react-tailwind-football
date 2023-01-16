@@ -362,7 +362,7 @@ const Sidebar: React.FC<Props> = () => {
               <ProfileMenu />
             </div>
           </div>
-          <h1>Dashboard</h1>
+          {/* <h1>Dashboard</h1> */}
         </div>
 
         {/* SIDEBAR */}

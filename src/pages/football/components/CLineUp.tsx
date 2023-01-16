@@ -10,6 +10,9 @@ import { Bench, Bench2, IInfoMatch, Lineup, Lineup2 } from "types/infoMatch";
 import Utils from "common/utils";
 import SoccerLineUp from "react-soccer-lineup";
 import CLoading from "components/CLoading";
+import { useNavigate } from "react-router-dom";
+import { useSelectorRoot } from "redux/hooks";
+import { RootState } from "redux/rootReducer";
 
 interface ILineUp extends Props {
   loading?: boolean;
@@ -17,6 +20,8 @@ interface ILineUp extends Props {
 }
 
 const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
+  const navigate = useNavigate()
+  const {rootInfoMatch} = useSelectorRoot((state:RootState)=> state.football )
   const convertArr = (lineup: Lineup[] | Lineup2[]): any => {
     let arrLineup: any = {
       squad: {
@@ -34,11 +39,7 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
           arrLineup.squad.gk = {
             number: lp.shirtNumber,
             name: (
-              <div
-                className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible `}
-              >
-                {lp.name}
-              </div>
+              <div className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible`}>{lp.name}</div>
             ),
           };
           arrLineup.squad.gk.onClick = () => {
@@ -49,11 +50,7 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
           arrLineup.squad.df.push({
             number: lp.shirtNumber,
             name: (
-              <div
-                className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible `}
-              >
-                {lp.name}
-              </div>
+              <div className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible`}>{lp.name}</div>
             ),
           });
           break;
@@ -61,11 +58,7 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
           arrLineup.squad.cm.push({
             number: lp.shirtNumber,
             name: (
-              <div
-                className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible `}
-              >
-                {lp.name}
-              </div>
+              <div className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible`}>{lp.name}</div>
             ),
           });
           break;
@@ -73,11 +66,7 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
           arrLineup.squad.cm.push({
             number: lp.shirtNumber,
             name: (
-              <div
-                className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible `}
-              >
-                {lp.name}
-              </div>
+              <div className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible`}>{lp.name}</div>
             ),
           });
           break;
@@ -85,11 +74,7 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
           arrLineup.squad.cm.push({
             number: lp.shirtNumber,
             name: (
-              <div
-                className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible `}
-              >
-                {lp.name}
-              </div>
+              <div className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible`}>{lp.name}</div>
             ),
           });
           break;
@@ -97,11 +82,7 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
           arrLineup.squad.cm.push({
             number: lp.shirtNumber,
             name: (
-              <div
-                className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible `}
-              >
-                {lp.name}
-              </div>
+              <div className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible`}>{lp.name}</div>
             ),
           });
           break;
@@ -109,11 +90,7 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
           arrLineup.squad.fw.push({
             number: lp.shirtNumber,
             name: (
-              <div
-                className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible `}
-              >
-                {lp.name}
-              </div>
+              <div className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible`}>{lp.name}</div>
             ),
           });
           break;
@@ -121,11 +98,7 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
           arrLineup.squad.fw.push({
             number: lp.shirtNumber,
             name: (
-              <div
-                className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible `}
-              >
-                {lp.name}
-              </div>
+              <div className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible`}>{lp.name}</div>
             ),
           });
           break;
@@ -133,11 +106,7 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
           arrLineup.squad.fw.push({
             number: lp.shirtNumber,
             name: (
-              <div
-                className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible `}
-              >
-                {lp.name}
-              </div>
+              <div className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible`}>{lp.name}</div>
             ),
           });
           break;
@@ -146,11 +115,7 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
           arrLineup.squad.fw.push({
             number: lp.shirtNumber,
             name: (
-              <div
-                className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible `}
-              >
-                {lp.name}
-              </div>
+              <div className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible`}>{lp.name}</div>
             ),
           });
           break;
@@ -165,7 +130,7 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
   return (
     <CLoading loading={loading}>
       <div className="">
-        <div className="bg-gray-200 dark:bg-gray-700 mb-1 text-center py-2 flex justify-around items-center gap-2">
+        <div className="bg-gray-200 dark:bg-gray-700 text-center py-2 flex justify-around items-center gap-2">
           <div className="">{match?.homeTeam.formation}</div>
           <div>
             <FontAwesomeIcon icon={faPeopleLine} className="text-base pr-2" />
@@ -173,7 +138,7 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
           </div>
           <div className="">{match?.awayTeam.formation}</div>
         </div>
-        <div className="">
+        <div className="mb-2">
           <SoccerLineUp
             size={"responsive"}
             // pattern={"squares"}
@@ -199,7 +164,18 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
               return (
                 <div
                   key={i}
-                  className="flex py-3 border-b border-gray-200 w-full whitespace-nowrap"
+                  onClick={()=>{
+                    navigate(
+                      `/dashboard/${rootInfoMatch.competition.type.toLowerCase()}-${
+                        rootInfoMatch.competition.code
+                      }-${new Date(
+                        rootInfoMatch.season.startDate!
+                      ).getFullYear()}/team/${match?.homeTeam.id}/player/${
+                        bench?.id
+                      }`
+                    )
+                  }}
+                  className="flex py-3 border-b border-gray-200 w-full whitespace-nowrap cursor-pointer hover:font-semibold"
                 >
                   <div className="w-14 pr-2">No. {bench.shirtNumber}</div>
                   <span className="capitalize">{`${bench.name} (${
@@ -216,7 +192,18 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
               return (
                 <div
                   key={i}
-                  className="flex justify-end py-3 border-b border-gray-200 w-full whitespace-nowrap"
+                  onClick={()=>{
+                    navigate(
+                      `/dashboard/${rootInfoMatch.competition.type.toLowerCase()}-${
+                        rootInfoMatch.competition.code
+                      }-${new Date(
+                        rootInfoMatch.season.startDate!
+                      ).getFullYear()}/team/${match?.awayTeam.id}/player/${
+                        bench2?.id
+                      }`
+                    )
+                  }}
+                  className="flex justify-end py-3 border-b border-gray-200 w-full whitespace-nowrap cursor-pointer hover:font-semibold"
                 >
                   <span className="capitalize">{`${bench2.name} (${
                     bench2.position
