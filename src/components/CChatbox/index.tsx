@@ -267,7 +267,7 @@ function CChatBox({ ...props }: Props) {
                                     ? moreEndRef
                                     : null
                                 }
-                                className="col-start-3 col-end-13 pl-3 py-1 rounded-lg mr-3"
+                                className="col-start-1 col-end-13 pl-3 py-1 rounded-lg mr-3"
                               >
                                 {Object.values(valueMessage)[i - 1]?.uid ===
                                 Object.values(valueMessage)[i]?.uid ? (
@@ -297,7 +297,7 @@ function CChatBox({ ...props }: Props) {
                                   />
                                 </div>
                               )} */}
-                                  <div className="relative text-sm bg-indigo-100 dark:bg-indigo-400 py-2 px-4 shadow rounded-xl flex items-center break-all">
+                                  <div className="relative w-5/6 max-w-fit text-sm bg-indigo-100 dark:bg-indigo-400 py-2 px-4 shadow rounded-xl flex items-center break-all">
                                     {value.message}
                                   </div>
                                 </div>
@@ -312,7 +312,7 @@ function CChatBox({ ...props }: Props) {
                                     ? moreEndRef
                                     : null
                                 }
-                                className="col-start-1 col-end-12 px-3 py-1 rounded-lg"
+                                className="col-start-1 col-end-13 px-3 py-1 rounded-lg"
                               >
                                 {Object.values(valueMessage)[i - 1]?.uid ===
                                 Object.values(valueMessage)[i]?.uid ? (
@@ -344,13 +344,13 @@ function CChatBox({ ...props }: Props) {
                                       <LazyLoadImage
                                         threshold={50}
                                         src={value.photoURL}
-                                        className="rounded-full w-10 h-10 min-w-fit"
+                                        className="rounded-full w-10 h-10"
                                         alt=""
                                         effect="blur"
                                       />
                                     </div>
                                   )}
-                                  <div className="relative ml-3 text-sm bg-white dark:bg-gray-400 py-2 px-4 shadow rounded-xl break-all">
+                                  <div className="relative w-5/6 max-w-fit ml-3 text-sm bg-white dark:bg-gray-400 py-2 px-4 shadow rounded-xl break-all">
                                     {value.message}
                                   </div>
                                 </div>
