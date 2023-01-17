@@ -11,9 +11,10 @@ import { auth, db } from "firebase-config";
 import CModal from "./modals/CModal";
 import { ref } from "firebase/database";
 import { useObject } from "react-firebase-hooks/database";
+import CButton from "./CButton";
 
 function ProfileMenu() {
-  const [modalOut, showModalOut] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { theme, user } = useSelectorRoot((state: RootState) => state.app);
   const dispatch = useDispatchRoot();
@@ -48,13 +49,15 @@ function ProfileMenu() {
 
   const handleLogout = async () => {
     sessionStorage.clear();
+    setLoading(true);
     signOut(auth)
       .then(() => {
-        showModalOut(false);
+        setLoading(false);
+        setDropdownOpen(false)
         // Sign-out successful.
-        // navigate("/auth", { replace: true });
       })
       .catch((error) => {
+        setLoading(false);
         // An error happened.
       });
   };
@@ -98,9 +101,7 @@ function ProfileMenu() {
                 src={
                   user.photoURL
                     ? `${user.photoURL}`
-                    : `https://ui-avatars.com/api/?name=${
-                        user.email
-                      }&background=152e4d&color=fff`
+                    : `https://ui-avatars.com/api/?name=${user.email}&background=152e4d&color=fff`
                 }
                 className="rounded-full w-10 h-10"
                 alt=""
@@ -150,64 +151,63 @@ function ProfileMenu() {
             <ul>
               <li>
                 <Link to="/dashboard/profile">
-                  <button
-                    className="font-medium hover:text-primary rounded flex items-center py-1 px-3"
+                  <CButton
+                    className="font-medium hover:text-primary rounded flex items-center py-1 px-3 hover:bg-gray-100"
                     onClick={() => setDropdownOpen(!dropdownOpen)}
                   >
                     <i className="ri-user-3-line mr-2"></i>My Profile
-                  </button>
+                  </CButton>
                 </Link>
               </li>
               <li>
-                <button
-                  className="font-medium text-red-500 hover:text-primary rounded flex items-center py-1 px-3 w-full"
-                  onClick={() => showModalOut(true)}
+                <CButton
+                  loading={loading}
+                  className="font-medium text-red-500 hover:text-primary rounded hover:bg-gray-100"
+                  onClick={() => {
+                    handleLogout();
+                  }}
                 >
                   <i className="ri-logout-box-line mr-2"></i>Sign Out
-                </button>
+                </CButton>
               </li>
             </ul>
           </div>
         </Transition>
         {/* } */}
       </div>
-      {modalOut && (
-        <CModal show={modalOut} closeModal={(e: boolean) => showModalOut(e)}>
-          <div className="relative bg-white rounded-lg overflow-hidden ">
-            <div className="flex items-center px-6 py-3 justify-center">
-              <h1 className="mx-3  font-semibold text-lg">
-                Are you sure you want to logout?
-              </h1>
+      {/* <div className="">
+        {modalOut && (
+          <CModal show={modalOut} closeModal={(e: boolean) => showModalOut(e)}>
+            <div className="relative bg-white rounded-lg overflow-hidden ">
+              <div className="flex items-center px-6 py-3 justify-center">
+                <h1 className="mx-3  font-semibold text-lg">
+                  Are you sure you want to logout?
+                </h1>
+              </div>
+              <div
+                onClick={() => showModalOut(false)}
+                className="absolute top-1 right-1 p-1 rounded-md bg-gray-300 hover:bg-gray-500 cursor-pointer"
+              >
+                <i className="ri-close-line"></i>
+              </div>
             </div>
-            <div
-              onClick={() => showModalOut(false)}
-              className="absolute top-1 right-1 p-1 rounded-md bg-gray-300 hover:bg-gray-500 cursor-pointer"
-            >
-              <i className="ri-close-line"></i>
-            </div>
-          </div>
 
-          <div className="px-6 pb-4">
-            {/* <button
-              onClick={handleLogout}
-              type="button"
-              className="w-full inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium  hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-            >
-              Cancel
-            </button> */}
-            <button
-              onClick={handleLogout}
-              type="button"
-              className="w-full inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-            >
-              Ok
-            </button>
-          </div>
-        </CModal>
-      )}
+            <div className="px-6 pb-4">
+          
+              <button
+                onClick={handleLogout}
+                type="button"
+                className="w-full inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              >
+                Ok
+              </button>
+            </div>
+          </CModal>
+        )}
+      </div>  */}
       {/* {modalOut && (
         <ConfirmModal
-          message="Are you sure to logout?"
+        message="Are you sure to logout?"
           onClose={() => showModalOut(false)}
           onNext={handleLogout}
         />

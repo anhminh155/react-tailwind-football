@@ -115,10 +115,10 @@ function CChatBox({ ...props }: Props) {
 
   return (
     <div {...props}>
-      <div className="flex h-96 antialiased text-gray-800">
+      <div className={props.className}>
         <div className="flex flex-row h-full w-full overflow-x-auto md:overflow-x-hidden rounded-xl">
           <div className="flex flex-col py-8 pl-6 pr-2 w-64 bg-white dark:bg-gray-700 md:flex-shrink-0">
-            <div className="flex flex-col">
+            <div className="flex flex-col h-full">
               <div className="flex flex-row items-center justify-between text-xs">
                 <span className="font-bold dark:text-white">All Competitions</span>
                 <span className="flex items-center justify-center bg-gray-300 h-4 w-4 rounded-full">
@@ -126,7 +126,7 @@ function CChatBox({ ...props }: Props) {
                 </span>
               </div>
               <div
-                className="flex flex-col space-y-1 mt-4 -mx-2 h-32 overflow-y-auto"
+                className="flex flex-col space-y-1 mt-4 -mx-2 h-2/5 overflow-y-auto"
                 id="show-scroll"
               >
                 <button
@@ -177,7 +177,7 @@ function CChatBox({ ...props }: Props) {
                 </span>
               </div>
               <div
-                className="flex flex-col space-y-1 mt-4 -mx-2 h-32 overflow-y-scroll"
+                className="flex flex-col space-y-1 mt-4 -mx-2 h-2/5 overflow-y-scroll"
                 id="show-scroll"
               >
                 {listFollowCompetition
@@ -211,7 +211,7 @@ function CChatBox({ ...props }: Props) {
             </div>
           </div>
           <div className="flex flex-col flex-auto h-full">
-            <div className="flex flex-col flex-auto flex-shrink-0 bg-gray-200 dark:bg-gray-900 h-80 p-4 pr-0 pt-0">
+            <div className="flex flex-col flex-auto flex-shrink-0 bg-gray-200 dark:bg-gray-900 h-full p-4 pr-0 pt-0">
               <div className="py-1 pl-2 bg-white dark:bg-gray-700 dark:text-white mt-2 rounded-lg mr-4">
                 {selectCompetition === "all" ? (
                   <div className="">All Competitions</div>

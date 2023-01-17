@@ -25,6 +25,7 @@ const Dashboard: React.FC<Props> = () => {
   const dispatch = useDispatchRoot();
   const [isShowChat, setIsShowChat] = useState<boolean>(false);
   const location = useLocation();
+  const [fullScreen, setFullScreen] = useState<boolean>(false);
   const ref = useRef<HTMLInputElement | any>(null);
 
   useEffect(() => {
@@ -88,7 +89,7 @@ const Dashboard: React.FC<Props> = () => {
             <div className="flex w-full justify-between items-center z-40">
               <h1 className="font-bold text-xl dark:text-white">
                 {/* Dashboard */}
-                </h1>
+              </h1>
               <ProfileMenu />
             </div>
           </div>
@@ -111,33 +112,53 @@ const Dashboard: React.FC<Props> = () => {
               <p>{new Date().getFullYear()} © CompanyName v2.0</p>
             </div> */}
           </div>
-          <div className="">
-            <div
-              onClick={() => setIsShowChat(!isShowChat)}
-              className={`${
-                isShowChat ? "hidden" : ""
-              } absolute bottom-4 right-4 h-14 w-14 rounded-full bg-blue-600/40 hover:bg-blue-600 cursor-pointer flex justify-center items-center`}
-            >
-              <i className="ri-chat-3-fill text-3xl text-blue-50"></i>
-            </div>
-            {isShowChat ? (
+          {location.pathname === "/dashboard" ? (
+            <></>
+          ) : (
+            <div className={`z-50`}>
               <div
-                // onBlur={() => setIsShowChat(false)}
-                className={`absolute bottom-4 right-4 bg-gray-500 p-2 rounded-xl shadow-2xl`}
+                onClick={() => setIsShowChat(!isShowChat)}
+                className={`${
+                  isShowChat ? "hidden" : ""
+                } absolute bottom-4 right-4 h-14 w-14 rounded-full bg-blue-600/40 hover:bg-blue-600 cursor-pointer flex justify-center items-center`}
               >
-                <div
-                  onClick={() => setIsShowChat(false)}
-                  className="absolute right-2 top-1 cursor-pointer hover:bg-white p-1 px-2 rounded-lg transition-all ease-in-out"
-                >
-                  <i className="ri-close-line text-xl"></i>
-                </div>
-                <div className="text-white py-2">Chat Room</div>
-                <CChatbox className="w-[400px] md:w-[500px] lg:w-[800px]" />
+                <i className="ri-chat-3-fill text-3xl text-blue-50"></i>
               </div>
-            ) : (
-              <></>
-            )}
-          </div>
+              {isShowChat ? (
+                <div
+                  // onBlur={() => setIsShowChat(false)}
+                  className={`absolute bg-gray-500 p-2 transition-all ease-in duration-200 ${
+                    fullScreen
+                      ? "h-full top-0 right-0 w-full "
+                      : "bottom-4 right-4 w-5/6 md:w-[500px] lg:w-[800px] rounded-xl shadow-2xl"
+                  } `}
+                >
+                  <div
+                    onClick={() => setIsShowChat(false)}
+                    className="absolute right-2 top-1 cursor-pointer hover:bg-white p-1 px-2 rounded-lg transition-all ease-in-out"
+                  >
+                    <i className="ri-close-line text-xl"></i>
+                  </div>
+                  <div
+                    onClick={() => setFullScreen(!fullScreen)}
+                    className="absolute right-12 top-1 cursor-pointer hover:bg-white p-1 px-2 rounded-lg transition-all ease-in-out"
+                  >
+                    <i
+                      className={`${
+                        fullScreen
+                          ? "ri-fullscreen-exit-line"
+                          : "ri-fullscreen-line"
+                      } text-xl`}
+                    ></i>
+                  </div>
+                  <div className="text-white pt-1 py-2">Chat Room</div>
+                  <CChatbox className={`${fullScreen ? "h-[98%]" : "h-96"}`} />
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </>

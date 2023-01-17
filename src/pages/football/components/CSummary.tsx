@@ -7,7 +7,13 @@ import {
   faBullhorn,
   faStop,
 } from "@fortawesome/free-solid-svg-icons";
-import { Booking, Goal, IInfoMatch, Substitution } from "types/infoMatch";
+import {
+  Booking,
+  Goal,
+  IInfoMatch,
+  Penalties,
+  Substitution,
+} from "types/infoMatch";
 import CLoading from "components/CLoading";
 import CModalViewPlayerMatch from "./CModalViewPlayerMatch";
 import { useDispatchRoot, useSelectorRoot } from "redux/hooks";
@@ -37,6 +43,11 @@ const CSummary: React.FC<ICSummary> = ({ loading = false, match }) => {
       "yyyy-MM-dd"
     ),
   };
+
+  //Match score penalties
+  let countHome = 0;
+  let countAway = 0;
+
   return (
     <CLoading loading={loading}>
       <div className="">
@@ -146,6 +157,92 @@ const CSummary: React.FC<ICSummary> = ({ loading = false, match }) => {
           );
         })}
       </div>
+      {match.penalties.length > 0 ? (
+        <div className="">
+          <div className="bg-gray-200 dark:bg-gray-700 mb-1 text-center py-2">
+            <FontAwesomeIcon icon={faFutbolBall} className="text-base pr-2" />
+            <span>
+              PENALTY{" "}
+              {`(${match.score.penalties?.away} - ${match.score.penalties?.home})`}
+            </span>
+          </div>
+          {match.penalties.map((penalty: Penalties | any, i: number) => {
+            const goalsPenaltyCount: number = match.goals.filter(
+              (goal: Goal) => goal.type === "PENALTY"
+            ).length;
+            if (i + 1 > goalsPenaltyCount) {
+              if (penalty.team.id === match.homeTeam.id && penalty.scored) {
+                countHome += 1;
+              } else if (
+                penalty.team.id !== match.homeTeam.id &&
+                penalty.scored
+              ) {
+                countAway += 1;
+              }
+              return (
+                <div key={i} className="w-full font-normal py-3 border-b">
+                  {penalty.team.id === match.homeTeam.id ? (
+                    <div className="relative flex justify-start">
+                      <FontAwesomeIcon
+                        icon={faFutbolBall}
+                        className={`text-base pr-2 ${
+                          penalty.scored ? "text-green-500" : "text-red-700"
+                        } `}
+                      />
+                      <span
+                        onClick={() => {
+                          //handle
+                          dispatch(
+                            fetchPlayerMatches({
+                              ...param,
+                              id: penalty.player?.id,
+                            })
+                          );
+                          setSelectTeam(penalty.team.id);
+                          setIsOpen(true);
+                        }}
+                        className="pr-1 hover:font-bold cursor-pointer"
+                      >
+                        {penalty.player.name}
+                      </span>
+                      <span className="absolute text-center right-1/2 w-12 font-semibold">{`${countHome} - ${countAway}`}</span>
+                    </div>
+                  ) : (
+                    <div className="relative flex justify-end items-center">
+                      <span
+                        onClick={() => {
+                          //handle
+                          dispatch(
+                            fetchPlayerMatches({
+                              ...param,
+                              id: penalty.player?.id,
+                            })
+                          );
+
+                          setSelectTeam(penalty.team.id);
+                          setIsOpen(true);
+                        }}
+                        className="pr-2 hover:font-bold cursor-pointer"
+                      >
+                        {penalty.player.name}
+                      </span>
+                      <FontAwesomeIcon
+                        icon={faFutbolBall}
+                        className={`text-base pr-2 ${
+                          penalty.scored ? "text-green-500" : "text-red-700"
+                        } `}
+                      />
+                      <span className="absolute text-center right-1/2 w-12 font-semibold">{`${countHome} - ${countAway}`}</span>
+                    </div>
+                  )}
+                </div>
+              );
+            }
+          })}
+        </div>
+      ) : (
+        <></>
+      )}
       <div className="">
         <div className="bg-gray-200 dark:bg-gray-700 mb-1 text-center py-2">
           <FontAwesomeIcon icon={faShirt} className="text-base pr-2" />

@@ -54,7 +54,7 @@ const MainDashboard: React.FC<Props> = () => {
   return (
     <div className="">
       <CBreadcrumb />
-      <CChatBox />
+      <CChatBox className="h-96 max-h-96" />
 
       {/* <div className="w-ful"> */}
         <CLoading
