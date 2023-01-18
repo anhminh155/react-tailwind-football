@@ -1,8 +1,8 @@
 import React from "react";
 import { Props } from "types/define";
 import CLoading from "components/CLoading";
-import { format } from "date-fns";
 import { Aggregations, ResultSet } from "types/player_matches";
+import Utils from "common/utils";
 
 interface IPlayerAggregations extends Props {
   aggregations: Aggregations;
@@ -22,10 +22,15 @@ const PlayerAggregations: React.FC<IPlayerAggregations> = ({
           <div className="uppercase flex items-center justify-center ">
             <div className="font-semibold">
               AGGREGATIONS:
-              {resultSet.first ? `${format(new Date(resultSet.first), "dd/MM/yyyy")} - ${format(
-                new Date(resultSet.last),
-                "dd/MM/yyyy"
-              )}` : ''}
+              {resultSet.first
+                ? `${Utils.formatWithTimeZone(
+                    new Date(resultSet.first),
+                    "dd/MM/yyyy"
+                  )} - ${Utils.formatWithTimeZone(
+                    new Date(resultSet.last),
+                    "dd/MM/yyyy"
+                  )}`
+                : ""}
             </div>
           </div>
         </div>

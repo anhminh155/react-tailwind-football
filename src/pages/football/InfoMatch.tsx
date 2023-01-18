@@ -11,7 +11,6 @@ import { RootState } from "redux/rootReducer";
 import { IPathNameChild } from "routes";
 import { Props } from "types/define";
 import { IFiltersAPI } from "types/lookup_tables";
-import { format } from "date-fns";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { UsersIcon, MapPinIcon, EyeIcon } from "@heroicons/react/20/solid";
 import { Tab } from "@headlessui/react";
@@ -95,7 +94,7 @@ const InfoMatch: React.FC<Props> = () => {
           <div className="flex justify-around bg-gray-300 w-2/3 rounded-b-lg text-gray-600">
             <div className="p-2">{`${rootInfoMatch.competition.name} (${rootInfoMatch.area.name})`}</div>
             <div className="p-2">
-              {format(new Date(rootInfoMatch.utcDate!), "dd/MM HH:mm")}
+              {Utils.formatWithTimeZone(new Date(rootInfoMatch.utcDate!), "dd/MM HH:mm")}
             </div>
           </div>
         </div>

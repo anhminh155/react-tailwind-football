@@ -15,16 +15,18 @@ import {
   ref,
 } from "firebase/database";
 import { db } from "firebase-config";
-import { format, isDate, isToday } from "date-fns";
+import { isToday } from "date-fns";
 import { useObject } from "react-firebase-hooks/database";
 import { useNavigate } from "react-router-dom";
 import ErrorField from "components/ErrorField";
+import Utils from "common/utils";
 
 function CChatBox({ ...props }: Props) {
   const { user } = useSelectorRoot((state: RootState) => state.app);
   const {
     register,
     resetField,
+    setFocus,
     formState: { errors },
     handleSubmit,
   } = useForm<any>({ criteriaMode: "all" });
@@ -48,7 +50,7 @@ function CChatBox({ ...props }: Props) {
     ref(db, `users/${user?.uid}/football/competition`)
   );
   const navigate = useNavigate();
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [loading, setLoading] = useState<boolean>(false);
   const [viewText, setViewText] = useState<boolean>(true);
 
   const scrollToBottom = () => {
@@ -56,40 +58,45 @@ function CChatBox({ ...props }: Props) {
   };
 
   const onSubmit = async (data: { message: string }) => {
-    setLoadingForm(true);
-    const estimatedServerTimeMs = new Date().getTime();
-    UtilsFirebase.writeUserMessagesData({
-      roomId: selectCompetition,
-      uid: user.uid,
-      message: data.message,
-      photoURL: user.photoURL,
-      displayName: user.displayName,
-      createdAt: estimatedServerTimeMs,
-    })
-      .then(() => {
-        setLoadingForm(false);
-        resetField("message");
-        scrollToBottom();
+    if (data.message) {
+      setLoadingForm(true);
+      const estimatedServerTimeMs = new Date().getTime();
+      UtilsFirebase.writeUserMessagesData({
+        roomId: selectCompetition,
+        uid: user.uid,
+        message: data.message,
+        photoURL: user.photoURL,
+        displayName: user.displayName,
+        createdAt: estimatedServerTimeMs,
       })
-      .catch((error) => {
-        console.error(error);
-        setLoadingForm(false);
-      });
+        .then(() => {
+          setLoadingForm(false);
+          resetField("message");
+          setTimeout(() => {
+            scrollToBottom();
+            setFocus("message");
+          }, 0);
+        })
+        .catch((error) => {
+          console.error(error);
+          setLoadingForm(false);
+        });
+    }
   };
 
   const handleViewMore = () => {
     //done
-    if (Object.keys(valueMessage).length >= 10) {
+    if (Object.keys(valueMessage).length >= 20) {
       const starCountRef = query(
         ref(db, "messages/" + selectCompetition),
         orderByChild("createdAt"),
         endBefore(Object.values(valueMessage)[0]?.createdAt),
-        limitToLast(10)
+        limitToLast(20)
       );
       onValue(starCountRef, (snapshot) => {
         const data = snapshot.val();
         setValueMessage({ ...data, ...valueMessage });
-        if (Object.keys(data).length < 10) {
+        if (Object.keys(data).length < 20) {
           setViewText(false);
         } else {
           setViewText(true);
@@ -102,7 +109,7 @@ function CChatBox({ ...props }: Props) {
     setViewText(true);
     const starCountRef = query(
       ref(db, "messages/" + selectCompetition),
-      limitToLast(10)
+      limitToLast(20)
     );
     onValue(starCountRef, (snapshot) => {
       const data = snapshot.val();
@@ -120,7 +127,9 @@ function CChatBox({ ...props }: Props) {
           <div className="flex flex-col py-8 pl-6 pr-2 w-64 bg-white dark:bg-gray-700 md:flex-shrink-0">
             <div className="flex flex-col h-full">
               <div className="flex flex-row items-center justify-between text-xs">
-                <span className="font-bold dark:text-white">All Competitions</span>
+                <span className="font-bold dark:text-white">
+                  All Competitions
+                </span>
                 <span className="flex items-center justify-center bg-gray-300 h-4 w-4 rounded-full">
                   {rootCompetitions.competitions.length}
                 </span>
@@ -212,7 +221,7 @@ function CChatBox({ ...props }: Props) {
           </div>
           <div className="flex flex-col flex-auto h-full">
             <div className="flex flex-col flex-auto flex-shrink-0 bg-gray-200 dark:bg-gray-900 h-full p-4 pr-0 pt-0">
-              <div className="py-1 pl-2 bg-white dark:bg-gray-700 dark:text-white mt-2 rounded-lg mr-4">
+              <div className="py-1 pl-2 bg-white dark:bg-gray-700 dark:text-white mt-2 rounded-lg mr-4 shadow-2xl">
                 {selectCompetition === "all" ? (
                   <div className="">All Competitions</div>
                 ) : (
@@ -239,12 +248,18 @@ function CChatBox({ ...props }: Props) {
               </div>
               <div
                 id="show-scroll"
-                className="flex flex-col h-full overflow-y-auto mb-4"
+                className="flex flex-col h-full overflow-y-auto mb-2"
               >
-                <div className="relative flex flex-col h-full">
+                <div
+                  className={`relative flex flex-col h-full ${
+                    valueMessage && Object.keys(valueMessage)?.length >= 20
+                      ? "justify-between"
+                      : "justify-end"
+                  }`}
+                >
                   {viewText &&
                   valueMessage &&
-                  Object.keys(valueMessage)?.length >= 10 ? (
+                  Object.keys(valueMessage)?.length >= 20 ? (
                     <div
                       onClick={() => handleViewMore()}
                       className="text-xs italic text-center hover:text-violet cursor-pointer pt-2"
@@ -275,8 +290,11 @@ function CChatBox({ ...props }: Props) {
                                 ) : (
                                   <div className="text-xs text-gray-500 text-center pb-2 pt-4">
                                     {isToday(new Date(value.createdAt))
-                                      ? format(Number(value.createdAt), "hh:mm")
-                                      : format(
+                                      ? Utils.formatWithTimeZone(
+                                          Number(value.createdAt),
+                                          "hh:mm"
+                                        )
+                                      : Utils.formatWithTimeZone(
                                           Number(value.createdAt),
                                           "dd/MM/yyyy hh:mm"
                                         )}
@@ -297,9 +315,22 @@ function CChatBox({ ...props }: Props) {
                                   />
                                 </div>
                               )} */}
-                                  <div className="relative w-5/6 max-w-fit text-sm bg-indigo-100 dark:bg-indigo-400 py-2 px-4 shadow rounded-xl flex items-center break-all">
-                                    {value.message}
-                                  </div>
+                                  <button className="group relative w-5/6 max-w-fit">
+                                    <span className="group-focus:block hidden text-xs text-gray-500 text-right py-1">
+                                      {isToday(new Date(value.createdAt))
+                                        ? Utils.formatWithTimeZone(
+                                            Number(value.createdAt),
+                                            "hh:mm"
+                                          )
+                                        : Utils.formatWithTimeZone(
+                                            Number(value.createdAt),
+                                            "dd/MM/yyyy hh:mm"
+                                          )}
+                                    </span>
+                                    <div className="text-sm bg-indigo-100 dark:bg-indigo-400 py-2 px-4 shadow rounded-xl flex items-center text-left break-all">
+                                      {value.message}
+                                    </div>
+                                  </button>
                                 </div>
                               </div>
                             );
@@ -321,11 +352,11 @@ function CChatBox({ ...props }: Props) {
                                   <div className="">
                                     <div className="text-xs text-gray-500 text-center pb-2 pt-4">
                                       {isToday(new Date(value.createdAt))
-                                        ? format(
+                                        ? Utils.formatWithTimeZone(
                                             Number(value.createdAt),
                                             "hh:mm"
                                           )
-                                        : format(
+                                        : Utils.formatWithTimeZone(
                                             Number(value.createdAt),
                                             "dd/MM/yyyy hh:mm"
                                           )}
@@ -335,7 +366,7 @@ function CChatBox({ ...props }: Props) {
                                     </div>
                                   </div>
                                 )}
-                                <div className="flex flex-row items-start">
+                                <div className="flex flex-row items-end">
                                   {Object.values(valueMessage)[i + 1]?.uid ===
                                   Object.values(valueMessage)[i]?.uid ? (
                                     <div className="mr-10"></div>
@@ -350,9 +381,22 @@ function CChatBox({ ...props }: Props) {
                                       />
                                     </div>
                                   )}
-                                  <div className="relative w-5/6 max-w-fit ml-3 text-sm bg-white dark:bg-gray-400 py-2 px-4 shadow rounded-xl break-all">
-                                    {value.message}
-                                  </div>
+                                  <button className="group relative w-5/6 max-w-fit">
+                                    <span className="group-focus:block hidden text-xs text-gray-500 text-left py-1 ml-3">
+                                      {isToday(new Date(value.createdAt))
+                                        ? Utils.formatWithTimeZone(
+                                            Number(value.createdAt),
+                                            "hh:mm"
+                                          )
+                                        : Utils.formatWithTimeZone(
+                                            Number(value.createdAt),
+                                            "dd/MM/yyyy hh:mm"
+                                          )}
+                                    </span>
+                                    <div className="ml-3 text-sm bg-white dark:bg-gray-400 py-2 px-4 shadow rounded-xl text-left break-all">
+                                      {value.message}
+                                    </div>
+                                  </button>
                                 </div>
                               </div>
                             );
@@ -402,7 +446,7 @@ function CChatBox({ ...props }: Props) {
                   <div className="flex-grow">
                     <div className="relative w-full">
                       <input
-                        autoFocus={true}
+                        // autoFocus={true}
                         disabled={loadingForm}
                         id="message"
                         className="flex w-full border rounded-xl focus:outline-none dark:bg-gray-600 focus:border-indigo-300 dark:text-gray-200 pl-4 h-8"

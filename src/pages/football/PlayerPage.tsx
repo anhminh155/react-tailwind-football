@@ -121,7 +121,7 @@ const PlayerPage: React.FC<Props> = () => {
               <div className="bg-white dark:bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium ">Birthday</dt>
                 <dd className="mt-1 text-sm  sm:col-span-2 sm:mt-0">
-                  {`${format(
+                  {`${Utils.formatWithTimeZone(
                     new Date(rootPlayer?.dateOfBirth),
                     "dd/MM/yyyy"
                   )} (${Utils.getAge(rootPlayer?.dateOfBirth)} Years old)`}

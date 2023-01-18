@@ -27,7 +27,7 @@ const Sidebar: React.FC<Props> = () => {
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
 
-  const location = useLocation();
+  const location = useLocation();  
 
   // close on click outside
   useEffect(() => {
@@ -357,8 +357,13 @@ const Sidebar: React.FC<Props> = () => {
             </button>
 
             {/* Header */}
-            <div className="flex h-full justify-between items-center">
-              <span />
+            <div className="flex h-full w-full justify-between items-center">
+              {/* <span /> */}
+              <button className="bg-gray-400 p-1 rounded-lg cursor-not-allowed ml-2 flex text-white text-base" disabled={true}>
+              <i className="ri-download-line pr-1"></i>
+
+                <span>Mobile App</span>
+                </button>
               <ProfileMenu />
             </div>
           </div>

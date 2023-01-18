@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { parseISO } from "date-fns";
-import { format, utcToZonedTime } from "date-fns-tz";
+import { format, formatInTimeZone, utcToZonedTime } from "date-fns-tz";
 
 class Utils {
   static setLocalStorage(key: string, value: unknown): void {
@@ -28,8 +28,25 @@ class Utils {
     return "Failed to get response from server. To protect the API from unnecessary load it is rate limited, please try again in 30 seconds!!!";
   }
 
-  static formatTime(date: string, typeFormat: string) {
-    return format(new Date(date), typeFormat);
+  /**
+   *
+   *
+   * @static
+   * @param {string} date
+   * @param {string} typeFormat
+   * @return {*} 
+   * @memberof Utils
+   */
+  static formatWithTimeZone(date: Date | string | number, typeFormat: string) {
+    let tz = Utils.getValueLocalStorage("timezone");    
+    if (!tz) {
+      Utils.setLocalStorage(
+        "timezone",
+        Intl.DateTimeFormat().resolvedOptions().timeZone
+      );
+      tz = (Intl.DateTimeFormat().resolvedOptions().timeZone);
+    }
+    return formatInTimeZone(date, tz.value, typeFormat);
   }
 
   static getCurrentTimeUTC(date?: any): string {

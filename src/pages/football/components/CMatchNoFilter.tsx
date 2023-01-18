@@ -2,9 +2,9 @@ import React from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate } from "react-router-dom";
 import { Props } from "types/define";
-import { format } from "date-fns";
 import { Match } from "types/teams_matches";
 import CLoading from "components/CLoading";
+import Utils from "common/utils";
 
 interface ICMatchTeam extends Props {
   dataMatch?: Match[];
@@ -61,7 +61,7 @@ const CMatchNoFilter: React.FC<ICMatchTeam> = ({
                     className="dark:bg-dark hover:dark:bg-gray-700 hover:bg-gray-400 hover:text-white"
                   >
                     <td className="px-6 py-2 min-w-fit">
-                      {format(new Date(match.utcDate), "dd/MM/yyyy HH:mm")}
+                      {Utils.formatWithTimeZone(new Date(match.utcDate), "dd/MM/yyyy HH:mm")}
                     </td>
                     {showLeague ? <td
                       onClick={() => {

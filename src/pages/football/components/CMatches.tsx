@@ -8,7 +8,7 @@ import CLoading from "components/CLoading";
 import { useSelectorRoot } from "redux/hooks";
 import { RootState } from "redux/rootReducer";
 import DatePicker from "react-datepicker";
-import { format, getMonth, getYear } from "date-fns";
+import {  getMonth, getYear } from "date-fns";
 import { Match } from "types/competiiton_matches";
 import Utils from "common/utils";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
@@ -246,7 +246,7 @@ const CMatches: React.FC<ICResults> = ({ getParam }) => {
               <div className={`relative `}>
                 <Listbox.Button className="relative w-full xl:w-72 cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
                   <span className="block truncate dark:text-black uppercase">
-                    {Utils.removeSpecialKey(selected.name,'_')}
+                    {Utils.removeSpecialKey(selected.name, "_")}
                   </span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <ChevronUpDownIcon
@@ -281,7 +281,7 @@ const CMatches: React.FC<ICResults> = ({ getParam }) => {
                                 selected ? "font-medium" : "font-normal"
                               }`}
                             >
-                              {Utils.removeSpecialKey(person.name,'_')}
+                              {Utils.removeSpecialKey(person.name, "_")}
                             </span>
                             {selected ? (
                               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
@@ -340,10 +340,10 @@ const CMatches: React.FC<ICResults> = ({ getParam }) => {
                 <div className="dark:bg-dark/40">
                   <div className="bg-gray-300  text-[#216ba5] w-full p-3 -mt-2 font-bold text-lg ">
                     <span className="pr-2">Season:</span>
-                    <span>{`${format(
+                    <span>{`${Utils.formatWithTimeZone(
                       new Date(rootCompetitionsStanding.season.startDate),
                       "dd/MM/yyyy"
-                    )} - ${format(
+                    )} - ${Utils.formatWithTimeZone(
                       new Date(rootCompetitionsStanding.season.endDate),
                       "dd/MM/yyyy"
                     )}`}</span>
@@ -474,7 +474,10 @@ const CMatches: React.FC<ICResults> = ({ getParam }) => {
                       className="dark:bg-dark hover:dark:bg-gray-700 hover:bg-gray-400 hover:text-white"
                     >
                       <td className="px-6 py-4 min-w-fit">
-                        {format(new Date(match.utcDate), "dd/MM HH:mm")}
+                        {Utils.formatWithTimeZone(
+                          new Date(match.utcDate),
+                          "dd/MM HH:mm"
+                        )}
                       </td>
                       <td className="px-6 py-4 text-right flex items-center justify-end">
                         <div>{match.homeTeam.shortName}</div>
