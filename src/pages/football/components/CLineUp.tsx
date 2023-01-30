@@ -20,8 +20,10 @@ interface ILineUp extends Props {
 }
 
 const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
-  const navigate = useNavigate()
-  const {rootInfoMatch} = useSelectorRoot((state:RootState)=> state.football )
+  const navigate = useNavigate();
+  const { rootInfoMatch } = useSelectorRoot(
+    (state: RootState) => state.football
+  );
   const convertArr = (lineup: Lineup[] | Lineup2[]): any => {
     let arrLineup: any = {
       squad: {
@@ -39,18 +41,23 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
           arrLineup.squad.gk = {
             number: lp.shirtNumber,
             name: (
-              <div className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible`}>{lp.name}</div>
+              <div
+                className={`p-2 bg-[#38838F] rounded-lg invisible xl:visible`}
+              >
+                {lp.name}
+              </div>
             ),
-          };
-          arrLineup.squad.gk.onClick = () => {
-            console.log(lp.name);
           };
           break;
         case "Centre-Back":
           arrLineup.squad.df.push({
             number: lp.shirtNumber,
             name: (
-              <div className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible`}>{lp.name}</div>
+              <div
+                className={`p-2 bg-[#38838F] rounded-lg invisible xl:visible`}
+              >
+                {lp.name}
+              </div>
             ),
           });
           break;
@@ -58,7 +65,11 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
           arrLineup.squad.cm.push({
             number: lp.shirtNumber,
             name: (
-              <div className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible`}>{lp.name}</div>
+              <div
+                className={`p-2 bg-[#38838F] rounded-lg invisible xl:visible`}
+              >
+                {lp.name}
+              </div>
             ),
           });
           break;
@@ -66,7 +77,11 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
           arrLineup.squad.cm.push({
             number: lp.shirtNumber,
             name: (
-              <div className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible`}>{lp.name}</div>
+              <div
+                className={`p-2 bg-[#38838F] rounded-lg invisible xl:visible`}
+              >
+                {lp.name}
+              </div>
             ),
           });
           break;
@@ -74,7 +89,11 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
           arrLineup.squad.cm.push({
             number: lp.shirtNumber,
             name: (
-              <div className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible`}>{lp.name}</div>
+              <div
+                className={`p-2 bg-[#38838F] rounded-lg invisible xl:visible`}
+              >
+                {lp.name}
+              </div>
             ),
           });
           break;
@@ -82,7 +101,11 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
           arrLineup.squad.cm.push({
             number: lp.shirtNumber,
             name: (
-              <div className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible`}>{lp.name}</div>
+              <div
+                className={`p-2 bg-[#38838F] rounded-lg invisible xl:visible`}
+              >
+                {lp.name}
+              </div>
             ),
           });
           break;
@@ -90,7 +113,11 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
           arrLineup.squad.fw.push({
             number: lp.shirtNumber,
             name: (
-              <div className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible`}>{lp.name}</div>
+              <div
+                className={`p-2 bg-[#38838F] rounded-lg invisible xl:visible`}
+              >
+                {lp.name}
+              </div>
             ),
           });
           break;
@@ -98,7 +125,11 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
           arrLineup.squad.fw.push({
             number: lp.shirtNumber,
             name: (
-              <div className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible`}>{lp.name}</div>
+              <div
+                className={`p-2 bg-[#38838F] rounded-lg invisible xl:visible`}
+              >
+                {lp.name}
+              </div>
             ),
           });
           break;
@@ -106,7 +137,11 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
           arrLineup.squad.fw.push({
             number: lp.shirtNumber,
             name: (
-              <div className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible`}>{lp.name}</div>
+              <div
+                className={`p-2 bg-[#38838F] rounded-lg invisible xl:visible`}
+              >
+                {lp.name}
+              </div>
             ),
           });
           break;
@@ -115,7 +150,11 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
           arrLineup.squad.fw.push({
             number: lp.shirtNumber,
             name: (
-              <div className={`p-2 bg-[#38838F]  rounded-lg invisible lg:visible`}>{lp.name}</div>
+              <div
+                className={`p-2 bg-[#38838F] rounded-lg invisible xl:visible`}
+              >
+                {lp.name}
+              </div>
             ),
           });
           break;
@@ -152,6 +191,69 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
             }}
           />
         </div>
+        <div className="grid grid-cols-2 font-normal">
+          <div className="lg:col-span-1 col-span-2">
+            {match?.homeTeam.lineup.map((lineup: Lineup, i: number) => {
+              return (
+                <div
+                  key={i}
+                  onClick={() => {
+                    navigate(
+                      `/dashboard/${rootInfoMatch.competition.type.toLowerCase()}-${
+                        rootInfoMatch.competition.code
+                      }-${new Date(
+                        rootInfoMatch.season.startDate!
+                      ).getFullYear()}/team/${match?.homeTeam.id}/player/${
+                        lineup?.id
+                      }`
+                    );
+                  }}
+                  className="flex py-3 border-b border-gray-200 w-full whitespace-nowrap cursor-pointer hover:font-semibold"
+                >
+                  <div className="w-14 pr-2">No. {lineup.shirtNumber}</div>
+                  <span className="capitalize">{`${lineup.name} (${
+                    lineup.position
+                      ? Utils.removeSpecialKey(lineup.position?.toString()!, "-")
+                      : "Not Data"
+                  })`}</span>
+                </div>
+              );
+            })}
+          </div>
+          <div className="lg:col-span-1 col-span-2">
+            {match?.awayTeam.lineup.map((lineup: Lineup2, i: number) => {
+              return (
+                <div
+                  key={i}
+                  onClick={() => {
+                    navigate(
+                      `/dashboard/${rootInfoMatch.competition.type.toLowerCase()}-${
+                        rootInfoMatch.competition.code
+                      }-${new Date(
+                        rootInfoMatch.season.startDate!
+                      ).getFullYear()}/team/${match?.awayTeam.id}/player/${
+                        lineup?.id
+                      }`
+                    );
+                  }}
+                  className="flex justify-end py-3 border-b border-gray-200 w-full whitespace-nowrap cursor-pointer hover:font-semibold"
+                >
+                  <span className="capitalize">{`${lineup.name} (${
+                    lineup.position
+                      ? Utils.removeSpecialKey(
+                          lineup.position?.toString()!,
+                          "-"
+                        )
+                      : "Not Data"
+                  })`}</span>
+                  <div className="w-14 pl-2 text-right">
+                    No. {lineup.shirtNumber}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
       <div className="">
         <div className="bg-gray-200 dark:bg-gray-700 mb-1 text-center py-2">
@@ -164,7 +266,7 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
               return (
                 <div
                   key={i}
-                  onClick={()=>{
+                  onClick={() => {
                     navigate(
                       `/dashboard/${rootInfoMatch.competition.type.toLowerCase()}-${
                         rootInfoMatch.competition.code
@@ -173,7 +275,7 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
                       ).getFullYear()}/team/${match?.homeTeam.id}/player/${
                         bench?.id
                       }`
-                    )
+                    );
                   }}
                   className="flex py-3 border-b border-gray-200 w-full whitespace-nowrap cursor-pointer hover:font-semibold"
                 >
@@ -192,7 +294,7 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
               return (
                 <div
                   key={i}
-                  onClick={()=>{
+                  onClick={() => {
                     navigate(
                       `/dashboard/${rootInfoMatch.competition.type.toLowerCase()}-${
                         rootInfoMatch.competition.code
@@ -201,7 +303,7 @@ const CLineUp: React.FC<ILineUp> = ({ match, loading }) => {
                       ).getFullYear()}/team/${match?.awayTeam.id}/player/${
                         bench2?.id
                       }`
-                    )
+                    );
                   }}
                   className="flex justify-end py-3 border-b border-gray-200 w-full whitespace-nowrap cursor-pointer hover:font-semibold"
                 >

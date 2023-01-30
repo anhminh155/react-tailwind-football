@@ -28,7 +28,7 @@ const App: React.FC<Props> = () => {
   return (
     <CLoading loading={loading}>
       <div className={`font-inter ${theme}`}>
-        <Router>
+        <Router basename="/~minhnate">
           <Routes>
             <Route path="/auth/*" element={<Auth />} />
             <Route path="/dashboard/*" element={<Dashboard />} />

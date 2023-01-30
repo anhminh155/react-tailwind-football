@@ -130,7 +130,7 @@ function CChatBox({ ...props }: Props) {
                 <span className="font-bold dark:text-white">
                   All Competitions
                 </span>
-                <span className="flex items-center justify-center bg-gray-300 h-4 w-4 rounded-full">
+                <span className="flex items-center justify-center bg-gray-300 h-4 w-4 rounded-full dark:text-black">
                   {rootCompetitions.competitions.length}
                 </span>
               </div>
@@ -181,7 +181,7 @@ function CChatBox({ ...props }: Props) {
               </div>
               <div className="flex flex-row items-center justify-between text-xs mt-6">
                 <span className="font-bold">Favorite</span>
-                <span className="flex items-center justify-center bg-gray-300 h-4 w-4 rounded-full">
+                <span className="flex items-center justify-center bg-gray-300 h-4 w-4 rounded-full dark:text-black">
                   {listFollowCompetition?.val()?.length ?? 0}
                 </span>
               </div>

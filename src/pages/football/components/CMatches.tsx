@@ -8,7 +8,7 @@ import CLoading from "components/CLoading";
 import { useSelectorRoot } from "redux/hooks";
 import { RootState } from "redux/rootReducer";
 import DatePicker from "react-datepicker";
-import {  getMonth, getYear } from "date-fns";
+import { getMonth, getYear } from "date-fns";
 import { Match } from "types/competiiton_matches";
 import Utils from "common/utils";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
@@ -488,8 +488,10 @@ const CMatches: React.FC<ICResults> = ({ getParam }) => {
                           alt=""
                         />
                       </td>
-                      <td className="px-1 py-4 text-center">
-                        {match.score.winner === null
+                      <td className="px-1 py-4 text-center whitespace-nowrap">
+                        {match.score.duration === "PENALTY_SHOOTOUT"
+                          ? `${match.score.regularTime?.home}(${match.score.penalties.home}) - ${match.score.regularTime?.away}(${match.score.penalties.away})`
+                          : match.score.winner === null
                           ? "vs"
                           : `${match.score.fullTime.home} - ${match.score.fullTime.away}`}
                       </td>
