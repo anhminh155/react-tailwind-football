@@ -11,23 +11,30 @@ import { Competition } from "types/competition";
 import { EnumTypes } from "types/lookup_tables";
 import { RootState } from "../redux/rootReducer";
 import { getYear } from "date-fns";
+import { useObject } from "react-firebase-hooks/database";
+import { db } from "firebase-config";
+import { ref } from "firebase/database";
 
 type Props = {};
 
 const Sidebar: React.FC<Props> = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { user } = useSelectorRoot((state: RootState) => state.app);
   const [menuActive, setMenuActive] = useState("");
   const [collapse, setCollapse] = useState(true);
   const dispatch = useDispatchRoot();
   const { rootCompetitions } = useSelectorRoot(
     (state: RootState) => state.football
   );
+  const [listFollowCompetition] = useObject(
+    ref(db, `users/${user?.uid}/football/competition`)
+  );
   const [newRouter, setNewRouter] = useState(AdminRoutes);
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
 
-  const location = useLocation();  
+  const location = useLocation();
 
   // close on click outside
   useEffect(() => {
@@ -66,29 +73,45 @@ const Sidebar: React.FC<Props> = () => {
   }, []);
 
   useEffect(() => {
-    let customRouter: any[] = [
-      {
-        name_var: "League",
-        url_var: "league",
-        icon_var: "ri-trophy-line",
-        children: [],
-      },
-      {
-        name_var: "Cup",
-        url_var: "cup",
-        icon_var: "ri-trophy-line",
-        children: [],
-      },
-    ];
+    let customRouter: any[] =
+      listFollowCompetition?.val()?.length > 0
+        ? [
+            {
+              name_var: "League",
+              url_var: "league",
+              icon_var: "ri-trophy-line",
+              children: [],
+            },
+            // {
+            //   name_var: "Cup",
+            //   url_var: "cup",
+            //   icon_var: "ri-trophy-line",
+            //   children: [],
+            // },
+            {
+              name_var: "Favorite",
+              url_var: "favorite",
+              icon_var: "ri-trophy-line",
+              children: [],
+            },
+          ]
+        : [
+            {
+              name_var: "League",
+              url_var: "league",
+              icon_var: "ri-trophy-line",
+              children: [],
+            },
+          ];
 
     const dataLeague = rootCompetitions.competitions.filter(
       (competition: Competition, i: number) =>
         competition.type === EnumTypes.CompetitionType.LEAGUE
     );
-    const dataCup = rootCompetitions.competitions.filter(
-      (competition: Competition, i: number) =>
-        competition.type === EnumTypes.CompetitionType.CUP
-    );
+    // const dataCup = rootCompetitions.competitions.filter(
+    //   (competition: Competition, i: number) =>
+    //     competition.type === EnumTypes.CompetitionType.CUP
+    // );
 
     dataLeague.forEach((competition: Competition) => {
       customRouter[0].children = [
@@ -103,22 +126,38 @@ const Sidebar: React.FC<Props> = () => {
         },
       ];
     });
-    dataCup.forEach((competition: Competition) => {
-      // console.log(competition);
-      customRouter[1].children = [
-        ...customRouter[1].children,
-        {
-          name_var: `${competition.name}`,
-          url_var: `cup-${competition.code}-${getYear(
-            new Date(competition.currentSeason.startDate)
-          )}`,
-          icon_var: "",
-          img_var: `${competition.emblem}`,
-        },
-      ];
-    });
+    // dataCup.forEach((competition: Competition) => {
+    //   // console.log(competition);
+    //   customRouter[1].children = [
+    //     ...customRouter[1].children,
+    //     {
+    //       name_var: `${competition.name}`,
+    //       url_var: `cup-${competition.code}-${getYear(
+    //         new Date(competition.currentSeason.startDate)
+    //       )}`,
+    //       icon_var: "",
+    //       img_var: `${competition.emblem}`,
+    //     },
+    //   ];
+    // });
+    if (listFollowCompetition?.val()?.length > 0) {
+      listFollowCompetition?.val()?.forEach((competition: any) => {
+        // console.log(competition);
+        customRouter[1].children = [
+          ...customRouter[1].children,
+          {
+            name_var: `${competition?.name}`,
+            url_var: `favorite-${competition?.code}-${getYear(
+              new Date(competition?.startDate)
+            )}`,
+            icon_var: "",
+            img_var: `${competition?.emblem}`,
+          },
+        ];
+      });
+    }
     setNewRouter([...AdminRoutes, ...customRouter]);
-  }, [rootCompetitions]);
+  }, [rootCompetitions, listFollowCompetition]);
 
   const activePath = (path: string) => {
     if (location.pathname === "/dashboard") {
@@ -359,11 +398,14 @@ const Sidebar: React.FC<Props> = () => {
             {/* Header */}
             <div className="flex h-full w-full justify-between items-center">
               {/* <span /> */}
-              <button className="bg-gray-400 p-1 rounded-lg cursor-not-allowed ml-2 flex text-white text-base" disabled={true}>
-              <i className="ri-download-line pr-1"></i>
+              <button
+                className="bg-gray-400 p-1 rounded-lg cursor-not-allowed ml-2 flex text-white text-base"
+                disabled={true}
+              >
+                <i className="ri-download-line pr-1"></i>
 
                 <span>Mobile App</span>
-                </button>
+              </button>
               <ProfileMenu />
             </div>
           </div>
