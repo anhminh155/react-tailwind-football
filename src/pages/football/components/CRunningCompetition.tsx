@@ -4,9 +4,9 @@ import { ITeams, RunningCompetition } from "types/teams";
 import CLoading from "components/CLoading";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { ResultSet } from "types/teams_matches";
-import { format } from "date-fns";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightLong } from "@fortawesome/free-solid-svg-icons";
+import Utils from "common/utils";
 
 interface ICRunningCompetition extends Props {
   getId?(idPlayer: number): void;
@@ -32,9 +32,9 @@ const CRunningCompetition: React.FC<ICRunningCompetition> = ({
         <div className="py-3">
           <div className="">
             <span className="font-semibold pr-2 text-base">Season:</span>
-            <span>{format(new Date(dataResult.first), "dd/MM/yyyy")}</span>
+            <span>{Utils.formatWithTimeZone(new Date(dataResult.first), "dd/MM/yyyy")}</span>
             <FontAwesomeIcon icon={faRightLong} className="text-base px-2" />
-            <span>{format(new Date(dataResult.last), "dd/MM/yyyy")}</span>
+            <span>{Utils.formatWithTimeZone(new Date(dataResult.last), "dd/MM/yyyy")}</span>
           </div>
           <div className="">
             <span className="font-semibold pr-2 text-base">Total matches:</span>

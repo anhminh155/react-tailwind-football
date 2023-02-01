@@ -60,7 +60,7 @@ const CompetitionPage: React.FC<Props> = () => {
         ?.val()
         ?.find(
           (competition: Competition) =>
-            competition.id === rootCompetitionsStanding.competition.id
+            competition.code === rootCompetitionsStanding.competition?.code
         )
     ) {
       setActiveStar(true);

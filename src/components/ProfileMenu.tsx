@@ -4,13 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import Utils from "../common/utils";
 import { useDispatchRoot, useSelectorRoot } from "../redux/hooks";
-import { setTheme, setUser } from "../redux/controller/app.slice";
+import { setTheme } from "../redux/controller/app.slice";
 import { RootState } from "../redux/rootReducer";
 import { signOut } from "@firebase/auth";
-import { auth, db } from "firebase-config";
-import CModal from "./modals/CModal";
-import { ref } from "firebase/database";
-import { useObject } from "react-firebase-hooks/database";
+import { auth } from "firebase-config";
 import CButton from "./CButton";
 
 function ProfileMenu() {
@@ -53,7 +50,7 @@ function ProfileMenu() {
     signOut(auth)
       .then(() => {
         setLoading(false);
-        setDropdownOpen(false)
+        setDropdownOpen(false);
         // Sign-out successful.
       })
       .catch((error) => {
@@ -152,7 +149,7 @@ function ProfileMenu() {
               <li>
                 <Link to="/dashboard/profile">
                   <CButton
-                    className="font-medium hover:text-primary rounded flex items-center py-1 px-3 hover:bg-gray-100"
+                    className="font-medium  text-primary rounded flex items-center hover:bg-gray-100"
                     onClick={() => setDropdownOpen(!dropdownOpen)}
                   >
                     <i className="ri-user-3-line mr-2"></i>My Profile
@@ -162,7 +159,7 @@ function ProfileMenu() {
               <li>
                 <CButton
                   loading={loading}
-                  className="font-medium text-red-500 hover:text-primary rounded hover:bg-gray-100"
+                  className="font-medium text-red-500 rounded hover:bg-gray-100"
                   onClick={() => {
                     handleLogout();
                   }}

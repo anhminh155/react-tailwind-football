@@ -10,6 +10,8 @@ import { setUser } from "redux/controller/app.slice";
 import { child, get } from "firebase/database";
 import { useAuthState } from "react-firebase-hooks/auth";
 import CChatbox from "components/CChatbox";
+import TimezoneSelect from "react-timezone-select";
+import Utils from "common/utils";
 
 // MAIN ROUTE
 const getRoutes = () => {
@@ -27,6 +29,27 @@ const Dashboard: React.FC<Props> = () => {
   const location = useLocation();
   const [fullScreen, setFullScreen] = useState<boolean>(false);
   const ref = useRef<HTMLInputElement | any>(null);
+
+  // console.log(Utils.formatWithTimeZone(new Date, 'HH:mm'));
+
+  //Handle timezone
+  const [selectedTimezone, setSelectedTimezone] = useState<any>(
+    Utils.getValueLocalStorage("timezone") ??
+      Intl.DateTimeFormat().resolvedOptions().timeZone
+  );
+
+  useEffect(() => {
+    const tz = Utils.getValueLocalStorage("timezone");
+    if (!tz) {
+      Utils.setLocalStorage(
+        "timezone",
+        Intl.DateTimeFormat().resolvedOptions().timeZone
+      );
+      setSelectedTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone);
+    } else {
+      setSelectedTimezone(tz);
+    }
+  }, []);
 
   useEffect(() => {
     ref.current?.scrollIntoView({ behavior: "smooth" });
@@ -87,9 +110,19 @@ const Dashboard: React.FC<Props> = () => {
           {/* HEADER */}
           <div className="select-none hidden md:flex items-center h-[4.5rem] dark:bg-dark bg-soft pl-10 py-3 pr-5 sticky top-0 z-10 border-b transform transition-all duration-700 ease-in-out">
             <div className="flex w-full justify-between items-center z-40">
-              <h1 className="font-bold text-xl dark:text-white">
-                {/* Dashboard */}
-              </h1>
+              {/* Dashboard */}
+              {/* <h1 className="font-bold text-xl dark:text-white">
+              </h1> */}
+              <div className="select-wrapper">
+                <TimezoneSelect
+                  className="text-gray-800"
+                  value={selectedTimezone}
+                  onChange={(tz) => {
+                    Utils.setLocalStorage("timezone", tz);
+                    setSelectedTimezone(tz);
+                  }}
+                />
+              </div>
               <ProfileMenu />
             </div>
           </div>

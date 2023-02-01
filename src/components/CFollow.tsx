@@ -1,5 +1,5 @@
 import { SizeProp } from "@fortawesome/fontawesome-svg-core";
-import React, { useState } from "react";
+import React from "react";
 import { Props } from "types/define";
 
 interface ICFollow extends Props {

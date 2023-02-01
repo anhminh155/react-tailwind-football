@@ -1,15 +1,5 @@
-import { format } from "date-fns";
 import { db } from "firebase-config";
-import {
-  child,
-  onDisconnect,
-  onValue,
-  push,
-  ref,
-  serverTimestamp,
-  set,
-  update,
-} from "firebase/database";
+import { child, push, ref, set, update } from "firebase/database";
 import { IUser } from "types/users";
 
 class UtilsFirebase {
@@ -43,7 +33,7 @@ class UtilsFirebase {
     // Get a key for a new Post.
     const newPostKey = push(child(ref(db), "messages/" + roomId)).key;
     // Write the new post's data simultaneously in the posts list and the user's post list.
-    const updates:any = {};
+    const updates: any = {};
     updates[`/messages/${roomId}/` + newPostKey] = {
       ...other,
     };

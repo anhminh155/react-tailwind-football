@@ -86,6 +86,8 @@ export interface ICompetitionMatches {
     duration: string
     fullTime: FullTime
     halfTime: HalfTime
+    regularTime?: any
+    penalties?:any
   }
   
   export interface FullTime {

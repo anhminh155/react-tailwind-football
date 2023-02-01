@@ -64,8 +64,10 @@ const CBreadcrumb: React.FC<Props> = () => {
       foo.push({ name: `${rootPlayer.name}` });
     }
     setParamUrl(foo);
+    // console.log(rootPlayer.name);
+    
     //eslint-disable-next-line
-  }, [rootCompetitions, location, rootCompetitionsMatches]);
+  }, [rootCompetitions, location, rootCompetitionsMatches, rootPlayer]);
 
   return (
     <div className="mb-4">

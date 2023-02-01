@@ -3,8 +3,8 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Props } from "types/define";
 import { useSelectorRoot } from "redux/hooks";
 import { RootState } from "redux/rootReducer";
-import { format } from "date-fns";
 import { Match } from "types/head2Head";
+import Utils from "common/utils";
 
 interface ICHead2Head extends Props {
   getPath(path: string): void;
@@ -126,7 +126,7 @@ const CHead2Head: React.FC<ICHead2Head> = ({ getPath }) => {
                     className="dark:bg-dark hover:dark:bg-gray-700 hover:bg-gray-400 hover:text-white"
                   >
                     <td className="px-6 py-4 min-w-fit">
-                      {format(new Date(match.utcDate), "dd/MM/yyyy HH:mm")}
+                      {Utils.formatWithTimeZone(new Date(match.utcDate), "dd/MM/yyyy HH:mm")}
                     </td>
                     <td className="px-6 py-4 text-right flex items-center justify-end whitespace-nowrap">
                       <div>{match.homeTeam.shortName}</div>

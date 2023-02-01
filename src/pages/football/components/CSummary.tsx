@@ -1,3 +1,4 @@
+ /* eslint-disable */
 import React, { useState } from "react";
 import { Props } from "types/define";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,8 +19,9 @@ import CLoading from "components/CLoading";
 import CModalViewPlayerMatch from "./CModalViewPlayerMatch";
 import { useDispatchRoot, useSelectorRoot } from "redux/hooks";
 import { fetchPlayerMatches } from "redux/controller/football.player.slice";
-import { addDays, format, subDays } from "date-fns";
+import { addDays, subDays } from "date-fns";
 import { RootState } from "redux/rootReducer";
+import Utils from "common/utils";
 
 interface ICSummary extends Props {
   loading?: boolean;
@@ -34,11 +36,11 @@ const CSummary: React.FC<ICSummary> = ({ loading = false, match }) => {
   const dispatch = useDispatchRoot();
   const [selectTeam, setSelectTeam] = useState<number>();
   const param = {
-    dateFrom: format(
+    dateFrom: Utils.formatWithTimeZone(
       subDays(new Date(match.utcDate.split("T")[0]), 1),
       "yyyy-MM-dd"
     ),
-    dateTo: format(
+    dateTo: Utils.formatWithTimeZone(
       addDays(new Date(match.utcDate.split("T")[0]), 1),
       "yyyy-MM-dd"
     ),
