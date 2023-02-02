@@ -43,7 +43,7 @@ const User: React.FC<Props> = () => {
     get(child(dbRef, `users/${user?.uid}`))
       .then((snapshot) => {
         if (snapshot.exists()) {
-          console.log(snapshot.val());
+          // console.log(snapshot.val());
           setProfile(snapshot.val());
         } else {
           console.log("No data available");
@@ -89,7 +89,6 @@ const User: React.FC<Props> = () => {
   };
 
   const upload = (e: any) => {
-    console.log("upload");
     const file = e.target.files[0];
     if (!file) return;
     const storageRef = ref(firebaseStorage, `files/${file.name}`);

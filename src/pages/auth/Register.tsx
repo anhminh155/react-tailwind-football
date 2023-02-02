@@ -30,7 +30,7 @@ const Register: React.FC<Props> = () => {
     setLoading(true)
     createUserWithEmailAndPassword(auth, data.email, data.password).then(
       (response) => {
-        console.log(response);
+        // console.log(response);
         const param: any = {
           userId: response.user.uid,
           displayName: data.displayName,

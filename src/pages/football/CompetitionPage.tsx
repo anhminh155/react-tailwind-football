@@ -151,7 +151,7 @@ const CompetitionPage: React.FC<Props> = () => {
                       competition: [],
                     };
                     if (snapshot.exists()) {
-                      console.log(snapshot.val());
+                      // console.log(snapshot.val());
                       const check = snapshot
                         .val()
                         .find(

@@ -81,12 +81,6 @@ const PlayerPage: React.FC<Props> = () => {
     if (selected.name === "ALL") {
       dispatch(fetchPlayerMatches({ ...param, id: Number(IdPlayer) }));
     } else {
-      console.log({
-        ...param,
-        id: Number(IdPlayer),
-        competitions: selected.code!,
-      });
-
       dispatch(
         fetchPlayerMatches({
           ...param,

@@ -28,7 +28,7 @@ const App: React.FC<Props> = () => {
   return (
     <CLoading loading={loading}>
       <div className={`font-inter ${theme}`}>
-        <Router basename="/react-tailwind-football/">
+        <Router basename="/react-tailwind-football">
           <Routes>
             <Route path="/auth/*" element={<Auth />} />
             <Route path="/dashboard/*" element={<Dashboard />} />

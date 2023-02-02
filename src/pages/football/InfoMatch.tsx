@@ -30,6 +30,7 @@ const InfoMatch: React.FC<Props> = () => {
     useSelectorRoot((state: RootState) => state.football);
   const [selectTab, setSelectTab] = useState<number>(0);
   const { competitionCode, idMatch } = useParams<IPathNameChild>();
+  // const [check, setCheck] = useState<boolean>(false);
   const navigate = useNavigate();
   const listTab: string[] = [
     "SUMMARY",
@@ -94,7 +95,10 @@ const InfoMatch: React.FC<Props> = () => {
           <div className="flex justify-around bg-gray-300 w-2/3 rounded-b-lg text-gray-600">
             <div className="p-2">{`${rootInfoMatch.competition.name} (${rootInfoMatch.area.name})`}</div>
             <div className="p-2">
-              {Utils.formatWithTimeZone(new Date(rootInfoMatch.utcDate!), "dd/MM HH:mm")}
+              {Utils.formatWithTimeZone(
+                new Date(rootInfoMatch.utcDate!),
+                "dd/MM HH:mm"
+              )}
             </div>
           </div>
         </div>
@@ -157,6 +161,14 @@ const InfoMatch: React.FC<Props> = () => {
               alt=""
             />
             <div>{rootInfoMatch.awayTeam.name}</div>
+            {/* <div
+              className={`flex gap-2 cursor-pointer ${
+                check ? "bg-green-400" : "bg-gray-200"
+              } p-2 justify-between mt-2`}
+            >
+              <h4>0</h4>
+              <i className="ri-add-line"></i>
+            </div> */}
           </div>
         </div>
         <div className="flex justify-center">

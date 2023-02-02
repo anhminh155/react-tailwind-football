@@ -226,7 +226,7 @@ export const fetchCompetitionStandings = createAsyncThunk(
         const data = res.data as unknown;
         return data;
       } else {
-        console.log(res);
+        // console.log(res);
       }
     } catch (error) {
       console.log(error);

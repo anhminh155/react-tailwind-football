@@ -1,7 +1,7 @@
 /** disable-eslint */
 import React, { useEffect, useRef, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AdminRoutes } from "../routes";
 import ProfileMenu from "./ProfileMenu";
 import appLogo from "../assets/img/applogo.png";
@@ -26,6 +26,7 @@ const Sidebar: React.FC<Props> = () => {
   const { rootCompetitions } = useSelectorRoot(
     (state: RootState) => state.football
   );
+  const navigate = useNavigate();
   const [listFollowCompetition] = useObject(
     ref(db, `users/${user?.uid}/football/competition`)
   );
@@ -428,7 +429,7 @@ const Sidebar: React.FC<Props> = () => {
           >
             <div
               className="cursor-pointer z-10 w-full px-4 mb-8 mt-3.5"
-              onClick={() => (window.location.href = "/dashboard")}
+              onClick={() => navigate("/dashboard")}
             >
               {collapse ? (
                 <div className="flex items-center py-5">
