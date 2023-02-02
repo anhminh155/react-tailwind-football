@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { API_URL } from "./constant";
+// import { API_URL } from "./constant";
 import { toast } from "react-toastify";
 
 const headers = {
