@@ -51,6 +51,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
+  "proxy": "https://api.football-data.org/v4/",
   "eslintConfig": {
     "extends": [
       "react-app",

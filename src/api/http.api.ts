@@ -15,7 +15,7 @@ const headers = {
 export default class Http {
   static get(receiptUrl: string) {
     return axios
-      .get(`${API_URL}${receiptUrl}`, {
+      .get(`/${receiptUrl}`, {
         headers: headers,
       })
       .catch((err: Error | AxiosError) => {
