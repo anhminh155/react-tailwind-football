@@ -1,7 +1,7 @@
 // import { IFiltersAPI } from "../types/football-type";
 import { IFiltersAPI } from "types/lookup_tables";
 
-export const API_URL = "https://api.football-data.org/v1/";
+export const API_URL = "https://api.football-data.org/v4/";
 
 const handleEndParam = (param: IFiltersAPI): string => {
   let result: string = "";

@@ -4,12 +4,12 @@ import { toast } from "react-toastify";
 
 const headers = {
   "X-Auth-Token": process.env.REACT_APP_X_AUTH_TOKEN,
-  "Allow-Control-Allow-Origin": "*",
+  'x-requested-with': 'XMLHttpRequest'
 };
 export default class Http {
   static get(receiptUrl: string) {
     return axios
-      .get(`${API_URL}${receiptUrl}`, {
+      .get(`https://cors-anywhere.herokuapp.com/${API_URL}${receiptUrl}`, {
         headers: headers,
       })
       .catch((err: Error | AxiosError) => {
