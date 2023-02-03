@@ -12,7 +12,7 @@
 /build
 
 # API
-/src/api
+# /src/api
 
 # misc
 .DS_Store
