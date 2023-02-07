@@ -55,6 +55,11 @@
   --clr-text-light: #fafafa; /* zinc-50 */
 }
 
+.h-screen {
+  height: 100svh; /* Fallback for browsers that do not support Custom Properties */
+  /* height: calc(var(--vh, 1vh) * 100); */
+}
+
 .dark {
   background-color: var(--clr-bg-dark);
   color: var(--clr-text-dark);

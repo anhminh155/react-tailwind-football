@@ -355,11 +355,11 @@ const Sidebar: React.FC<Props> = () => {
           aria-hidden="true"
           onClick={() => setSidebarOpen(false)}
         ></div>
-        <div className="md:hidden sticky top-0 w-full pb-2 px-4 sm:px-6 lg:px-8 z-30">
+        <div className="md:hidden sticky top-0 w-full pb-2 px-4 sm:px-6 lg:px-8 z-30 bg-white dark:bg-dark">
           <div className="flex items-center justify-between pt-4 pb-2">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="inline-flex items-center justify-center p-1 rounded-md hover:dark:bg-dark hover:dark:text-white text-black outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark"
+              className="inline-flex items-center justify-center p-1 rounded-md hover:dark:bg-dark dark:text-white hover:dark:text-white text-black outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark"
             >
               {sidebarOpen ? (
                 <svg
@@ -399,14 +399,14 @@ const Sidebar: React.FC<Props> = () => {
             {/* Header */}
             <div className="flex h-full w-full justify-between items-center">
               {/* <span /> */}
-              <button
+              {/* <button
                 className="bg-gray-400 p-1 rounded-lg cursor-not-allowed ml-2 flex text-white text-base"
                 disabled={true}
               >
                 <i className="ri-download-line pr-1"></i>
 
                 <span>Mobile App</span>
-              </button>
+              </button> */}
               <ProfileMenu />
             </div>
           </div>
@@ -418,7 +418,7 @@ const Sidebar: React.FC<Props> = () => {
           id="sidebar"
           ref={sidebar}
           className={`absolute z-40 left-0 top-0 md:static md:left-auto md:top-auto h-screen
-          2xl:bg-soft bg-white dark:bg-zinc-800
+          2xl:bg-soft bg-white dark:bg-gray-900
           md:dark:bg-dark md:translate-x-0 transform transition-all duration-700 ease-in-out
                     ${sidebarOpen ? "translate-x-0" : "-translate-x-64"} ${
             collapse ? "w-64 2xl:w-72" : "md:w-[4.4rem] 2xl:w-[5rem]"
