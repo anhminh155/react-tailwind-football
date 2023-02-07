@@ -144,7 +144,6 @@ const Dashboard: React.FC<Props> = () => {
       ) : (
         <div className="flex flex-col md:flex-row w-full h-screen overflow-hidden font-poppins bg-soft dark:bg-dark text-dark font-medium transform transition-all duration-500 ease-in-out dark:text-white">
           <Sidebar />
-
           <div className="w-full overflow-x-hidden overflow-y-auto h-screen flex flex-col">
             {/* HEADER */}
             <div className="select-none hidden md:flex items-center h-[4.5rem] dark:bg-dark bg-soft pl-10 py-3 pr-5 sticky top-0 z-10 border-b transform transition-all duration-700 ease-in-out">
@@ -168,7 +167,7 @@ const Dashboard: React.FC<Props> = () => {
             <div className="relative">
               <span ref={ref} className="absolute -top-52"></span>
               {/* DASHBOARD CONTENT */}
-              <div className="p-6 dark:bg-[#1e2836] h-full">
+              <div className="p-2 md:p-6 dark:bg-[#1e2836] h-full">
                 <Routes>
                   {getRoutes()}
                   <Route path="*" element={<NotFound />} />
@@ -192,7 +191,7 @@ const Dashboard: React.FC<Props> = () => {
                   onClick={() => setIsShowChat(!isShowChat)}
                   className={`${
                     isShowChat ? "hidden" : ""
-                  } absolute bottom-12 right-4 h-14 w-14 rounded-full bg-blue-600/40 hover:bg-blue-600 cursor-pointer flex justify-center items-center`}
+                  } absolute bottom-4 right-4 h-14 w-14 rounded-full bg-blue-600/40 hover:bg-blue-600 cursor-pointer flex justify-center items-center`}
                 >
                   <i className="ri-chat-3-fill text-3xl text-blue-50"></i>
                 </div>
@@ -201,8 +200,8 @@ const Dashboard: React.FC<Props> = () => {
                     // onBlur={() => setIsShowChat(false)}
                     className={`absolute bg-gray-500 p-2 transition-all ease-in duration-200 ${
                       fullScreen
-                        ? "h-full top-0 right-0 w-full z-50"
-                        : "bottom-10 right-4 w-5/6 md:w-[500px] lg:w-[800px] rounded-xl shadow-2xl"
+                        ? "h-screen top-0 right-0 w-full z-50"
+                        : "bottom-4 right-4 w-5/6 md:w-[500px] lg:w-[800px] rounded-xl shadow-2xl"
                     } `}
                   >
                     <div

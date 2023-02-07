@@ -397,7 +397,7 @@ const Sidebar: React.FC<Props> = () => {
             </button>
 
             {/* Header */}
-            <div className="flex h-full w-full justify-between items-center">
+            <div className="flex h-full w-full justify-end md:justify-between items-center">
               {/* <span /> */}
               {/* <button
                 className="bg-gray-400 p-1 rounded-lg cursor-not-allowed ml-2 flex text-white text-base"

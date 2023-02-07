@@ -102,7 +102,7 @@ const InfoMatch: React.FC<Props> = () => {
             </div>
           </div>
         </div>
-        <div className="scorers flex items-center justify-center  font-bold text-gray-600  my-8">
+        <div className="scorers flex items-center justify-center  font-bold text-gray-600 my-3 sm:my-8">
           <div className="text-center w-44">
             <LazyLoadImage
               effect="blur"
@@ -112,7 +112,7 @@ const InfoMatch: React.FC<Props> = () => {
             />
             <div className="">{rootInfoMatch.homeTeam.name}</div>
           </div>
-          <div className="scorers px-20 text-6xl">
+          <div className="scorers px-4 sm:px-20 text-6xl">
             <div className="whitespace-nowrap">
               <span>
                 {rootInfoMatch.score.duration === "REGULAR"

@@ -85,9 +85,9 @@ const TeamPage: React.FC<Props> = () => {
   return (
     <div>
       <CBreadcrumb />
-      <div className="header shadow-lg rounded-md p-3 flex">
+      <div className="header shadow-lg rounded-md p-3 sm:flex">
         <div className="col-span-1">
-          <div className="w-full flex flex-col md:items-center md:px-3 lg:pr-11">
+          <div className="w-full flex flex-col items-center md:px-3 lg:pr-11">
             <LazyLoadImage
               effect="blur"
               src={rootTeam?.crest}

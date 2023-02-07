@@ -105,7 +105,7 @@ function ProfileMenu() {
                 effect="blur"
               />
             </div>
-            <div className="flex items-center truncate">
+            <div className="hidden md:visible md:flex items-center truncate">
               <span className="truncate mr-1 font-medium group-hover:text-indigo-600">
                 {user?.email}
               </span>
