@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/react-tailwind-football/static/css/main.129a2579.css",
-    "main.js": "/react-tailwind-football/static/js/main.dd275a50.js",
+    "main.css": "/react-tailwind-football/static/css/main.518b2a9c.css",
+    "main.js": "/react-tailwind-football/static/js/main.9991812e.js",
     "static/js/787.c0622a35.chunk.js": "/react-tailwind-football/static/js/787.c0622a35.chunk.js",
     "static/media/applogo.png": "/react-tailwind-football/static/media/applogo.5fbed3cc6c92b38579a1.png",
     "index.html": "/react-tailwind-football/index.html",
-    "main.129a2579.css.map": "/react-tailwind-football/static/css/main.129a2579.css.map",
-    "main.dd275a50.js.map": "/react-tailwind-football/static/js/main.dd275a50.js.map",
+    "main.518b2a9c.css.map": "/react-tailwind-football/static/css/main.518b2a9c.css.map",
+    "main.9991812e.js.map": "/react-tailwind-football/static/js/main.9991812e.js.map",
     "787.c0622a35.chunk.js.map": "/react-tailwind-football/static/js/787.c0622a35.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.129a2579.css",
-    "static/js/main.dd275a50.js"
+    "static/css/main.518b2a9c.css",
+    "static/js/main.9991812e.js"
   ]
 }
