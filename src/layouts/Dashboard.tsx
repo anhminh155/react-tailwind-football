@@ -15,6 +15,8 @@ import TimezoneSelect from "react-timezone-select";
 import Utils from "common/utils";
 import CModal from "components/modals/CModal";
 import CButton from "components/CButton";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import img from "../assets/img/err.png";
 
 // MAIN ROUTE
 const getRoutes = () => {
@@ -129,8 +131,14 @@ const Dashboard: React.FC<Props> = () => {
               >
                 https://cors-anywhere.herokuapp.com/corsdemo
               </a>
-              .
+              <LazyLoadImage
+                            effect="blur"
+                            src={img}
+                            alt=""
+                            className="border"
+                          />
             </p>
+            <p className="pb-2">and click on the <span className="font-semibold">"Request temporary access to the demo server"</span> button, to temporarily restore the full functionality of CORS Anywhere for your client only.</p>
             <p>Sorry for the inconvenience.</p>
             <CButton
               onClick={() => setShowModal(false)}
