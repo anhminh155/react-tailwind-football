@@ -34,7 +34,7 @@ const Dashboard: React.FC<Props> = () => {
   const location = useLocation();
   const [fullScreen, setFullScreen] = useState<boolean>(false);
   const ref = useRef<HTMLInputElement | any>(null);
-  const [showModal, setShowModal] = useState<boolean>(true);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   // console.log(Utils.formatWithTimeZone(new Date, 'HH:mm'));
 
